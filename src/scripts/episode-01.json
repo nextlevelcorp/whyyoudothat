@@ -1,0 +1,64 @@
+{
+  "title": "Why your brain begs for one more scroll",
+  "durationSec": 55,
+  "scenes": [
+    {
+      "start": 0,
+      "end": 3,
+      "visual": "Big hook text on cream card, Norb peeking curious from the bottom",
+      "components": ["HookCard", "Norb"],
+      "norbEmotion": "curious",
+      "voiceover": "Why can't you stop scrolling?",
+      "keywords": ["scrolling"]
+    },
+    {
+      "start": 3,
+      "end": 12,
+      "visual": "Cute brain character pops in next to a jittery Norb",
+      "components": ["ConceptCharacter", "Norb", "CaptionBand"],
+      "norbEmotion": "jittery",
+      "concept": "brain",
+      "voiceover": "Your brain is not weak. It is running a very old program.",
+      "keywords": ["brain", "program"]
+    },
+    {
+      "start": 12,
+      "end": 24,
+      "visual": "Dopamine molecule character bounces in, Norb panics",
+      "components": ["ConceptCharacter", "Norb", "CaptionBand"],
+      "norbEmotion": "panicked",
+      "concept": "dopamine",
+      "voiceover": "Every swipe might be a reward, so dopamine says check one more.",
+      "keywords": ["dopamine", "reward"]
+    },
+    {
+      "start": 24,
+      "end": 36,
+      "visual": "Cortisol drop appears, Norb is exhausted",
+      "components": ["ConceptCharacter", "Norb", "CaptionBand"],
+      "norbEmotion": "exhausted",
+      "concept": "cortisol",
+      "voiceover": "But random rewards never satisfy, they just keep the loop spinning.",
+      "keywords": ["rewards", "loop"]
+    },
+    {
+      "start": 36,
+      "end": 48,
+      "visual": "Norb gets a lightbulb moment, brain character celebrates",
+      "components": ["ConceptCharacter", "Norb", "CaptionBand"],
+      "norbEmotion": "lightbulb",
+      "concept": "brain",
+      "voiceover": "The fix is friction. Move the app, log out, make checking cost effort.",
+      "keywords": ["friction", "effort"]
+    },
+    {
+      "start": 48,
+      "end": 55,
+      "visual": "Sources card, Norb celebrating in the corner",
+      "components": ["SourceCard", "Norb"],
+      "norbEmotion": "celebrating",
+      "voiceover": "Sources in caption.",
+      "keywords": []
+    }
+  ]
+}
