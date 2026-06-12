@@ -5,9 +5,21 @@ import type {ConceptKind} from '../components/ConceptCharacter';
 export type SceneComponentName =
   | 'HookCard'
   | 'SourceCard'
+  | 'TakeawayCard'
   | 'Norb'
   | 'ConceptCharacter'
   | 'CaptionBand';
+
+/**
+ * Animated action that ACTS OUT the voiceover. Every explanation scene
+ * must have one — the visual must show what the narration says, never
+ * just characters standing around.
+ */
+export type SceneAction =
+  | 'scroll' // phone with an endlessly scrolling feed
+  | 'burst' // repeating reward sparkle bursts
+  | 'loop' // orbiting dots: stuck-in-a-loop motion
+  | 'barrier'; // navy friction wall + lock blocking a phone
 
 export type SceneScript = {
   /** Scene start, in seconds from the beginning of the episode. */
@@ -18,6 +30,12 @@ export type SceneScript = {
   visual: string;
   /** Components to mount in this scene. */
   components: SceneComponentName[];
+  /**
+   * Animated prop that performs the narration on screen.
+   * Required for every explanation scene (anything between the hook
+   * and the takeaway) so the video never goes static.
+   */
+  action?: SceneAction;
   /** Norb's reaction during the scene (only used if 'Norb' is mounted). */
   norbEmotion?: NorbEmotion;
   /** Concept character to show (only used if 'ConceptCharacter' is mounted). */

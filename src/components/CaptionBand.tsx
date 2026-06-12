@@ -31,10 +31,10 @@ export const CaptionBand: React.FC<CaptionBandProps> = ({
   const words = text.split(/\s+/).filter(Boolean);
   if (words.length === 0) return null;
 
-  // Words appear evenly across the first ~80% of the scene, leaving the
-  // tail of the scene fully readable.
-  const window = durationInFrames * 0.8;
-  const perWord = window / words.length;
+  // Snappy reel pacing: ~6 frames per word (≈5 words/sec), but never
+  // slower than finishing within the first 45% of the scene — the full
+  // line must be readable well before the cut.
+  const perWord = Math.min(6, (durationInFrames * 0.45) / words.length);
 
   return (
     <div

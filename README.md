@@ -33,7 +33,9 @@ src/
   components/
     Norb.tsx              # mascot, `emotion` prop + idle wiggle
     ConceptCharacter.tsx  # cute-ified concepts (brain, amygdala, dopamine, cortisol)
-    CaptionBand.tsx       # word-by-word synced subtitles
+    ActionLayer.tsx       # animated props that act out the narration (scroll/burst/loop/barrier)
+    TakeawayCard.tsx      # "TRY THIS" card: the episode's one concrete tip
+    CaptionBand.tsx       # word-by-word synced subtitles (snappy pacing)
     HookCard.tsx          # 0–3s big-text hook
     SourceCard.tsx        # "Sources in caption 👇" end card
     SceneTransition.tsx   # the one standard transition (coral circle pop)
@@ -52,6 +54,26 @@ npm install
 npm run dev                  # Remotion Studio for previewing
 npm run render -- episode-01 # renders out/episode-01.mp4
 ```
+
+## Episode rules (apply to EVERY episode)
+
+These came out of the episode-01 review and are part of the template:
+
+1. **The visual must act out the voiceover.** Every explanation scene
+   (between the hook and the takeaway) must set an `action` that performs
+   what the narration says — never characters just standing around.
+   Available actions: `scroll`, `burst`, `loop`, `barrier` (extend
+   `ActionLayer.tsx` when a topic needs a new one, then add it to the
+   schema). The engine also adds a slow push-in zoom and slide-in
+   entrances to every scene, so nothing is ever static.
+2. **Captions are snappy.** `CaptionBand` paces words at ~6 frames each
+   and always finishes the line within the first 45% of the scene. Keep
+   voiceover lines short (max ~15 words per scene) so they stay readable.
+3. **One concrete takeaway, always.** Every episode ends with a
+   `TakeawayCard` scene right before the `SourceCard`: a "TRY THIS" card
+   with 1–2 imperative, doable-today steps (newline-separated in
+   `voiceover`). The narrative arc is fixed:
+   **hook → mechanism (acted out) → why it traps you → the fix → TRY THIS → sources.**
 
 ### Adding an episode
 
@@ -72,7 +94,8 @@ npm run render -- episode-01 # renders out/episode-01.mp4
     {
       "start": 0, "end": 3,            // seconds
       "visual": "what appears (notes for the writer)",
-      "components": ["HookCard"],       // HookCard | SourceCard | Norb | ConceptCharacter | CaptionBand
+      "components": ["HookCard"],       // HookCard | SourceCard | TakeawayCard | Norb | ConceptCharacter | CaptionBand
+      "action": "scroll",               // scroll | burst | loop | barrier — acts out the narration (required for explanation scenes)
       "norbEmotion": "curious",         // neutral | panicked | jittery | exhausted | curious | lightbulb | facepalm | celebrating
       "concept": "dopamine",            // brain | amygdala | dopamine | cortisol (with ConceptCharacter)
       "voiceover": "exact narration text",

@@ -5,7 +5,7 @@
     {
       "start": 0,
       "end": 3,
-      "visual": "Big hook text on cream card, Norb peeking curious from the bottom",
+      "visual": "Big hook text, curious Norb peeking from below",
       "components": ["HookCard", "Norb"],
       "norbEmotion": "curious",
       "voiceover": "Why can't you stop scrolling?",
@@ -14,47 +14,57 @@
     {
       "start": 3,
       "end": 12,
-      "visual": "Cute brain character pops in next to a jittery Norb",
-      "components": ["ConceptCharacter", "Norb", "CaptionBand"],
-      "norbEmotion": "jittery",
-      "concept": "brain",
-      "voiceover": "Your brain is not weak. It is running a very old program.",
-      "keywords": ["brain", "program"]
+      "visual": "Phone with endlessly scrolling feed cards; Norb watches hooked",
+      "components": ["Norb", "CaptionBand"],
+      "action": "scroll",
+      "norbEmotion": "curious",
+      "voiceover": "Every swipe is a tiny lottery. Most posts are boring, but the next one might be amazing.",
+      "keywords": ["lottery", "amazing"]
     },
     {
       "start": 12,
-      "end": 24,
-      "visual": "Dopamine molecule character bounces in, Norb panics",
+      "end": 21,
+      "visual": "Reward sparkles burst around the dopamine character; Norb gets jittery",
       "components": ["ConceptCharacter", "Norb", "CaptionBand"],
-      "norbEmotion": "panicked",
+      "action": "burst",
+      "norbEmotion": "jittery",
       "concept": "dopamine",
-      "voiceover": "Every swipe might be a reward, so dopamine says check one more.",
-      "keywords": ["dopamine", "reward"]
+      "voiceover": "That maybe fires dopamine. Your brain rewards the chance, not the post.",
+      "keywords": ["maybe", "dopamine", "chance"]
     },
     {
-      "start": 24,
-      "end": 36,
-      "visual": "Cortisol drop appears, Norb is exhausted",
-      "components": ["ConceptCharacter", "Norb", "CaptionBand"],
+      "start": 21,
+      "end": 30,
+      "visual": "Three dots chase each other around a circle, never arriving; Norb exhausted",
+      "components": ["Norb", "CaptionBand"],
+      "action": "loop",
       "norbEmotion": "exhausted",
-      "concept": "cortisol",
-      "voiceover": "But random rewards never satisfy, they just keep the loop spinning.",
-      "keywords": ["rewards", "loop"]
+      "voiceover": "So you chase the next maybe, and the next. A loop with no finish line.",
+      "keywords": ["loop"]
     },
     {
-      "start": 36,
-      "end": 48,
-      "visual": "Norb gets a lightbulb moment, brain character celebrates",
-      "components": ["ConceptCharacter", "Norb", "CaptionBand"],
+      "start": 30,
+      "end": 39,
+      "visual": "Navy friction wall with a lock pops up and blocks the lunging phone; Norb gets the idea",
+      "components": ["Norb", "CaptionBand"],
+      "action": "barrier",
       "norbEmotion": "lightbulb",
-      "concept": "brain",
-      "voiceover": "The fix is friction. Move the app, log out, make checking cost effort.",
-      "keywords": ["friction", "effort"]
+      "voiceover": "The way out is not willpower. It is friction: make scrolling cost an extra step.",
+      "keywords": ["friction", "step"]
     },
     {
-      "start": 48,
+      "start": 39,
+      "end": 50,
+      "visual": "Mustard TRY THIS card with two concrete steps; Norb celebrates",
+      "components": ["TakeawayCard", "Norb"],
+      "norbEmotion": "celebrating",
+      "voiceover": "Log out after every use.\nMove the app off your home screen.",
+      "keywords": ["log", "out", "move"]
+    },
+    {
+      "start": 50,
       "end": 55,
-      "visual": "Sources card, Norb celebrating in the corner",
+      "visual": "Sources card, Norb celebrating below",
       "components": ["SourceCard", "Norb"],
       "norbEmotion": "celebrating",
       "voiceover": "Sources in caption.",
