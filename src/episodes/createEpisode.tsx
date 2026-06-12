@@ -7,6 +7,7 @@ import {CaptionBand} from '../components/CaptionBand';
 import {HookCard} from '../components/HookCard';
 import {SourceCard} from '../components/SourceCard';
 import {TakeawayCard} from '../components/TakeawayCard';
+import {ScienceCard} from '../components/ScienceCard';
 import {ActionLayer} from '../components/ActionLayer';
 import {SceneTransition} from '../components/SceneTransition';
 import type {EpisodeScript, SceneScript} from '../scripts/schema';
@@ -54,6 +55,10 @@ const Scene: React.FC<{scene: SceneScript; durationInFrames: number}> = ({
 
       {has('TakeawayCard') && (
         <TakeawayCard text={scene.voiceover} keywords={scene.keywords} />
+      )}
+
+      {has('ScienceCard') && (
+        <ScienceCard text={scene.voiceover} keywords={scene.keywords} />
       )}
 
       {has('SourceCard') && <SourceCard />}

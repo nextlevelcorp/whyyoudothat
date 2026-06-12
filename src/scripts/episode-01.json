@@ -34,7 +34,7 @@
     },
     {
       "start": 21,
-      "end": 30,
+      "end": 28,
       "visual": "Three dots chase each other around a circle, never arriving; Norb exhausted",
       "components": ["Norb", "CaptionBand"],
       "action": "loop",
@@ -43,8 +43,8 @@
       "keywords": ["loop"]
     },
     {
-      "start": 30,
-      "end": 39,
+      "start": 28,
+      "end": 35,
       "visual": "Navy friction wall with a lock pops up and blocks the lunging phone; Norb gets the idea",
       "components": ["Norb", "CaptionBand"],
       "action": "barrier",
@@ -53,8 +53,17 @@
       "keywords": ["friction", "step"]
     },
     {
-      "start": 39,
-      "end": 50,
+      "start": 35,
+      "end": 44,
+      "visual": "Navy THE SCIENCE card naming the mechanism and why friction beats it; Norb curious",
+      "components": ["ScienceCard", "Norb"],
+      "norbEmotion": "curious",
+      "voiceover": "It's a variable reward schedule, the slot machine trick.\nUrges are short waves. One extra step outlasts the wave.",
+      "keywords": ["variable", "reward", "schedule", "waves", "outlasts"]
+    },
+    {
+      "start": 44,
+      "end": 51,
       "visual": "Mustard TRY THIS card with two concrete steps; Norb celebrates",
       "components": ["TakeawayCard", "Norb"],
       "norbEmotion": "celebrating",
@@ -62,7 +71,7 @@
       "keywords": ["log", "out", "move"]
     },
     {
-      "start": 50,
+      "start": 51,
       "end": 55,
       "visual": "Sources card, Norb celebrating below",
       "components": ["SourceCard", "Norb"],

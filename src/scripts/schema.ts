@@ -5,6 +5,7 @@ import type {ConceptKind} from '../components/ConceptCharacter';
 export type SceneComponentName =
   | 'HookCard'
   | 'SourceCard'
+  | 'ScienceCard'
   | 'TakeawayCard'
   | 'Norb'
   | 'ConceptCharacter'

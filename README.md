@@ -34,6 +34,7 @@ src/
     Norb.tsx              # mascot, `emotion` prop + idle wiggle
     ConceptCharacter.tsx  # cute-ified concepts (brain, amygdala, dopamine, cortisol)
     ActionLayer.tsx       # animated props that act out the narration (scroll/burst/loop/barrier)
+    ScienceCard.tsx       # "THE SCIENCE" card: names the mechanism + why the tip works
     TakeawayCard.tsx      # "TRY THIS" card: the episode's one concrete tip
     CaptionBand.tsx       # word-by-word synced subtitles (snappy pacing)
     HookCard.tsx          # 0–3s big-text hook
@@ -69,11 +70,17 @@ These came out of the episode-01 review and are part of the template:
 2. **Captions are snappy.** `CaptionBand` paces words at ~6 frames each
    and always finishes the line within the first 45% of the scene. Keep
    voiceover lines short (max ~15 words per scene) so they stay readable.
-3. **One concrete takeaway, always.** Every episode ends with a
+3. **Name the science, briefly but explicitly.** Generic advice is what
+   everyone posts; our differentiator is the backing. Every episode has
+   exactly one `ScienceCard` scene ("THE SCIENCE") right before the
+   takeaway: line 1 names the actual mechanism (e.g. "variable reward
+   schedule"), line 2 says in plain words why the upcoming tip defeats
+   it. Two short lines max — crisp, not a lecture.
+4. **One concrete takeaway, always.** Every episode ends with a
    `TakeawayCard` scene right before the `SourceCard`: a "TRY THIS" card
    with 1–2 imperative, doable-today steps (newline-separated in
    `voiceover`). The narrative arc is fixed:
-   **hook → mechanism (acted out) → why it traps you → the fix → TRY THIS → sources.**
+   **hook → mechanism (acted out) → why it traps you → the fix → THE SCIENCE → TRY THIS → sources.**
 
 ### Adding an episode
 
@@ -94,7 +101,7 @@ These came out of the episode-01 review and are part of the template:
     {
       "start": 0, "end": 3,            // seconds
       "visual": "what appears (notes for the writer)",
-      "components": ["HookCard"],       // HookCard | SourceCard | TakeawayCard | Norb | ConceptCharacter | CaptionBand
+      "components": ["HookCard"],       // HookCard | SourceCard | ScienceCard | TakeawayCard | Norb | ConceptCharacter | CaptionBand
       "action": "scroll",               // scroll | burst | loop | barrier — acts out the narration (required for explanation scenes)
       "norbEmotion": "curious",         // neutral | panicked | jittery | exhausted | curious | lightbulb | facepalm | celebrating
       "concept": "dopamine",            // brain | amygdala | dopamine | cortisol (with ConceptCharacter)
