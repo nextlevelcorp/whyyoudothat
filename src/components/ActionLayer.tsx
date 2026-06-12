@@ -265,10 +265,241 @@ const Barrier: React.FC<{size: number}> = ({size}) => {
   );
 };
 
+/** Slot machine with spinning reels and a pulling lever — the variable
+ * reward schedule, made literal. */
+const SlotMachine: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const u = size / 600;
+  const bodyW = 380 * u;
+  const bodyH = 300 * u;
+  const reelW = 86 * u;
+  const dotH = 70 * u;
+  const gap = 18 * u;
+  const cycle = (dotH + gap) * CARD_COLORS.length;
+  // Lever pulls down periodically, reels speed up right after each pull.
+  const pull = Math.max(0, Math.sin(frame / 14)) ** 3;
+
+  return (
+    <div style={{position: 'relative', width: bodyW + 120 * u, margin: '0 auto'}}>
+      <div
+        style={{
+          width: bodyW,
+          height: bodyH,
+          backgroundColor: COLORS.navy,
+          borderRadius: 48 * u,
+          boxShadow: boxShadow('navy'),
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 20 * u,
+          transform: `translateY(${pull * 8}px)`,
+        }}
+      >
+        {[0, 1, 2].map((r) => {
+          const speed = [7, 9, 5][r] * u * (1 + pull * 2);
+          const offset = (frame * speed) % cycle;
+          return (
+            <div
+              key={r}
+              style={{
+                width: reelW,
+                height: bodyH - 70 * u,
+                backgroundColor: COLORS.cream,
+                borderRadius: 24 * u,
+                overflow: 'hidden',
+                position: 'relative',
+              }}
+            >
+              {[0, 1, 2, 3].map((i) => {
+                const y =
+                  ((i * (dotH + gap) - offset) % (cycle * 2) + cycle * 2) % (cycle * 2) -
+                  dotH;
+                return (
+                  <div
+                    key={i}
+                    style={{
+                      position: 'absolute',
+                      left: (reelW - dotH) / 2,
+                      top: y,
+                      width: dotH,
+                      height: dotH,
+                      borderRadius: '50%',
+                      backgroundColor: CARD_COLORS[(i + r) % CARD_COLORS.length],
+                    }}
+                  />
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
+      {/* Lever */}
+      <div
+        style={{
+          position: 'absolute',
+          right: 0,
+          top: bodyH * 0.18,
+          width: 26 * u,
+          height: 150 * u,
+          borderRadius: 26 * u,
+          backgroundColor: COLORS.coral,
+          transformOrigin: '50% 100%',
+          transform: `rotate(${pull * 60}deg)`,
+          boxShadow: boxShadow('coral'),
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            top: -36 * u,
+            left: -22 * u,
+            width: 70 * u,
+            height: 70 * u,
+            borderRadius: '50%',
+            backgroundColor: COLORS.mustard,
+            boxShadow: boxShadow('mustard'),
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+/** An urge: a teal wave that swells and dies while the small navy
+ * friction step just stands there and outlasts it. */
+const Wave: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const u = size / 600;
+  const cycle = 70;
+  const p = (frame % cycle) / cycle;
+  const swell = Math.sin(p * Math.PI); // rises, peaks, dies
+
+  return (
+    <div style={{position: 'relative', width: size, height: 320 * u, margin: '0 auto'}}>
+      {/* Ground line */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 30 * u,
+          right: 30 * u,
+          height: 22 * u,
+          borderRadius: 22 * u,
+          backgroundColor: SHADOW_TONES.cream,
+        }}
+      />
+      {/* The urge wave: swells up and washes out, again and again */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 12 * u,
+          left: 60 * u,
+          width: 300 * u,
+          height: 270 * u * Math.max(swell, 0.02),
+          borderRadius: '50% 50% 12% 12% / 100% 100% 0% 0%',
+          backgroundColor: COLORS.teal,
+          boxShadow: boxShadow('teal'),
+          opacity: 0.35 + swell * 0.65,
+          transformOrigin: '50% 100%',
+          transform: `rotate(${Math.sin(frame / 9) * 2}deg)`,
+        }}
+      />
+      {/* The friction step: small, navy, unbothered */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 12 * u,
+          right: 80 * u,
+          width: 130 * u,
+          height: 150 * u + Math.sin(frame / 18) * 3,
+          borderRadius: 30 * u,
+          backgroundColor: COLORS.navy,
+          boxShadow: boxShadow('navy'),
+        }}
+      />
+    </div>
+  );
+};
+
+/** App icon being dragged off the phone screen and tossed away. */
+const DragAway: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const u = size / 600;
+  const phoneW = 300 * u;
+  const phoneH = 380 * u;
+  const cycle = 80;
+  const p = (frame % cycle) / cycle;
+  // Phases: 0–0.3 icon wiggles in place, 0.3–0.8 dragged out, then respawn.
+  const drag = interpolate(p, [0.3, 0.8], [0, 1], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
+  const wiggle = p < 0.3 ? Math.sin(frame * 1.4) * 4 : 0;
+
+  return (
+    <div style={{position: 'relative', width: size, height: phoneH, margin: '0 auto'}}>
+      <div
+        style={{
+          position: 'absolute',
+          left: 60 * u,
+          width: phoneW,
+          height: phoneH,
+          backgroundColor: COLORS.navy,
+          borderRadius: 44 * u,
+          boxShadow: boxShadow('navy'),
+          padding: 18 * u,
+        }}
+      >
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            backgroundColor: COLORS.cream,
+            borderRadius: 30 * u,
+            position: 'relative',
+          }}
+        >
+          {/* Remaining boring apps */}
+          {[0, 1, 2, 3, 4].map((i) => (
+            <div
+              key={i}
+              style={{
+                position: 'absolute',
+                left: 30 * u + (i % 2) * 110 * u,
+                top: 30 * u + Math.floor(i / 2) * 110 * u,
+                width: 76 * u,
+                height: 76 * u,
+                borderRadius: 22 * u,
+                backgroundColor: SHADOW_TONES.cream,
+              }}
+            />
+          ))}
+        </div>
+      </div>
+      {/* The app being exiled: dragged off screen, shrinking as it goes */}
+      <div
+        style={{
+          position: 'absolute',
+          left: 90 * u + 110 * u + drag * 320 * u + wiggle,
+          top: 160 * u - Math.sin(drag * Math.PI) * 90 * u,
+          width: 86 * u,
+          height: 86 * u,
+          borderRadius: 24 * u,
+          backgroundColor: COLORS.coral,
+          boxShadow: boxShadow('coral'),
+          opacity: 1 - Math.max(0, drag - 0.7) / 0.3,
+          transform: `scale(${1 - drag * 0.3}) rotate(${drag * 50}deg)`,
+        }}
+      />
+    </div>
+  );
+};
+
 /**
  * Animated prop layer that ACTS OUT the scene's narration. One action per
  * scene; the engine centers it on the stage. This is what keeps every
- * scene moving — characters react, the action explains.
+ * scene moving — characters react, the action explains. Card scenes
+ * (ScienceCard/TakeawayCard) get a compact action below the card.
  */
 export const ActionLayer: React.FC<ActionLayerProps> = ({action, size = 600}) => {
   switch (action) {
@@ -280,5 +511,11 @@ export const ActionLayer: React.FC<ActionLayerProps> = ({action, size = 600}) =>
       return <Loop size={size} />;
     case 'barrier':
       return <Barrier size={size} />;
+    case 'slotMachine':
+      return <SlotMachine size={size} />;
+    case 'wave':
+      return <Wave size={size} />;
+    case 'dragAway':
+      return <DragAway size={size} />;
   }
 };

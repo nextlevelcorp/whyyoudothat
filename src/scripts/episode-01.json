@@ -55,8 +55,9 @@
     {
       "start": 35,
       "end": 44,
-      "visual": "Navy THE SCIENCE card naming the mechanism and why friction beats it; Norb curious",
+      "visual": "THE SCIENCE card; below it an urge wave swells and dies while the navy friction step stands; Norb curious",
       "components": ["ScienceCard", "Norb"],
+      "action": "wave",
       "norbEmotion": "curious",
       "voiceover": "It's a variable reward schedule, the slot machine trick.\nUrges are short waves. One extra step outlasts the wave.",
       "keywords": ["variable", "reward", "schedule", "waves", "outlasts"]
@@ -64,8 +65,9 @@
     {
       "start": 44,
       "end": 51,
-      "visual": "Mustard TRY THIS card with two concrete steps; Norb celebrates",
+      "visual": "TRY THIS card; below it the coral app icon gets dragged off the phone and tossed away; Norb celebrates",
       "components": ["TakeawayCard", "Norb"],
+      "action": "dragAway",
       "norbEmotion": "celebrating",
       "voiceover": "Log out after every use.\nMove the app off your home screen.",
       "keywords": ["log", "out", "move"]

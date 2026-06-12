@@ -20,7 +20,10 @@ export type SceneAction =
   | 'scroll' // phone with an endlessly scrolling feed
   | 'burst' // repeating reward sparkle bursts
   | 'loop' // orbiting dots: stuck-in-a-loop motion
-  | 'barrier'; // navy friction wall + lock blocking a phone
+  | 'barrier' // navy friction wall + lock blocking a phone
+  | 'slotMachine' // spinning reels + lever: variable reward schedule
+  | 'wave' // urge wave rises and dies; the friction step outlasts it
+  | 'dragAway'; // app icon gets dragged off the phone and tossed out
 
 export type SceneScript = {
   /** Scene start, in seconds from the beginning of the episode. */

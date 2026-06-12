@@ -43,6 +43,7 @@ const Scene: React.FC<{scene: SceneScript; durationInFrames: number}> = ({
   const has = (name: string) => scene.components.includes(name as never);
   const hasConcept = Boolean(has('ConceptCharacter') && scene.concept);
   const hasAction = Boolean(scene.action);
+  const hasCard = has('ScienceCard') || has('TakeawayCard');
 
   // Slow push-in over the scene: from 100% to ~105%.
   const zoom = 1 + 0.05 * (frame / Math.max(durationInFrames, 1));
@@ -63,17 +64,18 @@ const Scene: React.FC<{scene: SceneScript; durationInFrames: number}> = ({
 
       {has('SourceCard') && <SourceCard />}
 
-      {/* The action performs the narration, center stage. */}
+      {/* The action performs the narration: center stage on its own,
+          compact below the card on ScienceCard/TakeawayCard scenes. */}
       {hasAction && (
         <div
           style={{
             position: 'absolute',
             left: CONTENT_BOX.x,
-            top: CONTENT_BOX.y + 60,
+            top: CONTENT_BOX.y + (hasCard ? 760 : 60),
             width: CONTENT_BOX.width,
           }}
         >
-          <ActionLayer action={scene.action!} size={620} />
+          <ActionLayer action={scene.action!} size={hasCard ? 480 : 620} />
         </div>
       )}
 
@@ -105,10 +107,13 @@ const Scene: React.FC<{scene: SceneScript; durationInFrames: number}> = ({
             style={{
               position: 'absolute',
               right: CONTENT_BOX.x - 10,
-              top: CONTENT_BOX.y + 680,
+              top: CONTENT_BOX.y + (hasCard ? 1000 : 680),
             }}
           >
-            <Norb emotion={scene.norbEmotion ?? 'neutral'} size={270} />
+            <Norb
+              emotion={scene.norbEmotion ?? 'neutral'}
+              size={hasCard ? 230 : 270}
+            />
           </SlideIn>
         ) : (
           <div

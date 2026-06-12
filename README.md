@@ -60,10 +60,13 @@ npm run render -- episode-01 # renders out/episode-01.mp4
 
 These came out of the episode-01 review and are part of the template:
 
-1. **The visual must act out the voiceover.** Every explanation scene
-   (between the hook and the takeaway) must set an `action` that performs
-   what the narration says — never characters just standing around.
-   Available actions: `scroll`, `burst`, `loop`, `barrier` (extend
+1. **The visual must act out the voiceover — card scenes included.**
+   Every scene except the hook and sources must set an `action` that
+   performs what the narration says — never characters just standing
+   around. On `ScienceCard`/`TakeawayCard` scenes the engine renders the
+   action compactly below the card, so the card states the idea and the
+   animation demonstrates it. Available actions: `scroll`, `burst`,
+   `loop`, `barrier`, `slotMachine`, `wave`, `dragAway` (extend
    `ActionLayer.tsx` when a topic needs a new one, then add it to the
    schema). The engine also adds a slow push-in zoom and slide-in
    entrances to every scene, so nothing is ever static.
@@ -102,7 +105,7 @@ These came out of the episode-01 review and are part of the template:
       "start": 0, "end": 3,            // seconds
       "visual": "what appears (notes for the writer)",
       "components": ["HookCard"],       // HookCard | SourceCard | ScienceCard | TakeawayCard | Norb | ConceptCharacter | CaptionBand
-      "action": "scroll",               // scroll | burst | loop | barrier — acts out the narration (required for explanation scenes)
+      "action": "scroll",               // scroll | burst | loop | barrier | slotMachine | wave | dragAway — acts out the narration (required everywhere except hook/sources)
       "norbEmotion": "curious",         // neutral | panicked | jittery | exhausted | curious | lightbulb | facepalm | celebrating
       "concept": "dopamine",            // brain | amygdala | dopamine | cortisol (with ConceptCharacter)
       "voiceover": "exact narration text",
