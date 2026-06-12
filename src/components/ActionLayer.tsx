@@ -1,6 +1,6 @@
 import React from 'react';
 import {interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
-import {COLORS, SHADOW_TONES, SPRINGS, boxShadow} from '../design-system';
+import {COLORS, FONT_FAMILY, SHADOW_TONES, SPRINGS, boxShadow} from '../design-system';
 import type {SceneAction} from '../scripts/schema';
 
 type ActionLayerProps = {
@@ -421,6 +421,146 @@ const Wave: React.FC<{size: number}> = ({size}) => {
   );
 };
 
+/**
+ * Animated bar chart: dopamine response vs reward probability. Bars pop
+ * up one by one and peak at 50% — "maybe" — which pulses and throws
+ * sparkles, while the sure thing (100%) stays low. Shows the Schultz-style
+ * inverted-U the narration describes.
+ */
+const Chart: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const u = size / 600;
+
+  const bars = [
+    {label: '0%', h: 0.18},
+    {label: '25%', h: 0.55},
+    {label: '50%', h: 1.0, peak: true},
+    {label: '75%', h: 0.55},
+    {label: '100%', h: 0.22},
+  ];
+  const maxH = 280 * u;
+  const barW = 78 * u;
+  const gap = 26 * u;
+  const chartW = bars.length * barW + (bars.length - 1) * gap;
+
+  // Sparkles popping off the peak bar.
+  const cycleLen = 24;
+  const p = (frame % cycleLen) / cycleLen;
+  const wave = Math.floor(frame / cycleLen);
+  const peakX = 2 * (barW + gap) + barW / 2;
+
+  return (
+    <div style={{position: 'relative', width: chartW, margin: '0 auto'}}>
+      {/* Axis title */}
+      <div
+        style={{
+          textAlign: 'center',
+          fontFamily: FONT_FAMILY,
+          fontWeight: 900,
+          fontSize: 34 * u,
+          letterSpacing: 3,
+          color: COLORS.navy,
+          marginBottom: 18 * u,
+        }}
+      >
+        DOPAMINE
+      </div>
+
+      {/* Bars */}
+      <div style={{position: 'relative', height: maxH, display: 'flex', gap, alignItems: 'flex-end'}}>
+        {bars.map((bar, i) => {
+          const rise = spring({
+            frame: frame - 6 - i * 5,
+            fps,
+            config: SPRINGS.bouncy,
+            durationInFrames: 24,
+          });
+          const pulse = bar.peak ? 1 + Math.sin(frame / 8) * 0.05 : 1 + Math.sin(frame / 14 + i) * 0.015;
+          return (
+            <div
+              key={i}
+              style={{
+                width: barW,
+                height: maxH * bar.h,
+                borderRadius: 22 * u,
+                backgroundColor: bar.peak ? COLORS.mustard : COLORS.teal,
+                boxShadow: boxShadow(bar.peak ? 'mustard' : 'teal'),
+                transform: `scaleY(${rise * pulse})`,
+                transformOrigin: '50% 100%',
+              }}
+            />
+          );
+        })}
+
+        {/* Sparkles above the "maybe" bar */}
+        {[0, 1, 2, 3, 4].map((i) => {
+          const angle = -Math.PI * (0.15 + (i / 4) * 0.7) + Math.sin(wave) * 0.1;
+          const radius = interpolate(p, [0, 1], [16 * u, 120 * u]);
+          const dotSize = interpolate(p, [0, 1], [26 * u, 8 * u]);
+          return (
+            <div
+              key={`s-${i}`}
+              style={{
+                position: 'absolute',
+                left: peakX + Math.cos(angle) * radius - dotSize / 2,
+                top: maxH - maxH * 1.0 + Math.sin(angle) * radius - 10 * u,
+                width: dotSize,
+                height: dotSize,
+                borderRadius: '50%',
+                backgroundColor: [COLORS.coral, COLORS.mustard][i % 2],
+                opacity: 1 - p,
+              }}
+            />
+          );
+        })}
+      </div>
+
+      {/* Baseline */}
+      <div
+        style={{
+          height: 16 * u,
+          borderRadius: 16 * u,
+          backgroundColor: COLORS.navy,
+          margin: `${14 * u}px 0`,
+        }}
+      />
+
+      {/* Probability labels: chance of a reward */}
+      <div style={{display: 'flex', gap}}>
+        {bars.map((bar, i) => (
+          <div
+            key={i}
+            style={{
+              width: barW,
+              textAlign: 'center',
+              fontFamily: FONT_FAMILY,
+              fontWeight: 800,
+              fontSize: 30 * u,
+              color: bar.peak ? COLORS.coral : COLORS.navy,
+            }}
+          >
+            {bar.label}
+          </div>
+        ))}
+      </div>
+      <div
+        style={{
+          textAlign: 'center',
+          fontFamily: FONT_FAMILY,
+          fontWeight: 800,
+          fontSize: 28 * u,
+          letterSpacing: 2,
+          color: COLORS.navy,
+          marginTop: 8 * u,
+        }}
+      >
+        CHANCE OF A REWARD
+      </div>
+    </div>
+  );
+};
+
 /** App icon being dragged off the phone screen and tossed away. */
 const DragAway: React.FC<{size: number}> = ({size}) => {
   const frame = useCurrentFrame();
@@ -517,5 +657,7 @@ export const ActionLayer: React.FC<ActionLayerProps> = ({action, size = 600}) =>
       return <Wave size={size} />;
     case 'dragAway':
       return <DragAway size={size} />;
+    case 'chart':
+      return <Chart size={size} />;
   }
 };

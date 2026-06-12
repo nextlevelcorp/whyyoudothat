@@ -55,12 +55,12 @@
     {
       "start": 35,
       "end": 44,
-      "visual": "THE SCIENCE card; below it an urge wave swells and dies while the navy friction step stands; Norb curious",
+      "visual": "THE SCIENCE card; below it a bar chart of dopamine vs reward chance pops up, peaking and sparkling at 50% 'maybe'; Norb curious",
       "components": ["ScienceCard", "Norb"],
-      "action": "wave",
+      "action": "chart",
       "norbEmotion": "curious",
-      "voiceover": "It's a variable reward schedule, the slot machine trick.\nUrges are short waves. One extra step outlasts the wave.",
-      "keywords": ["variable", "reward", "schedule", "waves", "outlasts"]
+      "voiceover": "Dopamine peaks when a reward is a maybe, not a sure thing.\nThe slot machine trick: a variable reward schedule.",
+      "keywords": ["dopamine", "maybe", "variable", "reward", "schedule"]
     },
     {
       "start": 44,

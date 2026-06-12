@@ -23,7 +23,8 @@ export type SceneAction =
   | 'barrier' // navy friction wall + lock blocking a phone
   | 'slotMachine' // spinning reels + lever: variable reward schedule
   | 'wave' // urge wave rises and dies; the friction step outlasts it
-  | 'dragAway'; // app icon gets dragged off the phone and tossed out
+  | 'dragAway' // app icon gets dragged off the phone and tossed out
+  | 'chart'; // animated bar chart: dopamine vs reward probability (peak at "maybe")
 
 export type SceneScript = {
   /** Scene start, in seconds from the beginning of the episode. */

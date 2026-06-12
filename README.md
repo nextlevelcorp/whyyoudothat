@@ -66,10 +66,15 @@ These came out of the episode-01 review and are part of the template:
    around. On `ScienceCard`/`TakeawayCard` scenes the engine renders the
    action compactly below the card, so the card states the idea and the
    animation demonstrates it. Available actions: `scroll`, `burst`,
-   `loop`, `barrier`, `slotMachine`, `wave`, `dragAway` (extend
+   `loop`, `barrier`, `slotMachine`, `wave`, `dragAway`, `chart` (extend
    `ActionLayer.tsx` when a topic needs a new one, then add it to the
    schema). The engine also adds a slow push-in zoom and slide-in
    entrances to every scene, so nothing is ever static.
+   **ScienceCard scenes specifically:** the action must visualize the
+   mechanism itself — if the claim is quantitative (a relationship, a
+   peak, a comparison), use `chart` (or a new chart variant); if it's a
+   process, animate the process (e.g. `slotMachine`). The card text and
+   the animation must describe the SAME fact.
 2. **Captions are snappy.** `CaptionBand` paces words at ~6 frames each
    and always finishes the line within the first 45% of the scene. Keep
    voiceover lines short (max ~15 words per scene) so they stay readable.
@@ -105,7 +110,7 @@ These came out of the episode-01 review and are part of the template:
       "start": 0, "end": 3,            // seconds
       "visual": "what appears (notes for the writer)",
       "components": ["HookCard"],       // HookCard | SourceCard | ScienceCard | TakeawayCard | Norb | ConceptCharacter | CaptionBand
-      "action": "scroll",               // scroll | burst | loop | barrier | slotMachine | wave | dragAway — acts out the narration (required everywhere except hook/sources)
+      "action": "scroll",               // scroll | burst | loop | barrier | slotMachine | wave | dragAway | chart — acts out the narration (required everywhere except hook/sources)
       "norbEmotion": "curious",         // neutral | panicked | jittery | exhausted | curious | lightbulb | facepalm | celebrating
       "concept": "dopamine",            // brain | amygdala | dopamine | cortisol (with ConceptCharacter)
       "voiceover": "exact narration text",
