@@ -1,6 +1,6 @@
 import React from 'react';
 import {interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
-import {COLORS, FONT_FAMILY, SHADOW_TONES, SPRINGS, boxShadow} from '../design-system';
+import {COLORS, FONT_FAMILY, SHADOW_TONES, SPRINGS, boxShadow, BrandColor} from '../design-system';
 import type {SceneAction} from '../scripts/schema';
 
 type ActionLayerProps = {
@@ -635,11 +635,463 @@ const DragAway: React.FC<{size: number}> = ({size}) => {
   );
 };
 
+/** A small label pill used by the narrative actions. */
+const Pill: React.FC<{
+  text: string;
+  color: BrandColor;
+  textColor?: string;
+  u: number;
+  style?: React.CSSProperties;
+}> = ({text, color, textColor = COLORS.cream, u, style}) => (
+  <div
+    style={{
+      fontFamily: FONT_FAMILY,
+      fontWeight: 900,
+      fontSize: 26 * u,
+      letterSpacing: 2,
+      color: textColor,
+      backgroundColor: COLORS[color],
+      borderRadius: 999,
+      padding: `${8 * u}px ${22 * u}px`,
+      whiteSpace: 'nowrap',
+      ...style,
+    }}
+  >
+    {text}
+  </div>
+);
+
+/** Free choice in the lab: LEFT / RIGHT buttons, a cursor pressing one,
+ * a ticking clock. Acts out "press left or right, totally up to them." */
+const FreeChoice: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const u = size / 600;
+  // Cursor drifts left<->right and "presses" at each extreme.
+  const swing = Math.sin(frame / 22);
+  const onLeft = swing < 0;
+  const press = Math.abs(swing) > 0.85 ? (Math.abs(swing) - 0.85) / 0.15 : 0;
+
+  const button = (label: string, active: boolean, color: BrandColor) => (
+    <div
+      style={{
+        width: 200 * u,
+        height: 150 * u,
+        borderRadius: 36 * u,
+        backgroundColor: COLORS[color],
+        boxShadow: boxShadow(color),
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: FONT_FAMILY,
+        fontWeight: 900,
+        fontSize: 46 * u,
+        color: COLORS.navy,
+        transform: `scale(${active && press > 0 ? 1 - press * 0.1 : 1})`,
+      }}
+    >
+      {label}
+    </div>
+  );
+
+  return (
+    <div style={{position: 'relative', width: size, margin: '0 auto'}}>
+      <div style={{display: 'flex', gap: 48 * u, justifyContent: 'center'}}>
+        {button('LEFT', onLeft, 'teal')}
+        {button('RIGHT', !onLeft, 'mustard')}
+      </div>
+
+      {/* Cursor hand: a coral dot that slides between the buttons */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 60 * u,
+          left: size / 2 + swing * 150 * u - 28 * u,
+          width: 56 * u,
+          height: 56 * u,
+          borderRadius: '50%',
+          backgroundColor: COLORS.coral,
+          boxShadow: boxShadow('coral'),
+          transform: `translateY(${press * 26 * u}px)`,
+        }}
+      />
+
+      {/* Ticking clock */}
+      <div
+        style={{
+          position: 'absolute',
+          right: -10 * u,
+          top: -20 * u,
+          width: 96 * u,
+          height: 96 * u,
+          borderRadius: '50%',
+          backgroundColor: COLORS.cream,
+          boxShadow: boxShadow('cream'),
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            width: 6 * u,
+            height: 36 * u,
+            backgroundColor: COLORS.navy,
+            borderRadius: 6 * u,
+            transformOrigin: '50% 100%',
+            transform: `translate(-50%, -100%) rotate(${frame * 6}deg)`,
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+/** The readiness-potential timeline: a playhead sweeps -7s -> 0s; the
+ * brain signal (teal) fires early, the "you feel you decided" marker
+ * (coral) only pops at 0s. Visualizes the seven-second gap. */
+const Readiness: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const u = size / 600;
+  const trackW = size;
+  const cycle = 170;
+  const p = (frame % cycle) / cycle; // 0..1 across the replay
+  const brainX = trackW * 0.1; // brain fires here (~-7s)
+  const awareX = trackW * 0.9; // you notice here (0s)
+  // Playhead sweeps to 0s by 70% of the cycle, then holds so the reveal lands.
+  const sweep = Math.min(1, p / 0.7);
+  const headX = brainX + (awareX - brainX) * sweep;
+
+  const brainLit = p > 0.04;
+  const awarePop = spring({
+    frame: (frame % cycle) - cycle * 0.66,
+    fps,
+    config: SPRINGS.bouncy,
+    durationInFrames: 16,
+  });
+
+  // Three stacked bands so nothing collides:
+  const gapY = 0; // band A: "~7 SECONDS"
+  const trackY = 132 * u; // band B: the timeline
+  const labelY = 184 * u; // band C: the two markers' labels
+
+  return (
+    <div style={{position: 'relative', width: size, height: 250 * u, margin: '0 auto'}}>
+      {/* Band A: the gap headline */}
+      <div
+        style={{
+          position: 'absolute',
+          top: gapY,
+          left: 0,
+          width: trackW,
+          textAlign: 'center',
+          fontFamily: FONT_FAMILY,
+          fontWeight: 900,
+          fontSize: 46 * u,
+          color: COLORS.coral,
+        }}
+      >
+        ~7 SECONDS
+      </div>
+
+      {/* Band B: rising brain-signal area up to the playhead */}
+      <div
+        style={{
+          position: 'absolute',
+          left: brainX,
+          top: trackY - 50 * u,
+          width: Math.max(0, headX - brainX),
+          height: 50 * u,
+          backgroundColor: COLORS.teal,
+          opacity: 0.4,
+          borderRadius: `${16 * u}px ${16 * u}px 0 0`,
+        }}
+      />
+      {/* timeline axis */}
+      <div
+        style={{
+          position: 'absolute',
+          left: 0,
+          top: trackY,
+          width: trackW,
+          height: 12 * u,
+          borderRadius: 12 * u,
+          backgroundColor: COLORS.navy,
+        }}
+      />
+      {/* brain-decides marker (fires early) */}
+      <div
+        style={{
+          position: 'absolute',
+          left: brainX - 26 * u,
+          top: trackY - 20 * u,
+          width: 52 * u,
+          height: 52 * u,
+          borderRadius: '50%',
+          backgroundColor: COLORS.teal,
+          boxShadow: boxShadow('teal'),
+          transform: `scale(${brainLit ? 1 + Math.sin(frame / 5) * 0.12 : 0.6})`,
+        }}
+      />
+      {/* you-notice marker (pops at 0s) */}
+      <div
+        style={{
+          position: 'absolute',
+          left: awareX - 26 * u,
+          top: trackY - 20 * u,
+          width: 52 * u,
+          height: 52 * u,
+          borderRadius: '50%',
+          backgroundColor: COLORS.coral,
+          boxShadow: boxShadow('coral'),
+          transform: `scale(${awarePop})`,
+        }}
+      />
+      {/* playhead */}
+      <div
+        style={{
+          position: 'absolute',
+          left: headX - 3 * u,
+          top: trackY - 34 * u,
+          width: 6 * u,
+          height: 70 * u,
+          borderRadius: 6 * u,
+          backgroundColor: COLORS.mustard,
+        }}
+      />
+
+      {/* Band C: the two labels, pinned left and right */}
+      <Pill
+        text="BRAIN DECIDES"
+        color="teal"
+        u={u}
+        style={{position: 'absolute', top: labelY, left: 0}}
+      />
+      <Pill
+        text="YOU NOTICE"
+        color="coral"
+        u={u}
+        style={{position: 'absolute', top: labelY, right: 0, transform: `scale(${awarePop})`}}
+      />
+    </div>
+  );
+};
+
+/** Backstage: a little "you" figure up front wears a CEO crown that keeps
+ * slipping off, while behind a curtain the brain works the levers. Acts
+ * out "you're the narrator, not the CEO." */
+const Backstage: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const u = size / 600;
+  const crownSlip = (Math.sin(frame / 18) + 1) / 2; // 0..1 slipping
+
+  return (
+    <div style={{position: 'relative', width: size, height: 360 * u, margin: '0 auto'}}>
+      {/* Curtain pulled aside, revealing backstage */}
+      <div
+        style={{
+          position: 'absolute',
+          right: 0,
+          top: 0,
+          width: 300 * u,
+          height: 360 * u,
+          backgroundColor: COLORS.cream,
+          boxShadow: boxShadow('cream'),
+          borderRadius: 24 * u,
+          overflow: 'hidden',
+        }}
+      >
+        {/* Brain working levers */}
+        <div
+          style={{
+            position: 'absolute',
+            left: 60 * u,
+            top: 120 * u,
+            width: 150 * u,
+            height: 150 * u,
+            borderRadius: '48% 52% 55% 45% / 55% 60% 40% 45%',
+            backgroundColor: COLORS.teal,
+            boxShadow: boxShadow('teal'),
+          }}
+        />
+        {[0, 1].map((i) => (
+          <div
+            key={i}
+            style={{
+              position: 'absolute',
+              left: 40 * u + i * 180 * u,
+              top: 60 * u,
+              width: 22 * u,
+              height: 110 * u,
+              borderRadius: 22 * u,
+              backgroundColor: COLORS.navy,
+              transformOrigin: '50% 100%',
+              transform: `rotate(${Math.sin(frame / 7 + i * 2) * 22}deg)`,
+            }}
+          >
+            <div
+              style={{
+                position: 'absolute',
+                top: -26 * u,
+                left: -16 * u,
+                width: 54 * u,
+                height: 54 * u,
+                borderRadius: '50%',
+                backgroundColor: COLORS.coral,
+              }}
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* The teal curtain edge */}
+      <div
+        style={{
+          position: 'absolute',
+          left: 250 * u,
+          top: -10 * u,
+          width: 70 * u,
+          height: 380 * u,
+          backgroundColor: COLORS.teal,
+          boxShadow: boxShadow('teal'),
+          borderRadius: 20 * u,
+        }}
+      />
+
+      {/* The "you" figure up front */}
+      <div style={{position: 'absolute', left: 30 * u, top: 70 * u}}>
+        {/* Sliding CEO crown */}
+        <div
+          style={{
+            position: 'absolute',
+            left: 18 * u,
+            top: -54 * u + crownSlip * 70 * u,
+            transform: `rotate(${crownSlip * 28}deg)`,
+          }}
+        >
+          <div
+            style={{
+              width: 90 * u,
+              height: 50 * u,
+              backgroundColor: COLORS.mustard,
+              boxShadow: boxShadow('mustard'),
+              clipPath:
+                'polygon(0% 100%, 0% 30%, 25% 55%, 50% 0%, 75% 55%, 100% 30%, 100% 100%)',
+            }}
+          />
+          <div
+            style={{
+              textAlign: 'center',
+              fontFamily: FONT_FAMILY,
+              fontWeight: 900,
+              fontSize: 20 * u,
+              color: COLORS.navy,
+            }}
+          >
+            CEO
+          </div>
+        </div>
+        {/* Head */}
+        <div
+          style={{
+            width: 120 * u,
+            height: 120 * u,
+            borderRadius: '50%',
+            backgroundColor: COLORS.navy,
+            boxShadow: boxShadow('navy'),
+            position: 'relative',
+          }}
+        >
+          {[-1, 1].map((s) => (
+            <div
+              key={s}
+              style={{
+                position: 'absolute',
+                left: `calc(50% + ${s * 22 * u}px - ${7 * u}px)`,
+                top: 46 * u,
+                width: 14 * u,
+                height: 14 * u,
+                borderRadius: '50%',
+                backgroundColor: COLORS.cream,
+              }}
+            />
+          ))}
+        </div>
+        {/* Body */}
+        <div
+          style={{
+            width: 150 * u,
+            height: 150 * u,
+            marginLeft: -15 * u,
+            marginTop: -10 * u,
+            borderRadius: `${40 * u}px ${40 * u}px ${30 * u}px ${30 * u}px`,
+            backgroundColor: COLORS.navy,
+            boxShadow: boxShadow('navy'),
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+/** A coin tumbling and settling at ~60% — "only about 60% accurate." */
+const CoinFlip: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const u = size / 600;
+  // Coin tumbles (scaleX wobble) and bobs.
+  const spin = Math.cos(frame / 6);
+  const bob = Math.abs(Math.sin(frame / 12)) * -30 * u;
+
+  return (
+    <div style={{position: 'relative', width: size, height: 300 * u, margin: '0 auto'}}>
+      <div style={{display: 'flex', justifyContent: 'center', marginBottom: 18 * u}}>
+        <Pill text="60% ACCURATE" color="mustard" textColor={COLORS.navy} u={u} />
+      </div>
+      <div
+        style={{
+          position: 'absolute',
+          left: '50%',
+          top: 90 * u,
+          width: 150 * u,
+          height: 150 * u,
+          marginLeft: -75 * u,
+          borderRadius: '50%',
+          backgroundColor: COLORS.mustard,
+          boxShadow: boxShadow('mustard'),
+          transform: `translateY(${bob}px) scaleX(${spin})`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontFamily: FONT_FAMILY,
+          fontWeight: 900,
+          fontSize: 70 * u,
+          color: COLORS.navy,
+        }}
+      >
+        {spin >= 0 ? '?' : ''}
+      </div>
+      {/* Ground shadow */}
+      <div
+        style={{
+          position: 'absolute',
+          left: '50%',
+          top: 270 * u,
+          width: 150 * u,
+          height: 22 * u,
+          marginLeft: -75 * u,
+          borderRadius: '50%',
+          backgroundColor: SHADOW_TONES.cream,
+        }}
+      />
+    </div>
+  );
+};
+
 /**
  * Animated prop layer that ACTS OUT the scene's narration. One action per
  * scene; the engine centers it on the stage. This is what keeps every
  * scene moving — characters react, the action explains. Card scenes
- * (ScienceCard/TakeawayCard) get a compact action below the card.
+ * (ScienceCard/TakeawayCard/OutroCard) get a compact action below the card.
  */
 export const ActionLayer: React.FC<ActionLayerProps> = ({action, size = 600}) => {
   switch (action) {
@@ -659,5 +1111,13 @@ export const ActionLayer: React.FC<ActionLayerProps> = ({action, size = 600}) =>
       return <DragAway size={size} />;
     case 'chart':
       return <Chart size={size} />;
+    case 'freeChoice':
+      return <FreeChoice size={size} />;
+    case 'readiness':
+      return <Readiness size={size} />;
+    case 'backstage':
+      return <Backstage size={size} />;
+    case 'coinFlip':
+      return <CoinFlip size={size} />;
   }
 };

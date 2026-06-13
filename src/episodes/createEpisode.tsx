@@ -6,6 +6,7 @@ import {ConceptCharacter} from '../components/ConceptCharacter';
 import {CaptionBand} from '../components/CaptionBand';
 import {HookCard} from '../components/HookCard';
 import {SourceCard} from '../components/SourceCard';
+import {OutroCard} from '../components/OutroCard';
 import {TakeawayCard} from '../components/TakeawayCard';
 import {ScienceCard} from '../components/ScienceCard';
 import {ActionLayer} from '../components/ActionLayer';
@@ -43,7 +44,9 @@ const Scene: React.FC<{scene: SceneScript; durationInFrames: number}> = ({
   const has = (name: string) => scene.components.includes(name as never);
   const hasConcept = Boolean(has('ConceptCharacter') && scene.concept);
   const hasAction = Boolean(scene.action);
-  const hasCard = has('ScienceCard') || has('TakeawayCard');
+  const hasCard = has('ScienceCard') || has('TakeawayCard') || has('OutroCard');
+  // Cards show a crisp headline; CaptionBand shows the full spoken line.
+  const cardText = scene.cardText ?? scene.voiceover;
 
   // Slow push-in over the scene: from 100% to ~105%.
   const zoom = 1 + 0.05 * (frame / Math.max(durationInFrames, 1));
@@ -51,16 +54,18 @@ const Scene: React.FC<{scene: SceneScript; durationInFrames: number}> = ({
   return (
     <AbsoluteFill style={{transform: `scale(${zoom})`, transformOrigin: '50% 42%'}}>
       {has('HookCard') && (
-        <HookCard text={scene.voiceover} keywords={scene.keywords} />
+        <HookCard text={cardText} keywords={scene.keywords} />
       )}
 
       {has('TakeawayCard') && (
-        <TakeawayCard text={scene.voiceover} keywords={scene.keywords} />
+        <TakeawayCard text={cardText} keywords={scene.keywords} />
       )}
 
       {has('ScienceCard') && (
-        <ScienceCard text={scene.voiceover} keywords={scene.keywords} />
+        <ScienceCard text={cardText} keywords={scene.keywords} />
       )}
+
+      {has('OutroCard') && <OutroCard text={cardText} />}
 
       {has('SourceCard') && <SourceCard />}
 
@@ -75,7 +80,7 @@ const Scene: React.FC<{scene: SceneScript; durationInFrames: number}> = ({
             width: CONTENT_BOX.width,
           }}
         >
-          <ActionLayer action={scene.action!} size={hasCard ? 480 : 620} />
+          <ActionLayer action={scene.action!} size={hasCard ? 560 : 620} />
         </div>
       )}
 

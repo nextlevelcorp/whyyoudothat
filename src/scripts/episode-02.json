@@ -1,0 +1,59 @@
+{
+  "title": "Your brain decided before you did",
+  "durationSec": 56,
+  "scenes": [
+    {
+      "start": 0,
+      "end": 4,
+      "visual": "Cream background. Big navy headline pops in word by word: 'You didn't choose to watch this.' Norb sits bottom-right, frozen mid-blink, one dendrite pointing up at the text as if caught off guard.",
+      "components": ["HookCard", "Norb"],
+      "norbEmotion": "curious",
+      "cardText": "You didn't choose to watch this.",
+      "voiceover": "You didn't actually decide to watch this. Your brain did — a few seconds before you knew it.",
+      "keywords": ["choose"]
+    },
+    {
+      "start": 4,
+      "end": 18,
+      "visual": "Brain character watches while a free-choice apparatus plays out: LEFT and RIGHT buttons, a cursor pressing one, a clock ticking. Norb leans in from the right.",
+      "components": ["ConceptCharacter", "Norb", "CaptionBand"],
+      "concept": "brain",
+      "action": "freeChoice",
+      "norbEmotion": "curious",
+      "voiceover": "Here's the weird part. In lab studies, scientists watched people's brain activity while they made a simple free choice — press left, or press right. Totally up to them.",
+      "keywords": ["free", "choice", "left", "right"]
+    },
+    {
+      "start": 18,
+      "end": 32,
+      "visual": "THE SCIENCE card. Below it a -7s to 0s timeline: the brain signal fires near -7s, the 'you notice' marker only pops at 0s, with the ~7 second gap labeled. Norb's jaw drops.",
+      "components": ["ScienceCard", "Norb"],
+      "action": "readiness",
+      "norbEmotion": "lightbulb",
+      "cardText": "The brain signal that predicts your choice fires up to 7s before you feel it.\nThat early signal is the readiness potential.",
+      "voiceover": "The brain pattern that predicted their choice showed up as much as seven seconds before they FELT like they'd decided. Seven. Seconds. Your conscious choice arrives late to its own party.",
+      "keywords": ["seven", "seconds", "predicted", "readiness", "potential"]
+    },
+    {
+      "start": 32,
+      "end": 44,
+      "visual": "A little 'you' figure up front wears a CEO crown that keeps sliding off; behind a pulled-aside curtain the brain works the levers. Norb facepalms gently.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "backstage",
+      "norbEmotion": "facepalm",
+      "voiceover": "So you might not be the CEO of your decisions. You might be the narrator — explaining choices your brain already started making backstage.",
+      "keywords": ["narrator", "backstage", "CEO"]
+    },
+    {
+      "start": 44,
+      "end": 56,
+      "visual": "A coin tumbles and settles at about 60% accuracy. Then the follow CTA card: 'Follow for more brain stuff @whyyoudothat'. Norb shrugs with a relieved smile, then waves.",
+      "components": ["OutroCard", "Norb"],
+      "action": "coinFlip",
+      "norbEmotion": "celebrating",
+      "cardText": "Follow for more brain stuff",
+      "voiceover": "But before you panic — these predictions were only about sixty percent accurate, and scientists still argue about what it all means. So free will isn't dead. It's just complicated. Follow if you like knowing why you do what you do.",
+      "keywords": ["sixty", "percent", "complicated"]
+    }
+  ]
+}

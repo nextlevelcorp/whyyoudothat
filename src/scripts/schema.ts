@@ -5,6 +5,7 @@ import type {ConceptKind} from '../components/ConceptCharacter';
 export type SceneComponentName =
   | 'HookCard'
   | 'SourceCard'
+  | 'OutroCard'
   | 'ScienceCard'
   | 'TakeawayCard'
   | 'Norb'
@@ -24,7 +25,11 @@ export type SceneAction =
   | 'slotMachine' // spinning reels + lever: variable reward schedule
   | 'wave' // urge wave rises and dies; the friction step outlasts it
   | 'dragAway' // app icon gets dragged off the phone and tossed out
-  | 'chart'; // animated bar chart: dopamine vs reward probability (peak at "maybe")
+  | 'chart' // animated bar chart: dopamine vs reward probability (peak at "maybe")
+  | 'freeChoice' // LEFT/RIGHT buttons + cursor pressing one + ticking clock
+  | 'readiness' // -7s -> 0s timeline: brain signal fires before you feel the choice
+  | 'backstage' // a "you" figure with a slipping CEO crown; brain works levers behind a curtain
+  | 'coinFlip'; // a coin half-flips and settles at ~60% accuracy
 
 export type SceneScript = {
   /** Scene start, in seconds from the beginning of the episode. */
@@ -47,6 +52,12 @@ export type SceneScript = {
   concept?: ConceptKind;
   /** Exact narration text; also drives the CaptionBand. */
   voiceover: string;
+  /**
+   * Optional crisp headline for card components (ScienceCard / TakeawayCard
+   * / OutroCard). Lets the card state a short claim while CaptionBand shows
+   * the full spoken line. Falls back to `voiceover` when omitted.
+   */
+  cardText?: string;
   /** Words highlighted in coral in captions and hook text. */
   keywords?: string[];
 };

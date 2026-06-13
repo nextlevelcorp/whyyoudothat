@@ -36,6 +36,7 @@ src/
     ActionLayer.tsx       # animated props that act out the narration (scroll/burst/loop/barrier)
     ScienceCard.tsx       # "THE SCIENCE" card: names the mechanism + why the tip works
     TakeawayCard.tsx      # "TRY THIS" card: the episode's one concrete tip
+    OutroCard.tsx         # "FOLLOW" call-to-action end card (alt to SourceCard)
     CaptionBand.tsx       # word-by-word synced subtitles (snappy pacing)
     HookCard.tsx          # 0–3s big-text hook
     SourceCard.tsx        # "Sources in caption 👇" end card
@@ -66,9 +67,12 @@ These came out of the episode-01 review and are part of the template:
    around. On `ScienceCard`/`TakeawayCard` scenes the engine renders the
    action compactly below the card, so the card states the idea and the
    animation demonstrates it. Available actions: `scroll`, `burst`,
-   `loop`, `barrier`, `slotMachine`, `wave`, `dragAway`, `chart` (extend
+   `loop`, `barrier`, `slotMachine`, `wave`, `dragAway`, `chart`,
+   `freeChoice`, `readiness`, `backstage`, `coinFlip` (extend
    `ActionLayer.tsx` when a topic needs a new one, then add it to the
-   schema). The engine also adds a slow push-in zoom and slide-in
+   schema). Actions are self-contained: if a beat needs a figure (a
+   phone, a "you" person, levers), the action draws it, so props stay
+   aligned. The engine also adds a slow push-in zoom and slide-in
    entrances to every scene, so nothing is ever static.
    **ScienceCard scenes specifically:** the action must visualize the
    mechanism itself — if the claim is quantitative (a relationship, a
@@ -109,11 +113,12 @@ These came out of the episode-01 review and are part of the template:
     {
       "start": 0, "end": 3,            // seconds
       "visual": "what appears (notes for the writer)",
-      "components": ["HookCard"],       // HookCard | SourceCard | ScienceCard | TakeawayCard | Norb | ConceptCharacter | CaptionBand
-      "action": "scroll",               // scroll | burst | loop | barrier | slotMachine | wave | dragAway | chart — acts out the narration (required everywhere except hook/sources)
+      "components": ["HookCard"],       // HookCard | SourceCard | OutroCard | ScienceCard | TakeawayCard | Norb | ConceptCharacter | CaptionBand
+      "action": "scroll",               // scroll | burst | loop | barrier | slotMachine | wave | dragAway | chart | freeChoice | readiness | backstage | coinFlip — acts out the narration (required everywhere except hook/sources)
       "norbEmotion": "curious",         // neutral | panicked | jittery | exhausted | curious | lightbulb | facepalm | celebrating
       "concept": "dopamine",            // brain | amygdala | dopamine | cortisol (with ConceptCharacter)
       "voiceover": "exact narration text",
+      "cardText": "short headline for HookCard/ScienceCard/TakeawayCard/OutroCard (optional; falls back to voiceover)",
       "keywords": ["words to highlight in coral"]
     }
   ]
