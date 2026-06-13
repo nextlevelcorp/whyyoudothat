@@ -1,0 +1,78 @@
+{
+  "title": "It's not stress — it's rank",
+  "durationSec": 56,
+  "scenes": [
+    {
+      "start": 0,
+      "end": 3,
+      "visual": "Big navy hook text pops in word by word; Norb peeks from below, curious.",
+      "components": ["HookCard", "Norb"],
+      "norbEmotion": "curious",
+      "cardText": "It's not the stress. It's your rank.",
+      "voiceover": "Stress isn't what's wearing you down. Where you sit in the pecking order is.",
+      "keywords": ["rank"]
+    },
+    {
+      "start": 3,
+      "end": 13,
+      "visual": "Rank ladder: three creatures on ascending pillars; the bottom-rank one trembles and sweats, the top wears a crown. Norb watches, alarmed.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "hierarchy",
+      "norbEmotion": "panicked",
+      "voiceover": "Take a troop of baboons. Same savanna, same threats. The ones at the bottom get sick the most.",
+      "keywords": ["bottom", "sick"]
+    },
+    {
+      "start": 13,
+      "end": 23,
+      "visual": "Cortisol drop character looks frazzled while dots loop endlessly; Norb is exhausted.",
+      "components": ["ConceptCharacter", "Norb", "CaptionBand"],
+      "action": "loop",
+      "concept": "cortisol",
+      "norbEmotion": "exhausted",
+      "voiceover": "Low rank means low control. So the stress alarm never shuts off, and that slow drip wears the body down.",
+      "keywords": ["control", "alarm"]
+    },
+    {
+      "start": 23,
+      "end": 34,
+      "visual": "A surge wave swells and finally passes beside a steady anchor; Norb gets the idea.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "wave",
+      "norbEmotion": "lightbulb",
+      "voiceover": "You can't always climb the ladder. But control and connection turn that alarm back down.",
+      "keywords": ["control", "connection"]
+    },
+    {
+      "start": 34,
+      "end": 45,
+      "visual": "THE SCIENCE card; below it a bar chart where cortisol rises as social rank falls (low-rank bar tallest); Norb curious.",
+      "components": ["ScienceCard", "Norb"],
+      "action": "rankChart",
+      "norbEmotion": "curious",
+      "cardText": "It's not the stressor.\nLow rank and low control keep cortisol high — that's the damage.",
+      "voiceover": "Here's the science. From baboons to office workers, it's not the workload. Low rank and low control keep cortisol high. That's the real damage.",
+      "keywords": ["rank", "control", "cortisol"]
+    },
+    {
+      "start": 45,
+      "end": 52,
+      "visual": "TRY THIS card; below it two creatures slide together and a warm pulse calms the stressed one; Norb celebrates.",
+      "components": ["TakeawayCard", "Norb"],
+      "action": "connect",
+      "norbEmotion": "celebrating",
+      "cardText": "Control one thing today.\nText one person you trust.",
+      "voiceover": "So today, take back one small thing you control. And text one person you trust. Connection is the off switch.",
+      "keywords": ["control", "trust"]
+    },
+    {
+      "start": 52,
+      "end": 56,
+      "visual": "Sources card; Norb celebrating below.",
+      "components": ["SourceCard", "Norb"],
+      "norbEmotion": "celebrating",
+      "voiceover": "Sources in the caption.",
+      "keywords": []
+    }
+  ]
+}

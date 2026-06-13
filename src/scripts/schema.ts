@@ -29,7 +29,10 @@ export type SceneAction =
   | 'freeChoice' // LEFT/RIGHT buttons + cursor pressing one + ticking clock
   | 'readiness' // -7s -> 0s timeline: brain signal fires before you feel the choice
   | 'backstage' // a "you" figure with a slipping CEO crown; brain works levers behind a curtain
-  | 'coinFlip'; // a coin half-flips and settles at ~60% accuracy
+  | 'coinFlip' // a coin half-flips and settles at ~60% accuracy
+  | 'hierarchy' // rank ladder: bottom-rank creature trembles, top-rank wears a crown
+  | 'rankChart' // bar chart: cortisol rises as social rank falls (low-rank bar tallest)
+  | 'connect'; // two creatures slide together; a warm pulse calms the stressed one
 
 export type SceneScript = {
   /** Scene start, in seconds from the beginning of the episode. */

@@ -1087,6 +1087,300 @@ const CoinFlip: React.FC<{size: number}> = ({size}) => {
   );
 };
 
+/** A tiny round creature face used by the rank/connection actions. */
+const Face: React.FC<{u: number; mood: 'calm' | 'worried'}> = ({u, mood}) => (
+  <>
+    {[-1, 1].map((s) => (
+      <div
+        key={s}
+        style={{
+          position: 'absolute',
+          left: `calc(50% + ${s * 20 * u}px - ${7 * u}px)`,
+          top: 38 * u,
+          width: 14 * u,
+          height: 14 * u,
+          borderRadius: '50%',
+          backgroundColor: COLORS.navy,
+        }}
+      />
+    ))}
+    <div
+      style={{
+        position: 'absolute',
+        left: '50%',
+        top: mood === 'worried' ? 64 * u : 60 * u,
+        transform: 'translateX(-50%)',
+        width: mood === 'worried' ? 22 * u : 34 * u,
+        height: mood === 'worried' ? 22 * u : 16 * u,
+        borderRadius:
+          mood === 'worried' ? '50%' : `0 0 ${34 * u}px ${34 * u}px`,
+        backgroundColor: COLORS.navy,
+      }}
+    />
+  </>
+);
+
+/** Rank ladder: three creatures on ascending pillars. The bottom-rank
+ * one (short pillar, coral) trembles and sweats; the top-rank one (tall
+ * pillar, teal) wears a crown. Acts out "your rank sets your stress." */
+const Hierarchy: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const u = size / 600;
+  const pillarW = 128 * u;
+  const gap = 40 * u;
+  const baseY = size * 0.8;
+  const tiers = [
+    {color: 'coral' as BrandColor, label: 'LOW', h: 130 * u, stressed: true},
+    {color: 'teal' as BrandColor, label: 'MID', h: 220 * u, stressed: false},
+    {color: 'teal' as BrandColor, label: 'TOP', h: 310 * u, stressed: false, crown: true},
+  ];
+  const totalW = tiers.length * pillarW + (tiers.length - 1) * gap;
+  const startX = (size - totalW) / 2;
+  const cSize = 92 * u;
+
+  return (
+    <div style={{position: 'relative', width: size, height: size, margin: '0 auto'}}>
+      {tiers.map((t, i) => {
+        const rise = spring({frame: frame - 6 - i * 5, fps, config: SPRINGS.bouncy, durationInFrames: 22});
+        const x = startX + i * (pillarW + gap);
+        const top = baseY - t.h;
+        const tremble = t.stressed ? Math.sin(frame * 1.8) * 5 * u : 0;
+        return (
+          <React.Fragment key={i}>
+            {/* pillar */}
+            <div
+              style={{
+                position: 'absolute',
+                left: x,
+                top,
+                width: pillarW,
+                height: t.h,
+                backgroundColor: COLORS.navy,
+                boxShadow: boxShadow('navy'),
+                borderRadius: `${24 * u}px ${24 * u}px 0 0`,
+                transform: `scaleY(${rise})`,
+                transformOrigin: '50% 100%',
+              }}
+            />
+            {/* creature on top */}
+            <div
+              style={{
+                position: 'absolute',
+                left: x + pillarW / 2 - cSize / 2 + tremble,
+                top: top - cSize - 8 * u,
+                width: cSize,
+                height: cSize,
+                borderRadius: '50%',
+                backgroundColor: COLORS[t.color],
+                boxShadow: boxShadow(t.color),
+                transform: `scale(${rise})`,
+                transformOrigin: '50% 100%',
+              }}
+            >
+              <Face u={u} mood={t.stressed ? 'worried' : 'calm'} />
+              {t.crown && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    left: '50%',
+                    top: -28 * u,
+                    transform: 'translateX(-50%)',
+                    width: 56 * u,
+                    height: 32 * u,
+                    backgroundColor: COLORS.mustard,
+                    clipPath:
+                      'polygon(0% 100%, 0% 30%, 25% 55%, 50% 0%, 75% 55%, 100% 30%, 100% 100%)',
+                  }}
+                />
+              )}
+            </div>
+            {/* sweat drop on the stressed one */}
+            {t.stressed && (
+              <div
+                style={{
+                  position: 'absolute',
+                  left: x + pillarW / 2 + 34 * u,
+                  top: top - cSize + 14 * u + Math.abs(Math.sin(frame / 8)) * 14 * u,
+                  width: 18 * u,
+                  height: 26 * u,
+                  borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%',
+                  backgroundColor: COLORS.teal,
+                }}
+              />
+            )}
+            {/* rank label */}
+            <Pill
+              text={t.label}
+              color={t.stressed ? 'coral' : 'navy'}
+              u={u}
+              style={{position: 'absolute', left: x + pillarW / 2 - 44 * u, top: baseY + 16 * u}}
+            />
+          </React.Fragment>
+        );
+      })}
+      {/* floor */}
+      <div
+        style={{
+          position: 'absolute',
+          left: startX - 20 * u,
+          top: baseY,
+          width: totalW + 40 * u,
+          height: 14 * u,
+          borderRadius: 14 * u,
+          backgroundColor: COLORS.navy,
+        }}
+      />
+    </div>
+  );
+};
+
+/** Bar chart where cortisol RISES as social rank falls — the low-rank bar
+ * is tallest and pulses. Quantitative science visual. */
+const RankChart: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const u = size / 600;
+  const bars = [
+    {label: 'HIGH', h: 0.35},
+    {label: 'MID', h: 0.6},
+    {label: 'LOW', h: 1.0, peak: true},
+  ];
+  const maxH = 280 * u;
+  const barW = 88 * u;
+  const gap = 34 * u;
+  const chartW = bars.length * barW + (bars.length - 1) * gap;
+
+  return (
+    <div style={{position: 'relative', width: chartW, margin: '0 auto'}}>
+      <div
+        style={{
+          textAlign: 'center',
+          fontFamily: FONT_FAMILY,
+          fontWeight: 900,
+          fontSize: 34 * u,
+          letterSpacing: 3,
+          color: COLORS.navy,
+          marginBottom: 18 * u,
+        }}
+      >
+        CORTISOL
+      </div>
+      <div style={{position: 'relative', height: maxH, display: 'flex', gap, alignItems: 'flex-end'}}>
+        {bars.map((bar, i) => {
+          const rise = spring({frame: frame - 6 - i * 6, fps, config: SPRINGS.bouncy, durationInFrames: 24});
+          const pulse = bar.peak ? 1 + Math.sin(frame / 8) * 0.05 : 1;
+          return (
+            <div
+              key={i}
+              style={{
+                width: barW,
+                height: maxH * bar.h,
+                borderRadius: 22 * u,
+                backgroundColor: bar.peak ? COLORS.mustard : COLORS.teal,
+                boxShadow: boxShadow(bar.peak ? 'mustard' : 'teal'),
+                transform: `scaleY(${rise * pulse})`,
+                transformOrigin: '50% 100%',
+              }}
+            />
+          );
+        })}
+      </div>
+      <div style={{height: 16 * u, borderRadius: 16 * u, backgroundColor: COLORS.navy, margin: `${14 * u}px 0`}} />
+      <div style={{display: 'flex', gap}}>
+        {bars.map((bar, i) => (
+          <div
+            key={i}
+            style={{
+              width: barW,
+              textAlign: 'center',
+              fontFamily: FONT_FAMILY,
+              fontWeight: 800,
+              fontSize: 30 * u,
+              color: bar.peak ? COLORS.coral : COLORS.navy,
+            }}
+          >
+            {bar.label}
+          </div>
+        ))}
+      </div>
+      <div
+        style={{
+          textAlign: 'center',
+          fontFamily: FONT_FAMILY,
+          fontWeight: 800,
+          fontSize: 28 * u,
+          letterSpacing: 2,
+          color: COLORS.navy,
+          marginTop: 8 * u,
+        }}
+      >
+        SOCIAL RANK
+      </div>
+    </div>
+  );
+};
+
+/** Two creatures slide together; a warm pulse blooms and the stressed one
+ * calms. Acts out "connection turns the alarm down." */
+const Connect: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const u = size / 600;
+  const cycle = 120;
+  const p = (frame % cycle) / cycle;
+  const approach = Math.min(1, p / 0.5); // come together over the first half
+  const together = Math.max(0, (p - 0.5) / 0.5); // bond + calm over the second
+  const cSize = 150 * u;
+  const cx = size / 2;
+  const leftX = cx - 210 * u + approach * 150 * u - cSize / 2;
+  const rightX = cx + 210 * u - approach * 150 * u - cSize / 2;
+  const tremble = (1 - approach) * Math.sin(frame * 2) * 5 * u;
+
+  const creature = (x: number, color: BrandColor, mood: 'calm' | 'worried') => (
+    <div
+      style={{
+        position: 'absolute',
+        left: x,
+        top: size * 0.18,
+        width: cSize,
+        height: cSize,
+        borderRadius: '50%',
+        backgroundColor: COLORS[color],
+        boxShadow: boxShadow(color),
+      }}
+    >
+      <Face u={u * (cSize / (92 * u))} mood={mood} />
+    </div>
+  );
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.62, margin: '0 auto'}}>
+      {/* warmth pulse once they meet */}
+      {together > 0 && (
+        <div
+          style={{
+            position: 'absolute',
+            left: cx - 150 * u,
+            top: size * 0.1,
+            width: 300 * u,
+            height: 300 * u,
+            borderRadius: '50%',
+            backgroundColor: COLORS.mustard,
+            opacity: 0.25 * (1 - together),
+            transform: `scale(${0.5 + together * 1.1})`,
+          }}
+        />
+      )}
+      {/* left: formerly stressed, calms as they bond */}
+      <div style={{transform: `translateX(${tremble}px)`}}>
+        {creature(leftX, 'coral', together > 0.4 ? 'calm' : 'worried')}
+      </div>
+      {/* right: the calm friend */}
+      {creature(rightX, 'teal', 'calm')}
+    </div>
+  );
+};
+
 /**
  * Animated prop layer that ACTS OUT the scene's narration. One action per
  * scene; the engine centers it on the stage. This is what keeps every
@@ -1119,5 +1413,11 @@ export const ActionLayer: React.FC<ActionLayerProps> = ({action, size = 600}) =>
       return <Backstage size={size} />;
     case 'coinFlip':
       return <CoinFlip size={size} />;
+    case 'hierarchy':
+      return <Hierarchy size={size} />;
+    case 'rankChart':
+      return <RankChart size={size} />;
+    case 'connect':
+      return <Connect size={size} />;
   }
 };
