@@ -61,8 +61,8 @@
       "components": ["TakeawayCard", "Norb"],
       "action": "connect",
       "norbEmotion": "celebrating",
-      "cardText": "Control one thing today.\nText one person you trust.",
-      "voiceover": "So today, take back one small thing you control. And text one person you trust. Connection is the off switch.",
+      "cardText": "You can't pick your rank.\nSo take back one thing you control.\nText one person you trust.",
+      "voiceover": "You can't change your rank overnight. But you can take back one thing you control today. Then text one person you trust — that connection is the off switch.",
       "keywords": ["control", "trust"]
     },
     {
