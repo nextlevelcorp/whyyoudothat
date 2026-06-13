@@ -32,7 +32,10 @@ export type SceneAction =
   | 'coinFlip' // a coin half-flips and settles at ~60% accuracy
   | 'hierarchy' // rank ladder: bottom-rank creature trembles, top-rank wears a crown
   | 'rankChart' // bar chart: cortisol rises as social rank falls (low-rank bar tallest)
-  | 'connect'; // two creatures slide together; a warm pulse calms the stressed one
+  | 'connect'  // two creatures slide together; a warm pulse calms the stressed one
+  | 'alarm'    // red rings pulse outward from the amygdala; threat spark zaps in
+  | 'hijack'   // two tracks from brain: fast coral "low road" beats slow teal "high road" to the body
+  | 'labelTame'; // ANGRY label drops onto the alarm; red rings shrink, calm teal ring blooms
 
 export type SceneScript = {
   /** Scene start, in seconds from the beginning of the episode. */

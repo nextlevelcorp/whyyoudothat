@@ -1,0 +1,78 @@
+{
+  "title": "Why you snap before you think",
+  "durationSec": 56,
+  "scenes": [
+    {
+      "start": 0,
+      "end": 3,
+      "visual": "Big navy hook text pops word by word; Norb peeks curious from below.",
+      "components": ["HookCard", "Norb"],
+      "norbEmotion": "curious",
+      "cardText": "Why do you snap before you can stop yourself?",
+      "voiceover": "Why do you snap before you can stop yourself?",
+      "keywords": ["snap"]
+    },
+    {
+      "start": 3,
+      "end": 14,
+      "visual": "Amygdala character center-stage; red alarm rings fire outward; a mustard threat spark zaps in from the right. Norb watches, panicked.",
+      "components": ["ConceptCharacter", "Norb", "CaptionBand"],
+      "action": "alarm",
+      "concept": "amygdala",
+      "norbEmotion": "panicked",
+      "voiceover": "Deep in your brain sits a smoke detector called the amygdala. The second it senses a threat, it fires an alarm — before you have had a single thought.",
+      "keywords": ["amygdala", "alarm", "threat"]
+    },
+    {
+      "start": 14,
+      "end": 25,
+      "visual": "Two race tracks: short coral FAST lane races to a BODY endpoint first; long teal SLOW lane is still mid-way to THINK. Norb jittery.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "hijack",
+      "norbEmotion": "jittery",
+      "voiceover": "That alarm takes a shortcut — straight to your body. The thinking part of your brain gets the message later. So you snap first, and reason shows up late.",
+      "keywords": ["shortcut", "snap", "later"]
+    },
+    {
+      "start": 25,
+      "end": 35,
+      "visual": "A coral urge wave swells high then crashes flat; a small navy anchor stands still, unbothered. Norb gets the idea.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "wave",
+      "norbEmotion": "lightbulb",
+      "voiceover": "The good news: that surge crests and fades in about ninety seconds — if you don't keep feeding it. Ride the wave instead of acting on it.",
+      "keywords": ["ninety", "seconds", "wave"]
+    },
+    {
+      "start": 35,
+      "end": 46,
+      "visual": "THE SCIENCE card; below it red alarm rings, then an ANGRY label tag spring-drops onto them — rings shrink, calm teal ring blooms. Norb curious.",
+      "components": ["ScienceCard", "Norb"],
+      "action": "labelTame",
+      "norbEmotion": "curious",
+      "cardText": "Name the feeling.\nThe amygdala quiets when you label the emotion.",
+      "voiceover": "Brain scans show that naming a feeling — just saying 'I'm angry' — turns the amygdala's volume down. Researchers call it affect labeling.",
+      "keywords": ["naming", "affect", "labeling"]
+    },
+    {
+      "start": 46,
+      "end": 53,
+      "visual": "TRY THIS card; below it the wave crests and subsides while a mustard label floats calmly. Norb celebrates.",
+      "components": ["TakeawayCard", "Norb"],
+      "action": "wave",
+      "norbEmotion": "celebrating",
+      "cardText": "Name it out loud.\nThen give it ninety seconds.",
+      "voiceover": "Next time you feel the spike: name it out loud. Then give it ninety seconds before you respond. That's the whole trick.",
+      "keywords": ["name", "ninety", "seconds"]
+    },
+    {
+      "start": 53,
+      "end": 56,
+      "visual": "Sources card; Norb celebrating below.",
+      "components": ["SourceCard", "Norb"],
+      "norbEmotion": "celebrating",
+      "voiceover": "Sources in the caption.",
+      "keywords": []
+    }
+  ]
+}

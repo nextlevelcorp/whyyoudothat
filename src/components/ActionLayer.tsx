@@ -1381,6 +1381,285 @@ const Connect: React.FC<{size: number}> = ({size}) => {
   );
 };
 
+/** Red alarm rings fire outward — the amygdala blaring before thought. */
+const Alarm: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const u = size / 600;
+  const cycle = 52;
+  const p = (frame % cycle) / cycle;
+  const cx = size / 2;
+  const cy = size * 0.42;
+  const offsets = [0, 0.33, 0.66];
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.72, margin: '0 auto'}}>
+      {/* pulsing rings */}
+      {offsets.map((off, i) => {
+        const rp = (p + off) % 1;
+        const r = rp * size * 0.44;
+        return (
+          <div
+            key={i}
+            style={{
+              position: 'absolute',
+              left: cx - r,
+              top: cy - r,
+              width: r * 2,
+              height: r * 2,
+              borderRadius: '50%',
+              backgroundColor: COLORS.coral,
+              opacity: (1 - rp) * 0.55,
+            }}
+          />
+        );
+      })}
+      {/* threat spark from the right */}
+      <div
+        style={{
+          position: 'absolute',
+          right: 40 * u,
+          top: cy - 30 * u,
+          width: 60 * u,
+          height: 60 * u,
+          borderRadius: '50%',
+          backgroundColor: COLORS.mustard,
+          boxShadow: boxShadow('mustard'),
+          transform: `scale(${1 + Math.sin(frame / 5) * 0.28})`,
+        }}
+      />
+      {/* alarm core */}
+      <div
+        style={{
+          position: 'absolute',
+          left: cx - 54 * u,
+          top: cy - 54 * u,
+          width: 108 * u,
+          height: 108 * u,
+          borderRadius: '50%',
+          backgroundColor: COLORS.coral,
+          boxShadow: boxShadow('coral'),
+          transform: `scale(${1 + Math.sin(frame / 6) * 0.12})`,
+        }}
+      />
+    </div>
+  );
+};
+
+/** Two race-tracks from the brain: the short coral FAST LANE reaches the
+ * body endpoint well before the long teal SLOW LANE reaches thinking. */
+const Hijack: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const u = size / 600;
+  const cycle = 100;
+  const p = (frame % cycle) / cycle;
+  const cx = size / 2;
+  const brainTop = 20 * u;
+  const brainH = 74 * u;
+  const trackTop = brainTop + brainH + 14 * u;
+  const fastH = 200 * u;
+  const slowH = 340 * u;
+  const lx = cx - 160 * u;
+  const rx = cx + 60 * u;
+  const trackW = 38 * u;
+
+  // coral dot arrives at 0.46 of cycle; teal still only 56% of its longer journey
+  const fastP = Math.min(1, p / 0.46);
+  const slowP = Math.min(0.56, p / 0.82);
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.82, margin: '0 auto'}}>
+      {/* brain blob */}
+      <div
+        style={{
+          position: 'absolute',
+          left: cx - 54 * u,
+          top: brainTop,
+          width: 108 * u,
+          height: brainH,
+          borderRadius: '48% 52% 55% 45% / 55% 60% 40% 45%',
+          backgroundColor: COLORS.teal,
+          boxShadow: boxShadow('teal'),
+          transform: `scale(${1 + Math.sin(frame / 9) * 0.04})`,
+        }}
+      />
+
+      {/* fast coral track (shorter) */}
+      <div style={{position: 'absolute', left: lx, top: trackTop, width: trackW, height: fastH,
+        borderRadius: 20 * u, backgroundColor: SHADOW_TONES.coral}} />
+      {/* slow teal track (longer) */}
+      <div style={{position: 'absolute', left: rx, top: trackTop, width: trackW, height: slowH,
+        borderRadius: 20 * u, backgroundColor: SHADOW_TONES.teal}} />
+
+      {/* coral racing dot */}
+      <div
+        style={{
+          position: 'absolute',
+          left: lx + trackW / 2 - 22 * u,
+          top: trackTop + fastP * fastH - 22 * u,
+          width: 44 * u,
+          height: 44 * u,
+          borderRadius: '50%',
+          backgroundColor: COLORS.coral,
+          boxShadow: boxShadow('coral'),
+        }}
+      />
+      {/* teal racing dot */}
+      <div
+        style={{
+          position: 'absolute',
+          left: rx + trackW / 2 - 22 * u,
+          top: trackTop + slowP * slowH - 22 * u,
+          width: 44 * u,
+          height: 44 * u,
+          borderRadius: '50%',
+          backgroundColor: COLORS.teal,
+          boxShadow: boxShadow('teal'),
+        }}
+      />
+
+      {/* BODY endpoint (coral, lit when fast dot arrives) */}
+      <div
+        style={{
+          position: 'absolute',
+          left: lx - 14 * u,
+          top: trackTop + fastH + 8 * u,
+          width: 66 * u,
+          height: 66 * u,
+          borderRadius: '50%',
+          backgroundColor: fastP >= 1 ? COLORS.coral : SHADOW_TONES.cream,
+          boxShadow: fastP >= 1 ? boxShadow('coral') : undefined,
+          transform: `scale(${fastP >= 1 ? 1 + Math.sin(frame / 5) * 0.1 : 1})`,
+        }}
+      />
+      {/* THINK endpoint (teal, dim since the dot hasn't arrived) */}
+      <div
+        style={{
+          position: 'absolute',
+          left: rx - 14 * u,
+          top: trackTop + slowH + 8 * u,
+          width: 66 * u,
+          height: 66 * u,
+          borderRadius: '50%',
+          backgroundColor: SHADOW_TONES.cream,
+        }}
+      />
+
+      {/* labels */}
+      <Pill text="FAST" color="coral" u={u}
+        style={{position: 'absolute', left: lx - 10 * u, top: trackTop - 52 * u}} />
+      <Pill text="SLOW" color="teal" u={u}
+        style={{position: 'absolute', left: rx - 10 * u, top: trackTop - 52 * u}} />
+      <Pill text="BODY" color="coral" u={u}
+        style={{position: 'absolute', left: lx - 18 * u, top: trackTop + fastH + 82 * u}} />
+      <Pill text="THINK" color="navy" u={u}
+        style={{position: 'absolute', left: rx - 24 * u, top: trackTop + slowH + 82 * u}} />
+    </div>
+  );
+};
+
+/** Emotion label drops onto the alarm core; red rings shrink, a calm teal
+ * ring blooms. Acts out "naming the feeling turns the amygdala down." */
+const LabelTame: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const u = size / 600;
+  const cycle = 88;
+  const p = (frame % cycle) / cycle;
+  const cx = size / 2;
+  const cy = size * 0.4;
+
+  const labelIn = spring({
+    frame: (frame % cycle) - cycle * 0.28,
+    fps,
+    config: SPRINGS.bouncy,
+    durationInFrames: 18,
+  });
+  const labeled = p > 0.42;
+  const alarmAlpha = labeled ? Math.max(0, 1 - (p - 0.42) / 0.28) : 1;
+  const calmScale = labeled ? Math.min(1, (p - 0.42) / 0.38) : 0;
+  const offsets = [0, 0.33, 0.66];
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.72, margin: '0 auto'}}>
+      {/* alarm rings (fade after label lands) */}
+      {offsets.map((off, i) => {
+        const rp = ((p * 1.5 + off) % 1);
+        const r = rp * size * 0.38;
+        return (
+          <div
+            key={i}
+            style={{
+              position: 'absolute',
+              left: cx - r,
+              top: cy - r,
+              width: r * 2,
+              height: r * 2,
+              borderRadius: '50%',
+              backgroundColor: COLORS.coral,
+              opacity: (1 - rp) * alarmAlpha * 0.55,
+            }}
+          />
+        );
+      })}
+      {/* calm teal ring blooms after labeling */}
+      {calmScale > 0 && (
+        <div
+          style={{
+            position: 'absolute',
+            left: cx - 190 * u * calmScale,
+            top: cy - 190 * u * calmScale,
+            width: 380 * u * calmScale,
+            height: 380 * u * calmScale,
+            borderRadius: '50%',
+            backgroundColor: COLORS.teal,
+            opacity: 0.28 * (1 - calmScale * 0.6),
+          }}
+        />
+      )}
+      {/* alarm/calm core */}
+      <div
+        style={{
+          position: 'absolute',
+          left: cx - 52 * u,
+          top: cy - 52 * u,
+          width: 104 * u,
+          height: 104 * u,
+          borderRadius: '50%',
+          backgroundColor: labeled ? COLORS.teal : COLORS.coral,
+          boxShadow: boxShadow(labeled ? 'teal' : 'coral'),
+          transform: `scale(${labeled ? 0.82 : 1 + Math.sin(frame / 6) * 0.12})`,
+        }}
+      />
+      {/* ANGRY label dropping in */}
+      <div
+        style={{
+          position: 'absolute',
+          left: cx - 80 * u,
+          top: cy - 118 * u - (1 - labelIn) * 180 * u,
+          transform: `scale(${labelIn})`,
+          transformOrigin: '50% 100%',
+        }}
+      >
+        <div
+          style={{
+            backgroundColor: COLORS.mustard,
+            borderRadius: 999,
+            boxShadow: boxShadow('mustard'),
+            padding: `${14 * u}px ${28 * u}px`,
+            fontFamily: FONT_FAMILY,
+            fontWeight: 900,
+            fontSize: 30 * u,
+            color: COLORS.navy,
+            whiteSpace: 'nowrap',
+          }}
+        >
+          ANGRY
+        </div>
+      </div>
+    </div>
+  );
+};
+
 /**
  * Animated prop layer that ACTS OUT the scene's narration. One action per
  * scene; the engine centers it on the stage. This is what keeps every
@@ -1419,5 +1698,11 @@ export const ActionLayer: React.FC<ActionLayerProps> = ({action, size = 600}) =>
       return <RankChart size={size} />;
     case 'connect':
       return <Connect size={size} />;
+    case 'alarm':
+      return <Alarm size={size} />;
+    case 'hijack':
+      return <Hijack size={size} />;
+    case 'labelTame':
+      return <LabelTame size={size} />;
   }
 };
