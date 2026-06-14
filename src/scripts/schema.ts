@@ -38,7 +38,10 @@ export type SceneAction =
   | 'labelTame' // ANGRY label drops onto the alarm; red rings shrink, calm teal ring blooms
   | 'recall'    // navy file drawer; a memory card rises, glows editable (mustard halo), then re-files
   | 'drift'     // three memory cards left-to-right: each copy is more tilted/teal-shifted than the last
-  | 'reconsolidate'; // memory card with a padlock: lock springs open → card glows LABILE → lock snaps shut
+  | 'reconsolidate' // memory card with a padlock: lock springs open → card glows LABILE → lock snaps shut
+  | 'gasBrakes'    // GAS pedal floored (coral) next to a half-built BRAKE pedal under scaffolding (teal)
+  | 'construction' // teal brain whose front is wrapped in scaffolding + crane: the judgment part still wiring
+  | 'maturation';  // 0→25 age axis sweeps; the prefrontal brain only fills in at the mid-twenties mark
 
 export type SceneScript = {
   /** Scene start, in seconds from the beginning of the episode. */

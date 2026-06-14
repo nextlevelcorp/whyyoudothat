@@ -2000,6 +2000,378 @@ const Reconsolidate: React.FC<{size: number}> = ({size}) => {
   );
 };
 
+/** GAS pedal floored (coral, vibrating, thrill spark above) next to a
+ * half-built BRAKE pedal wrapped in mustard scaffolding (teal, barely moving).
+ * Acts out "the gas is floored but the brakes are still being installed." */
+const GasBrakes: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const u = size / 600;
+  const cx = size / 2;
+  const floorY = size * 0.66;
+  const pedalW = 180 * u;
+  const gasX = cx - pedalW - 40 * u;
+  const brakeX = cx + 40 * u;
+
+  // Gas is floored and vibrating; brake is short and steady.
+  const gasPress = 1; // fully down
+  const jitter = Math.sin(frame * 1.6) * 4 * u;
+  const gasH = 70 * u; // pressed flat
+  const brakeBuilt = 0.45; // only partly built
+  const brakeH = 150 * u * brakeBuilt;
+
+  // thrill spark cycle above the gas
+  const sparkP = (frame % 30) / 30;
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.8, margin: '0 auto'}}>
+      {/* floor */}
+      <div
+        style={{
+          position: 'absolute',
+          left: gasX - 30 * u,
+          top: floorY,
+          width: pedalW * 2 + 140 * u,
+          height: 16 * u,
+          borderRadius: 16 * u,
+          backgroundColor: COLORS.navy,
+        }}
+      />
+
+      {/* thrill spark above gas */}
+      <div
+        style={{
+          position: 'absolute',
+          left: gasX + pedalW / 2 - 22 * u + jitter,
+          top: floorY - gasH - 80 * u - sparkP * 60 * u,
+          width: 44 * u,
+          height: 44 * u,
+          borderRadius: '50%',
+          backgroundColor: COLORS.coral,
+          opacity: 1 - sparkP,
+        }}
+      />
+
+      {/* GAS pedal: floored, vibrating */}
+      <div
+        style={{
+          position: 'absolute',
+          left: gasX + jitter,
+          top: floorY - gasH,
+          width: pedalW,
+          height: gasH,
+          borderRadius: 24 * u,
+          backgroundColor: COLORS.coral,
+          boxShadow: boxShadow('coral'),
+          transform: `scaleY(${gasPress})`,
+          transformOrigin: '50% 100%',
+        }}
+      />
+
+      {/* BRAKE pedal: short, under construction */}
+      <div
+        style={{
+          position: 'absolute',
+          left: brakeX,
+          top: floorY - brakeH,
+          width: pedalW,
+          height: brakeH,
+          borderRadius: 24 * u,
+          backgroundColor: COLORS.teal,
+          boxShadow: boxShadow('teal'),
+        }}
+      />
+      {/* scaffolding bars across the unfinished brake */}
+      {[0, 1].map((i) => (
+        <div
+          key={i}
+          style={{
+            position: 'absolute',
+            left: brakeX - 12 * u,
+            top: floorY - brakeH - 30 * u - i * 34 * u,
+            width: pedalW + 24 * u,
+            height: 14 * u,
+            borderRadius: 14 * u,
+            backgroundColor: COLORS.mustard,
+            transform: `rotate(${i % 2 === 0 ? -4 : 4}deg)`,
+          }}
+        />
+      ))}
+
+      {/* labels */}
+      <Pill
+        text="GAS"
+        color="coral"
+        u={u}
+        style={{position: 'absolute', left: gasX + pedalW / 2 - 36 * u, top: floorY + 28 * u}}
+      />
+      <Pill
+        text="BRAKE"
+        color="teal"
+        u={u}
+        style={{position: 'absolute', left: brakeX + pedalW / 2 - 48 * u, top: floorY + 28 * u}}
+      />
+    </div>
+  );
+};
+
+/** Teal brain whose FRONT (behind the forehead) is wrapped in mustard
+ * scaffolding with a little navy crane swinging; the back glows finished.
+ * Acts out "the judgment part is the last to finish wiring." */
+const Construction: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const u = size / 600;
+  const cx = size / 2;
+  const cy = size * 0.42;
+  const brainW = 320 * u;
+  const brainH = 250 * u;
+
+  const craneSwing = Math.sin(frame / 12) * 14;
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.78, margin: '0 auto'}}>
+      {/* brain blob */}
+      <div
+        style={{
+          position: 'absolute',
+          left: cx - brainW / 2,
+          top: cy - brainH / 2,
+          width: brainW,
+          height: brainH,
+          borderRadius: '48% 52% 55% 45% / 58% 60% 40% 42%',
+          backgroundColor: COLORS.teal,
+          boxShadow: boxShadow('teal'),
+          transform: `scale(${1 + Math.sin(frame / 10) * 0.02})`,
+        }}
+      />
+      {/* "front / forehead" patch under construction (right side) */}
+      <div
+        style={{
+          position: 'absolute',
+          left: cx + 24 * u,
+          top: cy - brainH / 2 + 20 * u,
+          width: brainW * 0.42,
+          height: brainH * 0.66,
+          borderRadius: `${30 * u}px ${60 * u}px ${60 * u}px ${30 * u}px`,
+          backgroundColor: SHADOW_TONES.teal,
+        }}
+      />
+      {/* scaffolding poles over the front patch */}
+      {[0, 1, 2].map((i) => (
+        <div
+          key={i}
+          style={{
+            position: 'absolute',
+            left: cx + 36 * u + i * 40 * u,
+            top: cy - brainH / 2 + 24 * u,
+            width: 12 * u,
+            height: brainH * 0.6,
+            borderRadius: 12 * u,
+            backgroundColor: COLORS.mustard,
+          }}
+        />
+      ))}
+      {[0, 1].map((i) => (
+        <div
+          key={`h-${i}`}
+          style={{
+            position: 'absolute',
+            left: cx + 30 * u,
+            top: cy - brainH / 2 + 40 * u + i * 70 * u,
+            width: 130 * u,
+            height: 12 * u,
+            borderRadius: 12 * u,
+            backgroundColor: COLORS.mustard,
+          }}
+        />
+      ))}
+
+      {/* crane: vertical mast + swinging arm with a hanging block */}
+      <div
+        style={{
+          position: 'absolute',
+          left: cx + brainW / 2 - 6 * u,
+          top: cy - brainH / 2 - 120 * u,
+          width: 14 * u,
+          height: 170 * u,
+          borderRadius: 14 * u,
+          backgroundColor: COLORS.navy,
+        }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          left: cx + brainW / 2 - 6 * u,
+          top: cy - brainH / 2 - 120 * u,
+          width: 120 * u,
+          height: 14 * u,
+          borderRadius: 14 * u,
+          backgroundColor: COLORS.navy,
+          transformOrigin: '0% 50%',
+          transform: `rotate(${craneSwing}deg)`,
+        }}
+      >
+        {/* hanging block */}
+        <div
+          style={{
+            position: 'absolute',
+            right: 0,
+            top: 14 * u,
+            width: 40 * u,
+            height: 40 * u,
+            borderRadius: 10 * u,
+            backgroundColor: COLORS.coral,
+            boxShadow: boxShadow('coral'),
+          }}
+        />
+      </div>
+
+      {/* WIRING pill */}
+      <Pill
+        text="WIRING…"
+        color="mustard"
+        textColor={COLORS.navy}
+        u={u}
+        style={{position: 'absolute', left: cx + 30 * u, top: cy + brainH / 2 + 14 * u}}
+      />
+    </div>
+  );
+};
+
+/** A 0→25 age axis; a playhead sweeps left to right and a fill bar follows.
+ * A brain icon at the far right (the prefrontal) only fills in when the
+ * sweep reaches ~25. Acts out "the brakes finish wiring in your mid-twenties." */
+const Maturation: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const u = size / 600;
+  const cycle = 150;
+  const p = (frame % cycle) / cycle;
+  const trackW = size * 0.82;
+  const startX = (size - trackW) / 2;
+  const trackY = size * 0.42;
+
+  const sweep = Math.min(1, p / 0.75); // reach the end by 75%, then hold
+  const headX = startX + sweep * trackW;
+  const done = sweep >= 0.99;
+  const brainPop = done
+    ? spring({frame: (frame % cycle) - cycle * 0.75, fps, config: SPRINGS.bouncy, durationInFrames: 18})
+    : 0;
+
+  const ticks = [
+    {label: '0', at: 0},
+    {label: '10', at: 0.4},
+    {label: '18', at: 0.72},
+    {label: '25', at: 1},
+  ];
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.7, margin: '0 auto'}}>
+      {/* headline */}
+      <div
+        style={{
+          position: 'absolute',
+          top: trackY - 110 * u,
+          left: 0,
+          width: size,
+          textAlign: 'center',
+          fontFamily: FONT_FAMILY,
+          fontWeight: 900,
+          fontSize: 34 * u,
+          letterSpacing: 3,
+          color: COLORS.navy,
+        }}
+      >
+        BRAIN WIRING
+      </div>
+
+      {/* base track */}
+      <div
+        style={{
+          position: 'absolute',
+          left: startX,
+          top: trackY,
+          width: trackW,
+          height: 26 * u,
+          borderRadius: 26 * u,
+          backgroundColor: SHADOW_TONES.cream,
+        }}
+      />
+      {/* fill */}
+      <div
+        style={{
+          position: 'absolute',
+          left: startX,
+          top: trackY,
+          width: Math.max(0, headX - startX),
+          height: 26 * u,
+          borderRadius: 26 * u,
+          backgroundColor: COLORS.teal,
+        }}
+      />
+      {/* playhead */}
+      <div
+        style={{
+          position: 'absolute',
+          left: headX - 6 * u,
+          top: trackY - 18 * u,
+          width: 12 * u,
+          height: 62 * u,
+          borderRadius: 12 * u,
+          backgroundColor: COLORS.mustard,
+        }}
+      />
+
+      {/* age ticks */}
+      {ticks.map((t, i) => (
+        <div
+          key={i}
+          style={{
+            position: 'absolute',
+            left: startX + t.at * trackW - 18 * u,
+            top: trackY + 40 * u,
+            width: 36 * u,
+            textAlign: 'center',
+            fontFamily: FONT_FAMILY,
+            fontWeight: 800,
+            fontSize: 30 * u,
+            color: t.label === '25' ? COLORS.coral : COLORS.navy,
+          }}
+        >
+          {t.label}
+        </div>
+      ))}
+
+      {/* prefrontal brain at the end, fills in only at 25 */}
+      <div
+        style={{
+          position: 'absolute',
+          left: startX + trackW - 50 * u,
+          top: trackY - 150 * u,
+          width: 100 * u,
+          height: 84 * u,
+          borderRadius: '48% 52% 55% 45% / 58% 60% 40% 42%',
+          backgroundColor: brainPop > 0.1 ? COLORS.teal : SHADOW_TONES.cream,
+          boxShadow: brainPop > 0.1 ? boxShadow('teal') : undefined,
+          transform: `scale(${0.7 + brainPop * 0.3})`,
+        }}
+      />
+      {done && (
+        <Pill
+          text="BRAKES READY"
+          color="coral"
+          u={u}
+          style={{
+            position: 'absolute',
+            left: startX + trackW - 130 * u,
+            top: trackY - 210 * u,
+            transform: `scale(${brainPop})`,
+          }}
+        />
+      )}
+    </div>
+  );
+};
+
 /**
  * Animated prop layer that ACTS OUT the scene's narration. One action per
  * scene; the engine centers it on the stage. This is what keeps every
@@ -2050,5 +2422,11 @@ export const ActionLayer: React.FC<ActionLayerProps> = ({action, size = 600}) =>
       return <Drift size={size} />;
     case 'reconsolidate':
       return <Reconsolidate size={size} />;
+    case 'gasBrakes':
+      return <GasBrakes size={size} />;
+    case 'construction':
+      return <Construction size={size} />;
+    case 'maturation':
+      return <Maturation size={size} />;
   }
 };

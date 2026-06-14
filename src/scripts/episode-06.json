@@ -1,0 +1,77 @@
+{
+  "title": "Your brain's brakes come last",
+  "durationSec": 56,
+  "scenes": [
+    {
+      "start": 0,
+      "end": 3,
+      "visual": "Big navy hook text pops word by word; Norb peeks curious from below.",
+      "components": ["HookCard", "Norb"],
+      "norbEmotion": "curious",
+      "cardText": "Why were you such a reckless teenager?",
+      "voiceover": "Why were you so reckless as a teenager?",
+      "keywords": ["reckless"]
+    },
+    {
+      "start": 3,
+      "end": 14,
+      "visual": "Two pedals on a navy floor: GAS (coral) floored and vibrating with a thrill spark above; BRAKE (teal) half-built under mustard scaffolding. Norb jittery.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "gasBrakes",
+      "norbEmotion": "jittery",
+      "voiceover": "Your brain has a gas pedal — the thrill-and-reward system — and brakes: the part that says 'wait, bad idea.' In your teens the gas is floored. But the brakes are still being installed.",
+      "keywords": ["gas", "brakes"]
+    },
+    {
+      "start": 14,
+      "end": 25,
+      "visual": "A teal brain whose front (behind the forehead) is wrapped in scaffolding with a swinging crane; the back glows finished. A WIRING pill. Norb panicked.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "construction",
+      "norbEmotion": "panicked",
+      "voiceover": "That judgment part — right behind your forehead — is the last to finish wiring. So a teen feels the thrill at full blast while the brakes barely work.",
+      "keywords": ["judgment", "wiring"]
+    },
+    {
+      "start": 25,
+      "end": 35,
+      "visual": "A coral urge wave swells high then crashes flat; a small navy anchor stands still, unbothered. Norb gets the idea.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "wave",
+      "norbEmotion": "lightbulb",
+      "voiceover": "You can't rush the wiring. But the thrill always spikes and fades — so a pause, or a night's sleep, lets your brakes catch up.",
+      "keywords": ["pause", "sleep"]
+    },
+    {
+      "start": 35,
+      "end": 46,
+      "visual": "THE SCIENCE card; below it a 0-to-25 age axis sweeps left to right, and the prefrontal brain at the end only fills in at 25 with a BRAKES READY pill. Norb curious.",
+      "components": ["ScienceCard", "Norb"],
+      "action": "maturation",
+      "norbEmotion": "curious",
+      "cardText": "The prefrontal cortex — your brain's brakes — keeps wiring into your mid-twenties.",
+      "voiceover": "The prefrontal cortex — the brain's brakes — keeps maturing into your mid-twenties. Brain scans show it is the last region to finish.",
+      "keywords": ["prefrontal", "cortex", "mid-twenties"]
+    },
+    {
+      "start": 46,
+      "end": 53,
+      "visual": "TRY THIS card; below it the gas pedal floored beside the half-built brake. Norb celebrates.",
+      "components": ["TakeawayCard", "Norb"],
+      "action": "gasBrakes",
+      "norbEmotion": "celebrating",
+      "cardText": "Big risk? Sleep on it.\nLet your brakes catch up.",
+      "voiceover": "So before any big risk: sleep on it. A rested brain brakes far better than a tired one — at any age.",
+      "keywords": ["sleep", "rested"]
+    },
+    {
+      "start": 53,
+      "end": 56,
+      "visual": "Sources card; Norb celebrating below.",
+      "components": ["SourceCard", "Norb"],
+      "norbEmotion": "celebrating",
+      "voiceover": "Sources in the caption.",
+      "keywords": []
+    }
+  ]
+}
