@@ -1660,6 +1660,346 @@ const LabelTame: React.FC<{size: number}> = ({size}) => {
   );
 };
 
+/** Navy file drawer; a krem memory card rises out, glows with mustard halo
+ * (editable!), gains a small teal detail dot, then slides back down and re-files.
+ * Acts out "recall pulls the memory out and makes it editable." */
+const Recall: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const u = size / 600;
+  const cycle = 110;
+  const p = (frame % cycle) / cycle;
+
+  // 0–0.3: card rises; 0.3–0.6: glows editable; 0.6–0.85: teal dot appears; 0.85–1: re-files
+  const riseP = Math.min(1, p / 0.28);
+  const glowP = p > 0.28 && p < 0.82 ? Math.sin(((p - 0.28) / 0.54) * Math.PI) : 0;
+  const dotP = p > 0.55 ? spring({frame: (frame % cycle) - cycle * 0.55, fps, config: SPRINGS.bouncy, durationInFrames: 14}) : 0;
+  const refileP = p > 0.84 ? (p - 0.84) / 0.16 : 0;
+
+  const drawerH = 120 * u;
+  const cardW = 260 * u;
+  const cardH = 160 * u;
+  const cx = size / 2;
+  const drawerY = size * 0.55;
+  const cardY = drawerY - cardH - 30 * u - riseP * 180 * u + refileP * 210 * u;
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.78, margin: '0 auto'}}>
+      {/* mustard glow halo behind card */}
+      {glowP > 0 && (
+        <div
+          style={{
+            position: 'absolute',
+            left: cx - (cardW / 2 + 28 * u),
+            top: cardY - 24 * u,
+            width: cardW + 56 * u,
+            height: cardH + 48 * u,
+            borderRadius: 40 * u,
+            backgroundColor: COLORS.mustard,
+            opacity: glowP * 0.45,
+          }}
+        />
+      )}
+      {/* memory card */}
+      <div
+        style={{
+          position: 'absolute',
+          left: cx - cardW / 2,
+          top: cardY,
+          width: cardW,
+          height: cardH,
+          borderRadius: 28 * u,
+          backgroundColor: COLORS.cream,
+          boxShadow: boxShadow('cream'),
+          transform: `rotate(${Math.sin(frame / 9) * glowP * 3}deg)`,
+        }}
+      >
+        {/* three faint lines representing stored content */}
+        {[0, 1, 2].map((i) => (
+          <div
+            key={i}
+            style={{
+              position: 'absolute',
+              left: 24 * u,
+              top: 32 * u + i * 36 * u,
+              width: [160, 120, 80][i] * u,
+              height: 14 * u,
+              borderRadius: 14 * u,
+              backgroundColor: SHADOW_TONES.cream,
+            }}
+          />
+        ))}
+        {/* teal detail dot (new calmer detail being added) */}
+        {dotP > 0 && (
+          <div
+            style={{
+              position: 'absolute',
+              right: 24 * u,
+              bottom: 24 * u,
+              width: 34 * u,
+              height: 34 * u,
+              borderRadius: '50%',
+              backgroundColor: COLORS.teal,
+              boxShadow: boxShadow('teal'),
+              transform: `scale(${dotP})`,
+            }}
+          />
+        )}
+      </div>
+      {/* navy file drawer */}
+      <div
+        style={{
+          position: 'absolute',
+          left: cx - 180 * u,
+          top: drawerY,
+          width: 360 * u,
+          height: drawerH,
+          borderRadius: 24 * u,
+          backgroundColor: COLORS.navy,
+          boxShadow: boxShadow('navy'),
+        }}
+      >
+        {/* drawer handle */}
+        <div
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: 22 * u,
+            transform: 'translateX(-50%)',
+            width: 80 * u,
+            height: 20 * u,
+            borderRadius: 20 * u,
+            backgroundColor: COLORS.mustard,
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+/** Three memory cards in a row: each is a copy of the previous,
+ * but tilted more and hue-shifted toward teal — the photocopy of a photocopy.
+ * Acts out "recall it enough and it drifts far from what really happened." */
+const Drift: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const u = size / 600;
+  const cardW = 220 * u;
+  const cardH = 150 * u;
+  const gap = 40 * u;
+  const totalW = 3 * cardW + 2 * gap;
+  const startX = (size - totalW) / 2;
+  const cardY = size * 0.18;
+
+  // Each card bobs at a slightly offset phase
+  const cards = [
+    {tilt: 0, color: COLORS.coral, shadowColor: 'coral' as BrandColor, label: 'ORIGINAL', fade: 0},
+    {tilt: 8, color: COLORS.mustard, shadowColor: 'mustard' as BrandColor, label: 'RECALLED', fade: 0.15},
+    {tilt: 18, color: COLORS.teal, shadowColor: 'teal' as BrandColor, label: 'DRIFTED', fade: 0.35},
+  ];
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.65, margin: '0 auto'}}>
+      {cards.map((c, i) => {
+        const bob = Math.sin(frame / 10 + i * 1.1) * 6 * u;
+        const x = startX + i * (cardW + gap);
+        return (
+          <div key={i}>
+            <div
+              style={{
+                position: 'absolute',
+                left: x,
+                top: cardY + bob,
+                width: cardW,
+                height: cardH,
+                borderRadius: 28 * u,
+                backgroundColor: c.color,
+                boxShadow: boxShadow(c.shadowColor),
+                opacity: 1 - c.fade,
+                transform: `rotate(${c.tilt + Math.sin(frame / 14 + i) * 1.5}deg)`,
+                transformOrigin: '50% 100%',
+              }}
+            >
+              {/* content lines */}
+              {[0, 1].map((li) => (
+                <div
+                  key={li}
+                  style={{
+                    position: 'absolute',
+                    left: 18 * u,
+                    top: 28 * u + li * 34 * u,
+                    width: (120 - i * 30) * u,
+                    height: 12 * u,
+                    borderRadius: 12 * u,
+                    backgroundColor: 'rgba(255,255,255,0.4)',
+                  }}
+                />
+              ))}
+            </div>
+            {/* arrow between cards */}
+            {i < 2 && (
+              <div
+                style={{
+                  position: 'absolute',
+                  left: x + cardW + 10 * u,
+                  top: cardY + cardH / 2 - 10 * u,
+                  width: gap - 20 * u,
+                  height: 20 * u,
+                  borderRadius: 20 * u,
+                  backgroundColor: SHADOW_TONES.cream,
+                }}
+              />
+            )}
+            <Pill
+              text={c.label}
+              color={c.shadowColor}
+              u={u}
+              style={{
+                position: 'absolute',
+                left: x + cardW / 2 - 60 * u,
+                top: cardY + cardH + 20 * u,
+              }}
+            />
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+/** Memory card with a padlock: the lock springs open → card glows LABILE
+ * (mustard) and wobbles → lock snaps shut (re-saved). Cycles. Acts out
+ * reconsolidation: recall → labile → re-stored. */
+const Reconsolidate: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const u = size / 600;
+  const cycle = 120;
+  const p = (frame % cycle) / cycle;
+
+  // Phase 0–0.25: locked; 0.25–0.5: lock springs open; 0.5–0.75: LABILE glowing; 0.75–1: lock snaps shut
+  const unlockP = p > 0.22 && p < 0.52
+    ? spring({frame: (frame % cycle) - cycle * 0.22, fps, config: SPRINGS.bouncy, durationInFrames: 16})
+    : p >= 0.52 ? 1 : 0;
+  const labileP = p > 0.45 && p < 0.78 ? Math.sin(((p - 0.45) / 0.33) * Math.PI) : 0;
+  const relockP = p > 0.74
+    ? spring({frame: (frame % cycle) - cycle * 0.74, fps, config: SPRINGS.bouncy, durationInFrames: 16})
+    : 0;
+  const locked = relockP > 0.5;
+
+  const cx = size / 2;
+  const cardW = 280 * u;
+  const cardH = 170 * u;
+  const cardX = cx - cardW / 2;
+  const cardY = size * 0.22;
+
+  // Lock shackle rises when unlocking
+  const shackleUp = unlockP * 40 * u * (locked ? 0 : 1);
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.75, margin: '0 auto'}}>
+      {/* labile glow */}
+      {labileP > 0 && (
+        <div
+          style={{
+            position: 'absolute',
+            left: cardX - 32 * u,
+            top: cardY - 28 * u,
+            width: cardW + 64 * u,
+            height: cardH + 56 * u,
+            borderRadius: 40 * u,
+            backgroundColor: COLORS.mustard,
+            opacity: labileP * 0.5,
+          }}
+        />
+      )}
+      {/* memory card */}
+      <div
+        style={{
+          position: 'absolute',
+          left: cardX,
+          top: cardY,
+          width: cardW,
+          height: cardH,
+          borderRadius: 28 * u,
+          backgroundColor: labileP > 0.1 ? COLORS.mustard : COLORS.cream,
+          boxShadow: boxShadow(labileP > 0.1 ? 'mustard' : 'cream'),
+          transform: `rotate(${Math.sin(frame / 8) * labileP * 5}deg)`,
+        }}
+      >
+        {/* LABILE label appears when open */}
+        {labileP > 0.3 && (
+          <div
+            style={{
+              position: 'absolute',
+              left: '50%',
+              top: '50%',
+              transform: `translate(-50%, -50%) scale(${labileP})`,
+              fontFamily: FONT_FAMILY,
+              fontWeight: 900,
+              fontSize: 36 * u,
+              color: COLORS.navy,
+              whiteSpace: 'nowrap',
+              letterSpacing: 3,
+            }}
+          >
+            EDITABLE
+          </div>
+        )}
+      </div>
+      {/* padlock body */}
+      <div
+        style={{
+          position: 'absolute',
+          left: cx - 56 * u,
+          top: cardY - 40 * u,
+          width: 112 * u,
+          height: 90 * u,
+          borderRadius: 22 * u,
+          backgroundColor: locked || relockP > 0 ? COLORS.navy : COLORS.teal,
+          boxShadow: boxShadow(locked || relockP > 0 ? 'navy' : 'teal'),
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: '40%',
+            transform: 'translateX(-50%)',
+            width: 20 * u,
+            height: 28 * u,
+            borderRadius: 10 * u,
+            backgroundColor: COLORS.cream,
+          }}
+        />
+      </div>
+      {/* padlock shackle (U-shape top, rises when open) */}
+      <div
+        style={{
+          position: 'absolute',
+          left: cx - 38 * u,
+          top: cardY - 80 * u - shackleUp,
+          width: 76 * u,
+          height: 56 * u,
+          borderRadius: `${38 * u}px ${38 * u}px 0 0`,
+          backgroundColor: locked || relockP > 0 ? COLORS.navy : COLORS.teal,
+          boxShadow: locked || relockP > 0 ? boxShadow('navy') : boxShadow('teal'),
+        }}
+      />
+      {/* status pill */}
+      <Pill
+        text={labileP > 0.3 ? 'LABILE' : locked ? 'STORED' : 'OPEN'}
+        color={labileP > 0.3 ? 'mustard' : locked ? 'navy' : 'teal'}
+        u={u}
+        style={{
+          position: 'absolute',
+          left: cx - 60 * u,
+          top: cardY + cardH + 20 * u,
+        }}
+      />
+    </div>
+  );
+};
+
 /**
  * Animated prop layer that ACTS OUT the scene's narration. One action per
  * scene; the engine centers it on the stage. This is what keeps every
@@ -1704,5 +2044,11 @@ export const ActionLayer: React.FC<ActionLayerProps> = ({action, size = 600}) =>
       return <Hijack size={size} />;
     case 'labelTame':
       return <LabelTame size={size} />;
+    case 'recall':
+      return <Recall size={size} />;
+    case 'drift':
+      return <Drift size={size} />;
+    case 'reconsolidate':
+      return <Reconsolidate size={size} />;
   }
 };

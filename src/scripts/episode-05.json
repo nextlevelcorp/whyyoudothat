@@ -1,0 +1,77 @@
+{
+  "title": "Your memories aren't recordings",
+  "durationSec": 56,
+  "scenes": [
+    {
+      "start": 0,
+      "end": 3,
+      "visual": "Big navy hook text pops word by word; Norb peeks curious from below.",
+      "components": ["HookCard", "Norb"],
+      "norbEmotion": "curious",
+      "cardText": "What if your memories aren't recordings?",
+      "voiceover": "What if your memories aren't recordings?",
+      "keywords": ["recordings"]
+    },
+    {
+      "start": 3,
+      "end": 14,
+      "visual": "Navy file drawer; a krem memory card rises up, glows with a mustard halo (editable!), gains a small teal detail, then slides back down. Norb watches, curious.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "recall",
+      "norbEmotion": "curious",
+      "voiceover": "When you remember something, your brain doesn't press play. It pulls the memory out of storage — and for a few minutes, it goes soft and editable.",
+      "keywords": ["editable", "storage"]
+    },
+    {
+      "start": 14,
+      "end": 25,
+      "visual": "Three memory cards left to right: first is crisp coral (ORIGINAL), second tilted and mustard (RECALLED), third tilted more and teal (DRIFTED). Norb looks exhausted.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "drift",
+      "norbEmotion": "exhausted",
+      "voiceover": "While it's open, today's mood and new details quietly leak in. Then it saves again — a little changed. Recall it enough, and it drifts far from what really happened.",
+      "keywords": ["drifts", "changed"]
+    },
+    {
+      "start": 25,
+      "end": 35,
+      "visual": "File drawer again; card rises, the teal detail is added deliberately, then re-files calmer. Norb gets the idea.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "recall",
+      "norbEmotion": "lightbulb",
+      "voiceover": "But that open window is a gift too. Recall a rough memory, add one calmer thought, and your brain re-saves the gentler version.",
+      "keywords": ["calmer", "gift"]
+    },
+    {
+      "start": 35,
+      "end": 46,
+      "visual": "THE SCIENCE card; below it a memory card with a padlock — it springs open, card glows EDITABLE (mustard), then the lock snaps shut again. Norb curious.",
+      "components": ["ScienceCard", "Norb"],
+      "action": "reconsolidate",
+      "norbEmotion": "curious",
+      "cardText": "Recall makes memory editable.\nThen it re-stores — changed.\nResearchers call it reconsolidation.",
+      "voiceover": "Every time you pull up a memory, your brain has to store it all over again. Researchers call it reconsolidation — and that re-save window is where it can change.",
+      "keywords": ["reconsolidation", "re-save", "change"]
+    },
+    {
+      "start": 46,
+      "end": 53,
+      "visual": "TRY THIS card; below it the drawer opens and a card rises with a fresh teal dot, then re-files. Norb celebrates.",
+      "components": ["TakeawayCard", "Norb"],
+      "action": "recall",
+      "norbEmotion": "celebrating",
+      "cardText": "Replay good memories often.\nWhen a hard one surfaces, add one calmer thought.",
+      "voiceover": "Replay good memories often — you strengthen them. And when a painful one surfaces, add one calmer thought before it files itself away.",
+      "keywords": ["replay", "calmer", "strengthen"]
+    },
+    {
+      "start": 53,
+      "end": 56,
+      "visual": "Sources card; Norb celebrating below.",
+      "components": ["SourceCard", "Norb"],
+      "norbEmotion": "celebrating",
+      "voiceover": "Sources in the caption.",
+      "keywords": []
+    }
+  ]
+}

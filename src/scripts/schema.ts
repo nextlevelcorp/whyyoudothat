@@ -35,7 +35,10 @@ export type SceneAction =
   | 'connect'  // two creatures slide together; a warm pulse calms the stressed one
   | 'alarm'    // red rings pulse outward from the amygdala; threat spark zaps in
   | 'hijack'   // two tracks from brain: fast coral "low road" beats slow teal "high road" to the body
-  | 'labelTame'; // ANGRY label drops onto the alarm; red rings shrink, calm teal ring blooms
+  | 'labelTame' // ANGRY label drops onto the alarm; red rings shrink, calm teal ring blooms
+  | 'recall'    // navy file drawer; a memory card rises, glows editable (mustard halo), then re-files
+  | 'drift'     // three memory cards left-to-right: each copy is more tilted/teal-shifted than the last
+  | 'reconsolidate'; // memory card with a padlock: lock springs open → card glows LABILE → lock snaps shut
 
 export type SceneScript = {
   /** Scene start, in seconds from the beginning of the episode. */
