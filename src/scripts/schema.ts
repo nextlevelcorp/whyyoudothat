@@ -41,7 +41,10 @@ export type SceneAction =
   | 'reconsolidate' // memory card with a padlock: lock springs open → card glows LABILE → lock snaps shut
   | 'gasBrakes'    // GAS pedal floored (coral) next to a half-built BRAKE pedal under scaffolding (teal)
   | 'construction' // teal brain whose front is wrapped in scaffolding + crane: the judgment part still wiring
-  | 'maturation';  // 0→25 age axis sweeps; the prefrontal brain only fills in at the mid-twenties mark
+  | 'maturation'   // 0→25 age axis sweeps; the prefrontal brain only fills in at the mid-twenties mark
+  | 'geneSwitch'      // DNA strand with toggle switches; sun/cloud environment cycles them on (teal) or off (navy)
+  | 'orchidDandelion' // split-screen: teal orchid reacts dramatically, mustard dandelion barely changes
+  | 'susceptibility'; // crossover line chart: steep teal "SENSITIVE" vs flat mustard "RESILIENT" across environments
 
 export type SceneScript = {
   /** Scene start, in seconds from the beginning of the episode. */

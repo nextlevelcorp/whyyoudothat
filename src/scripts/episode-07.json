@@ -1,0 +1,77 @@
+{
+  "title": "Your genes aren't your destiny",
+  "durationSec": 56,
+  "scenes": [
+    {
+      "start": 0,
+      "end": 3,
+      "visual": "Big navy hook text pops word by word; Norb peeks curious from below.",
+      "components": ["HookCard", "Norb"],
+      "norbEmotion": "curious",
+      "cardText": "Did you inherit bad genes?",
+      "voiceover": "Did you inherit bad genes?",
+      "keywords": ["genes"]
+    },
+    {
+      "start": 3,
+      "end": 13,
+      "visual": "DNA strand with three toggle switches; sun icon overhead springs them all to teal ON, then cloud dims them to navy OFF — cycling.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "geneSwitch",
+      "norbEmotion": "curious",
+      "voiceover": "Your genes are more like a script than a verdict. The lines are written — but your environment decides which ones get performed.",
+      "keywords": ["script", "environment"]
+    },
+    {
+      "start": 13,
+      "end": 23,
+      "visual": "Split screen: teal orchid on the left wilts under a storm cloud then explosively blooms when sun appears; mustard dandelion on the right barely moves either way.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "orchidDandelion",
+      "norbEmotion": "panicked",
+      "voiceover": "Some genes make you extra-sensitive — to stress AND to kindness. Others are dandelion genes: tough in almost any soil.",
+      "keywords": ["sensitive", "dandelion"]
+    },
+    {
+      "start": 23,
+      "end": 33,
+      "visual": "Two figures slide together; a warm teal pulse blooms between them — safe connection as the environmental trigger that flips the better genes on.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "connect",
+      "norbEmotion": "lightbulb",
+      "voiceover": "You can't rewrite your genes. But you can change the stage. Safe bonds, sleep, and movement flip the better genes on.",
+      "keywords": ["sleep", "movement"]
+    },
+    {
+      "start": 33,
+      "end": 44,
+      "visual": "THE SCIENCE card; below it a crossover line chart draws in: steep teal SENSITIVE line vs flat mustard RESILIENT line across HARSH → NURTURING. Labels pop via spring.",
+      "components": ["ScienceCard", "Norb"],
+      "action": "susceptibility",
+      "norbEmotion": "curious",
+      "cardText": "Differential susceptibility: sensitive genes amplify BOTH bad and good environments.",
+      "voiceover": "Differential susceptibility: the same gene variant that worsens outcomes in harsh environments also produces the best outcomes in nurturing ones.",
+      "keywords": ["susceptibility", "nurturing"]
+    },
+    {
+      "start": 44,
+      "end": 52,
+      "visual": "TRY THIS card; below it the DNA toggles spring to ON as the sun icon glows. Norb celebrates.",
+      "components": ["TakeawayCard", "Norb"],
+      "action": "geneSwitch",
+      "norbEmotion": "celebrating",
+      "cardText": "Pick one environment to upgrade.\nBetter inputs — same genes, different you.",
+      "voiceover": "Pick one environment to upgrade this week.\nBetter inputs, same genes — different you.",
+      "keywords": ["upgrade"]
+    },
+    {
+      "start": 52,
+      "end": 56,
+      "visual": "Sources card; Norb celebrating below.",
+      "components": ["SourceCard", "Norb"],
+      "norbEmotion": "celebrating",
+      "voiceover": "Sources in the caption.",
+      "keywords": []
+    }
+  ]
+}

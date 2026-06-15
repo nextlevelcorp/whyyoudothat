@@ -2372,6 +2372,449 @@ const Maturation: React.FC<{size: number}> = ({size}) => {
   );
 };
 
+/** DNA strand with 3 toggle switches; an environment icon cycles sun/cloud
+ * and the toggles spring on (teal) or off (navy) to show which genes
+ * "get read." Acts out "environment decides which lines get performed." */
+const GeneSwitch: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const u = size / 600;
+
+  const cycle = 90;
+  const wave = Math.sin((frame / cycle) * Math.PI * 2);
+  const on = (wave + 1) / 2; // 0 = off/storm, 1 = on/sun
+  const sunPhase = wave > 0;
+
+  const strandW = size * 0.78;
+  const strandLeft = (size - strandW) / 2;
+  const strandH = 22 * u;
+  const rungH = 76 * u;
+  const topRailY = size * 0.48;
+  const bottomRailY = topRailY + strandH + rungH;
+  const numRungs = 7;
+
+  // Toggle knob: pill track is 96u wide, knob 44u → range [4u, 48u]
+  const knobLeft = interpolate(on, [0, 1], [4 * u, 48 * u]);
+  const toggleColor = sunPhase ? COLORS.teal : COLORS.navy;
+  const toggleShadowKey: 'teal' | 'navy' = sunPhase ? 'teal' : 'navy';
+  const iconSize = 76 * u;
+  const iconTop = 14 * u;
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.83, margin: '0 auto'}}>
+      {/* Environment icon — sun (mustard) or cloud (navy) */}
+      <div
+        style={{
+          position: 'absolute',
+          left: size / 2 - iconSize / 2,
+          top: iconTop,
+          width: iconSize,
+          height: sunPhase ? iconSize : iconSize * 0.65,
+          borderRadius: sunPhase ? '50%' : `50% 50% 40% 40%`,
+          backgroundColor: sunPhase ? COLORS.mustard : COLORS.navy,
+          boxShadow: boxShadow(sunPhase ? 'mustard' : 'navy'),
+          transform: `scale(${0.82 + 0.18 * on})`,
+        }}
+      />
+      {/* Cloud: extra bump on the left and right when storm */}
+      {!sunPhase && (
+        <>
+          <div style={{
+            position: 'absolute',
+            left: size / 2 - iconSize * 0.62,
+            top: iconTop + iconSize * 0.12,
+            width: iconSize * 0.55,
+            height: iconSize * 0.55,
+            borderRadius: '50%',
+            backgroundColor: COLORS.navy,
+          }} />
+          <div style={{
+            position: 'absolute',
+            left: size / 2 + iconSize * 0.18,
+            top: iconTop + iconSize * 0.2,
+            width: iconSize * 0.42,
+            height: iconSize * 0.42,
+            borderRadius: '50%',
+            backgroundColor: COLORS.navy,
+          }} />
+        </>
+      )}
+      {/* Label under icon */}
+      <div style={{
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: iconTop + iconSize + 16 * u,
+        textAlign: 'center',
+        fontFamily: FONT_FAMILY,
+        fontWeight: 900,
+        fontSize: 28 * u,
+        letterSpacing: 2,
+        color: sunPhase ? COLORS.mustard : COLORS.navy,
+      }}>
+        {sunPhase ? 'NURTURING' : 'HARSH'}
+      </div>
+
+      {/* DNA top rail */}
+      <div style={{
+        position: 'absolute',
+        left: strandLeft,
+        top: topRailY,
+        width: strandW,
+        height: strandH,
+        borderRadius: strandH,
+        backgroundColor: COLORS.navy,
+        boxShadow: boxShadow('navy'),
+      }} />
+      {/* DNA bottom rail */}
+      <div style={{
+        position: 'absolute',
+        left: strandLeft,
+        top: bottomRailY,
+        width: strandW,
+        height: strandH,
+        borderRadius: strandH,
+        backgroundColor: COLORS.navy,
+        boxShadow: boxShadow('navy'),
+      }} />
+      {/* Rungs */}
+      {Array.from({length: numRungs}).map((_, i) => {
+        const rx = strandLeft + ((i + 1) / (numRungs + 1)) * strandW - 10 * u;
+        return (
+          <div key={i} style={{
+            position: 'absolute',
+            left: rx,
+            top: topRailY + strandH,
+            width: 20 * u,
+            height: rungH,
+            borderRadius: 10 * u,
+            backgroundColor: SHADOW_TONES.navy,
+          }} />
+        );
+      })}
+
+      {/* 3 toggle switches at 25%, 50%, 75% of strand */}
+      {[0.25, 0.5, 0.75].map((frac, t) => {
+        const tx = strandLeft + frac * strandW - 48 * u;
+        const ty = topRailY + strandH + rungH / 2 - 26 * u;
+        return (
+          <div key={t} style={{
+            position: 'absolute',
+            left: tx,
+            top: ty,
+            width: 96 * u,
+            height: 52 * u,
+            borderRadius: 26 * u,
+            backgroundColor: toggleColor,
+            boxShadow: boxShadow(toggleShadowKey),
+          }}>
+            <div style={{
+              position: 'absolute',
+              left: knobLeft,
+              top: 4 * u,
+              width: 44 * u,
+              height: 44 * u,
+              borderRadius: '50%',
+              backgroundColor: COLORS.cream,
+            }} />
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+/** Split-screen: a teal orchid vs a mustard dandelion.
+ * An environment icon cycles storm → sunshine. The orchid responds
+ * dramatically (droops then blooms); the dandelion barely flinches.
+ * Acts out "differential sensitivity — to stress AND to kindness." */
+const OrchidDandelion: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const u = size / 600;
+
+  const cycle = 100;
+  const wave = Math.sin((frame / cycle) * Math.PI * 2);
+  const sun = (wave + 1) / 2; // 0 = storm, 1 = sunshine
+  const sunPhase = wave > 0;
+
+  const halfW = size / 2;
+  const flowerY = size * 0.54;
+  const petalR = 68 * u; // distance from center to petal center
+  const petalD = 52 * u; // petal circle diameter
+  const centerD = 68 * u;
+  const numPetals = 6;
+  const puffR = 62 * u;
+  const puffD = 32 * u;
+  const numPuffs = 12;
+
+  // Orchid reacts a lot
+  const orchidScale = 0.72 + sun * 0.56;
+  const orchidY = flowerY + (1 - sun) * 28 * u;
+  // Dandelion barely reacts
+  const dandelionScale = 0.95 + sun * 0.1;
+
+  const iconSize = 72 * u;
+  const iconTop = 14 * u;
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.9, margin: '0 auto'}}>
+      {/* Environment icon at top center */}
+      <div style={{
+        position: 'absolute',
+        left: size / 2 - iconSize / 2,
+        top: iconTop,
+        width: iconSize,
+        height: sunPhase ? iconSize : iconSize * 0.65,
+        borderRadius: sunPhase ? '50%' : '50% 50% 40% 40%',
+        backgroundColor: sunPhase ? COLORS.mustard : COLORS.navy,
+        boxShadow: boxShadow(sunPhase ? 'mustard' : 'navy'),
+        transform: `scale(${0.82 + 0.18 * sun})`,
+      }} />
+      {!sunPhase && (
+        <>
+          <div style={{position:'absolute', left: size/2 - iconSize*0.6, top: iconTop + iconSize*0.1, width: iconSize*0.52, height: iconSize*0.52, borderRadius:'50%', backgroundColor: COLORS.navy}} />
+          <div style={{position:'absolute', left: size/2 + iconSize*0.16, top: iconTop + iconSize*0.18, width: iconSize*0.4, height: iconSize*0.4, borderRadius:'50%', backgroundColor: COLORS.navy}} />
+        </>
+      )}
+
+      {/* Divider */}
+      <div style={{
+        position: 'absolute',
+        left: halfW - 4 * u,
+        top: iconTop + iconSize + 20 * u,
+        width: 8 * u,
+        bottom: 40 * u,
+        backgroundColor: SHADOW_TONES.cream,
+        borderRadius: 4 * u,
+      }} />
+
+      {/* ORCHID — left half */}
+      <div style={{position:'absolute', left:0, top:0, width:halfW, height:'100%'}}>
+        {/* Flower group */}
+        <div style={{
+          position: 'absolute',
+          left: halfW / 2,
+          top: orchidY,
+          transform: `translate(-50%, -50%) scale(${orchidScale})`,
+        }}>
+          {Array.from({length: numPetals}).map((_, i) => {
+            const a = (i / numPetals) * Math.PI * 2;
+            return (
+              <div key={i} style={{
+                position: 'absolute',
+                left: Math.cos(a) * petalR - petalD / 2,
+                top: Math.sin(a) * petalR - petalD / 2,
+                width: petalD,
+                height: petalD,
+                borderRadius: '50%',
+                backgroundColor: COLORS.teal,
+                boxShadow: boxShadow('teal'),
+              }} />
+            );
+          })}
+          <div style={{
+            position: 'absolute',
+            left: -centerD / 2,
+            top: -centerD / 2,
+            width: centerD,
+            height: centerD,
+            borderRadius: '50%',
+            backgroundColor: COLORS.mustard,
+            boxShadow: boxShadow('mustard'),
+          }} />
+        </div>
+        <div style={{
+          position:'absolute', bottom: 14*u, left:0, right:0,
+          textAlign:'center', fontFamily: FONT_FAMILY, fontWeight: 900,
+          fontSize: 26*u, color: COLORS.teal,
+        }}>ORCHID</div>
+      </div>
+
+      {/* DANDELION — right half */}
+      <div style={{position:'absolute', left:halfW, top:0, width:halfW, height:'100%'}}>
+        <div style={{
+          position: 'absolute',
+          left: halfW / 2,
+          top: flowerY,
+          transform: `translate(-50%, -50%) scale(${dandelionScale})`,
+        }}>
+          {Array.from({length: numPuffs}).map((_, i) => {
+            const a = (i / numPuffs) * Math.PI * 2;
+            return (
+              <div key={i} style={{
+                position: 'absolute',
+                left: Math.cos(a) * puffR - puffD / 2,
+                top: Math.sin(a) * puffR - puffD / 2,
+                width: puffD,
+                height: puffD,
+                borderRadius: '50%',
+                backgroundColor: COLORS.mustard,
+                boxShadow: boxShadow('mustard'),
+              }} />
+            );
+          })}
+          <div style={{
+            position: 'absolute',
+            left: -centerD / 2,
+            top: -centerD / 2,
+            width: centerD,
+            height: centerD,
+            borderRadius: '50%',
+            backgroundColor: COLORS.coral,
+            boxShadow: boxShadow('coral'),
+          }} />
+        </div>
+        <div style={{
+          position:'absolute', bottom: 14*u, left:0, right:0,
+          textAlign:'center', fontFamily: FONT_FAMILY, fontWeight: 900,
+          fontSize: 26*u, color: COLORS.mustard,
+        }}>DANDELION</div>
+      </div>
+    </div>
+  );
+};
+
+/** Crossover line chart: X = environment quality (HARSH → NURTURING),
+ * Y = outcome. A steep teal "SENSITIVE" line and a nearly flat mustard
+ * "RESILIENT" line animate in progressively. Acts out the
+ * differential-susceptibility crossover interaction. */
+const Susceptibility: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const u = size / 600;
+
+  const chartW = size * 0.80;
+  const chartH = size * 0.50;
+  const chartLeft = (size - chartW) / 2;
+  const chartTop = size * 0.17;
+  const axisThick = 14 * u;
+
+  const drawProgress = spring({
+    frame: frame - 6,
+    fps,
+    config: {damping: 18, stiffness: 55},
+    durationInFrames: 44,
+  });
+  const labelIn = spring({
+    frame: frame - 46,
+    fps,
+    config: SPRINGS.bouncy,
+    durationInFrames: 16,
+  });
+
+  // Chart coordinate helpers
+  const cx = (xFrac: number) => chartLeft + xFrac * chartW;
+  const cy = (yFrac: number) => chartTop + chartH - yFrac * chartH;
+
+  // Line definitions (start / end in 0-1 chart coords)
+  const lines: Array<{
+    start: {x: number; y: number};
+    end: {x: number; y: number};
+    color: string;
+    shadow: 'teal' | 'mustard';
+    label: string;
+    labelYOffset: number;
+  }> = [
+    {start: {x: 0, y: 0.08}, end: {x: 1, y: 0.92}, color: COLORS.teal, shadow: 'teal', label: 'SENSITIVE', labelYOffset: -44 * u},
+    {start: {x: 0, y: 0.44}, end: {x: 1, y: 0.60}, color: COLORS.mustard, shadow: 'mustard', label: 'RESILIENT', labelYOffset: 14 * u},
+  ];
+
+  const DOT_COUNT = 36;
+  const DOT_SIZE = 20 * u;
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.85, margin: '0 auto'}}>
+      {/* Y axis */}
+      <div style={{
+        position: 'absolute',
+        left: chartLeft,
+        top: chartTop,
+        width: axisThick,
+        height: chartH,
+        borderRadius: axisThick,
+        backgroundColor: COLORS.navy,
+      }} />
+      {/* X axis */}
+      <div style={{
+        position: 'absolute',
+        left: chartLeft,
+        top: chartTop + chartH,
+        width: chartW,
+        height: axisThick,
+        borderRadius: axisThick,
+        backgroundColor: COLORS.navy,
+      }} />
+
+      {/* X axis labels */}
+      <div style={{
+        position: 'absolute',
+        left: chartLeft,
+        top: chartTop + chartH + 24 * u,
+        fontFamily: FONT_FAMILY, fontWeight: 800, fontSize: 26 * u, color: COLORS.navy,
+      }}>HARSH</div>
+      <div style={{
+        position: 'absolute',
+        right: chartLeft,
+        top: chartTop + chartH + 24 * u,
+        fontFamily: FONT_FAMILY, fontWeight: 800, fontSize: 26 * u, color: COLORS.navy,
+        textAlign: 'right',
+      }}>NURTURING</div>
+
+      {/* Y axis label */}
+      <div style={{
+        position: 'absolute',
+        left: chartLeft,
+        top: chartTop - 44 * u,
+        fontFamily: FONT_FAMILY, fontWeight: 800, fontSize: 26 * u, color: COLORS.navy,
+      }}>OUTCOME ↑</div>
+
+      {/* Lines drawn as filled dots */}
+      {lines.map((line) =>
+        Array.from({length: DOT_COUNT}).map((_, i) => {
+          const t = i / (DOT_COUNT - 1);
+          if (t > drawProgress) return null;
+          const x = cx(line.start.x + (line.end.x - line.start.x) * t);
+          const y = cy(line.start.y + (line.end.y - line.start.y) * t);
+          return (
+            <div
+              key={`${line.label}-${i}`}
+              style={{
+                position: 'absolute',
+                left: x - DOT_SIZE / 2,
+                top: y - DOT_SIZE / 2,
+                width: DOT_SIZE,
+                height: DOT_SIZE,
+                borderRadius: '50%',
+                backgroundColor: line.color,
+                boxShadow: boxShadow(line.shadow),
+              }}
+            />
+          );
+        })
+      )}
+
+      {/* End-of-line labels */}
+      {lines.map((line) => (
+        <div
+          key={`label-${line.label}`}
+          style={{
+            position: 'absolute',
+            left: cx(line.end.x) - 120 * u,
+            top: cy(line.end.y) + line.labelYOffset,
+            fontFamily: FONT_FAMILY,
+            fontWeight: 900,
+            fontSize: 26 * u,
+            color: line.color,
+            transform: `scale(${labelIn})`,
+            transformOrigin: 'center center',
+          }}
+        >
+          {line.label}
+        </div>
+      ))}
+    </div>
+  );
+};
+
 /**
  * Animated prop layer that ACTS OUT the scene's narration. One action per
  * scene; the engine centers it on the stage. This is what keeps every
@@ -2428,5 +2871,11 @@ export const ActionLayer: React.FC<ActionLayerProps> = ({action, size = 600}) =>
       return <Construction size={size} />;
     case 'maturation':
       return <Maturation size={size} />;
+    case 'geneSwitch':
+      return <GeneSwitch size={size} />;
+    case 'orchidDandelion':
+      return <OrchidDandelion size={size} />;
+    case 'susceptibility':
+      return <Susceptibility size={size} />;
   }
 };
