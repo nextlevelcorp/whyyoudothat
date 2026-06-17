@@ -1,0 +1,77 @@
+{
+  "title": "The love hormone picks sides",
+  "durationSec": 56,
+  "scenes": [
+    {
+      "start": 0,
+      "end": 3,
+      "visual": "Big navy hook text pops word by word; Norb peeks curious from below.",
+      "components": ["HookCard", "Norb"],
+      "norbEmotion": "curious",
+      "cardText": "Is oxytocin the 'love hormone'?",
+      "voiceover": "Is oxytocin really the love hormone?",
+      "keywords": ["oxytocin"]
+    },
+    {
+      "start": 3,
+      "end": 13,
+      "visual": "Two figures slide together, a warm teal pulse blooms between them — the bonding effect of oxytocin.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "connect",
+      "norbEmotion": "curious",
+      "voiceover": "Oxytocin is the bonding chemical. A hug, a shared laugh — and it glues you to your people.",
+      "keywords": ["bonding", "people"]
+    },
+    {
+      "start": 13,
+      "end": 23,
+      "visual": "Teal in-group dots cluster inside a navy ring; a coral outsider dot gets nudged further away as the ring holds firm.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "inGroup",
+      "norbEmotion": "panicked",
+      "voiceover": "But the same glue draws a line. As it pulls your group closer, it pushes outsiders further away.",
+      "keywords": ["line", "outsiders"]
+    },
+    {
+      "start": 23,
+      "end": 33,
+      "visual": "The navy ring springs outward; the coral outsider dot enters the circle and turns teal; a mustard warm pulse blooms at the center.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "widenCircle",
+      "norbEmotion": "lightbulb",
+      "voiceover": "The fix isn't less bonding — it's a bigger circle. Find one thing you share, and 'them' becomes 'us'.",
+      "keywords": ["circle", "share"]
+    },
+    {
+      "start": 33,
+      "end": 44,
+      "visual": "THE SCIENCE card; below it a two-bar chart springs up: tall teal YOUR GROUP bar vs short navy OUTSIDERS bar under a TRUST headline.",
+      "components": ["ScienceCard", "Norb"],
+      "action": "groupTrust",
+      "norbEmotion": "curious",
+      "cardText": "Oxytocin boosts in-group trust — not trust in general.",
+      "voiceover": "Oxytocin drives in-group favoritism: it raises trust and cooperation inside your group, but not toward outsiders.",
+      "keywords": ["favoritism", "trust"]
+    },
+    {
+      "start": 44,
+      "end": 52,
+      "visual": "TRY THIS card; below it the widening circle animation plays with the outsider dot turning teal. Norb celebrates.",
+      "components": ["TakeawayCard", "Norb"],
+      "action": "widenCircle",
+      "norbEmotion": "celebrating",
+      "cardText": "Feeling 'us vs them'?\nName one thing you share with 'them'.",
+      "voiceover": "Next time you feel 'us versus them,' name one thing you share with them.",
+      "keywords": ["share"]
+    },
+    {
+      "start": 52,
+      "end": 56,
+      "visual": "Sources card; Norb celebrating below.",
+      "components": ["SourceCard", "Norb"],
+      "norbEmotion": "celebrating",
+      "voiceover": "Sources in the caption.",
+      "keywords": []
+    }
+  ]
+}

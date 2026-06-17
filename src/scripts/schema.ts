@@ -44,7 +44,10 @@ export type SceneAction =
   | 'maturation'   // 0→25 age axis sweeps; the prefrontal brain only fills in at the mid-twenties mark
   | 'geneSwitch'      // DNA strand with toggle switches; sun/cloud environment cycles them on (teal) or off (navy)
   | 'orchidDandelion' // split-screen: teal orchid reacts dramatically, mustard dandelion barely changes
-  | 'susceptibility'; // crossover line chart: steep teal "SENSITIVE" vs flat mustard "RESILIENT" across environments
+  | 'susceptibility'  // crossover line chart: steep teal "SENSITIVE" vs flat mustard "RESILIENT" across environments
+  | 'inGroup'         // teal dots cluster inside a navy ring; a coral outsider dot is pushed further away
+  | 'widenCircle'     // navy ring springs outward, coral outsider enters and turns teal, mustard pulse blooms
+  | 'groupTrust';     // two-bar chart: tall teal "YOUR GROUP" vs short navy "OUTSIDERS" — in-group favoritism
 
 export type SceneScript = {
   /** Scene start, in seconds from the beginning of the episode. */

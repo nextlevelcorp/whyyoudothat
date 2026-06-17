@@ -2372,6 +2372,291 @@ const Maturation: React.FC<{size: number}> = ({size}) => {
   );
 };
 
+/** 5–6 teal dots cluster tightly (the in-group); a navy ring surrounds them.
+ * A lone coral dot outside the ring gets nudged further away with a spring.
+ * Acts out "the same glue draws a line — outsiders get pushed further." */
+const InGroup: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const u = size / 600;
+
+  const cx = size / 2;
+  const cy = size * 0.46;
+  const ringR = 140 * u;
+  const dotD = 56 * u;
+
+  // Cluster breathes gently
+  const breath = Math.sin(frame / 18) * 6 * u;
+
+  // Outsider drifts further over time then resets
+  const cycle = 80;
+  const t = (frame % cycle) / cycle;
+  const outsiderPush = spring({
+    frame: (frame % cycle),
+    fps,
+    config: SPRINGS.gentle,
+    durationInFrames: 30,
+  });
+  const outsiderX = cx + (ringR + 60 * u + outsiderPush * 70 * u);
+  const outsiderY = cy - 20 * u;
+
+  // Inner group positions (pentagon + center)
+  const innerPositions = [
+    {x: 0, y: 0},
+    ...Array.from({length: 5}).map((_, i) => {
+      const a = (i / 5) * Math.PI * 2 - Math.PI / 2;
+      return {x: Math.cos(a) * 70 * u, y: Math.sin(a) * 70 * u};
+    }),
+  ];
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.9, margin: '0 auto'}}>
+      {/* Navy ring — made from two concentric circles */}
+      <div style={{
+        position: 'absolute',
+        left: cx - ringR - 22 * u,
+        top: cy - ringR - 22 * u,
+        width: (ringR + 22 * u) * 2,
+        height: (ringR + 22 * u) * 2,
+        borderRadius: '50%',
+        backgroundColor: COLORS.navy,
+        boxShadow: boxShadow('navy'),
+      }} />
+      <div style={{
+        position: 'absolute',
+        left: cx - ringR + 8 * u,
+        top: cy - ringR + 8 * u,
+        width: (ringR - 8 * u) * 2,
+        height: (ringR - 8 * u) * 2,
+        borderRadius: '50%',
+        backgroundColor: COLORS.cream,
+      }} />
+
+      {/* Inner group dots */}
+      {innerPositions.map((pos, i) => (
+        <div key={i} style={{
+          position: 'absolute',
+          left: cx + pos.x + breath - dotD / 2,
+          top: cy + pos.y + breath * 0.5 - dotD / 2,
+          width: dotD,
+          height: dotD,
+          borderRadius: '50%',
+          backgroundColor: COLORS.teal,
+          boxShadow: boxShadow('teal'),
+        }} />
+      ))}
+
+      {/* Outsider dot — coral, pushed further right */}
+      <div style={{
+        position: 'absolute',
+        left: outsiderX - dotD * 0.5,
+        top: outsiderY - dotD * 0.5,
+        width: dotD,
+        height: dotD,
+        borderRadius: '50%',
+        backgroundColor: COLORS.coral,
+        boxShadow: boxShadow('coral'),
+        transform: `scale(${interpolate(outsiderPush, [0, 1], [1, 0.72])})`,
+      }} />
+
+      {/* Label */}
+      <div style={{
+        position: 'absolute',
+        bottom: 16 * u,
+        left: 0, right: 0,
+        textAlign: 'center',
+        fontFamily: FONT_FAMILY, fontWeight: 900, fontSize: 28 * u, color: COLORS.navy,
+      }}>SAME CHEMICAL, DIFFERENT EFFECT</div>
+    </div>
+  );
+};
+
+/** The navy boundary ring springs outward; the coral outsider dot enters,
+ * turns teal, and a mustard warm pulse blooms at the center.
+ * Acts out "find one thing you share — 'them' becomes 'us'." */
+const WidenCircle: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const u = size / 600;
+
+  const cx = size / 2;
+  const cy = size * 0.44;
+  const cycle = 90;
+  const p = (frame % cycle) / cycle;
+
+  // Ring expands from tight to wide, then snaps back
+  const expandProg = spring({
+    frame: frame % cycle,
+    fps,
+    config: SPRINGS.bouncy,
+    durationInFrames: 30,
+  });
+  const ringR = interpolate(expandProg, [0, 1], [110 * u, 170 * u]);
+  const ringThick = 22 * u;
+
+  // Outsider enters as ring widens
+  const outsiderStart = cx + 220 * u;
+  const outsiderTarget = cx + 60 * u;
+  const outsiderX = interpolate(expandProg, [0, 1], [outsiderStart, outsiderTarget]);
+  const outsiderY = cy - 10 * u;
+  const dotD = 56 * u;
+  const dotColor = expandProg > 0.6 ? COLORS.teal : COLORS.coral;
+  const dotShadow: 'teal' | 'coral' = expandProg > 0.6 ? 'teal' : 'coral';
+
+  // Warm pulse
+  const pulseScale = 0.8 + Math.sin(frame / 12) * 0.2;
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.88, margin: '0 auto'}}>
+      {/* Ring outer */}
+      <div style={{
+        position: 'absolute',
+        left: cx - ringR - ringThick,
+        top: cy - ringR - ringThick,
+        width: (ringR + ringThick) * 2,
+        height: (ringR + ringThick) * 2,
+        borderRadius: '50%',
+        backgroundColor: COLORS.navy,
+        boxShadow: boxShadow('navy'),
+      }} />
+      {/* Ring inner cutout (cream) */}
+      <div style={{
+        position: 'absolute',
+        left: cx - ringR,
+        top: cy - ringR,
+        width: ringR * 2,
+        height: ringR * 2,
+        borderRadius: '50%',
+        backgroundColor: COLORS.cream,
+      }} />
+
+      {/* Warm mustard pulse at center */}
+      <div style={{
+        position: 'absolute',
+        left: cx - 44 * u * pulseScale,
+        top: cy - 44 * u * pulseScale,
+        width: 88 * u * pulseScale,
+        height: 88 * u * pulseScale,
+        borderRadius: '50%',
+        backgroundColor: COLORS.mustard,
+        boxShadow: boxShadow('mustard'),
+        opacity: 0.5 + expandProg * 0.5,
+      }} />
+
+      {/* Inner teal dots */}
+      {Array.from({length: 5}).map((_, i) => {
+        const a = (i / 5) * Math.PI * 2 - Math.PI / 2;
+        return (
+          <div key={i} style={{
+            position: 'absolute',
+            left: cx + Math.cos(a) * 68 * u - 26 * u,
+            top: cy + Math.sin(a) * 68 * u - 26 * u,
+            width: 52 * u,
+            height: 52 * u,
+            borderRadius: '50%',
+            backgroundColor: COLORS.teal,
+            boxShadow: boxShadow('teal'),
+          }} />
+        );
+      })}
+
+      {/* Outsider dot moving in */}
+      <div style={{
+        position: 'absolute',
+        left: outsiderX - dotD / 2,
+        top: outsiderY - dotD / 2,
+        width: dotD,
+        height: dotD,
+        borderRadius: '50%',
+        backgroundColor: dotColor,
+        boxShadow: boxShadow(dotShadow),
+      }} />
+    </div>
+  );
+};
+
+/** Two-bar trust chart: tall teal "YOUR GROUP" bar vs short navy "OUTSIDERS"
+ * bar. Bars spring up, labels pop in. Acts out the in-group favoritism
+ * science: oxytocin raises in-group trust, not general trust. */
+const GroupTrust: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const u = size / 600;
+
+  const barW = 180 * u;
+  const maxH = 280 * u;
+  const gap = 80 * u;
+  const totalW = barW * 2 + gap;
+  const left = (size - totalW) / 2;
+
+  const bars = [
+    {label: 'YOUR\nGROUP', h: 0.88, color: COLORS.teal, shadow: 'teal' as const},
+    {label: 'OUTSIDERS', h: 0.28, color: COLORS.navy, shadow: 'navy' as const},
+  ];
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.78, margin: '0 auto'}}>
+      {/* Title */}
+      <div style={{
+        textAlign: 'center',
+        fontFamily: FONT_FAMILY, fontWeight: 900, fontSize: 34 * u, letterSpacing: 3,
+        color: COLORS.navy, marginBottom: 24 * u,
+      }}>TRUST</div>
+
+      <div style={{position: 'relative', height: maxH + 80 * u}}>
+        {/* Bars */}
+        {bars.map((bar, i) => {
+          const rise = spring({
+            frame: frame - 6 - i * 10,
+            fps,
+            config: SPRINGS.bouncy,
+            durationInFrames: 24,
+          });
+          const barH = maxH * bar.h;
+          return (
+            <div key={i} style={{
+              position: 'absolute',
+              left: left + i * (barW + gap),
+              bottom: 30 * u,
+              width: barW,
+              height: barH * rise,
+              borderRadius: 22 * u,
+              backgroundColor: bar.color,
+              boxShadow: boxShadow(bar.shadow),
+              transformOrigin: '50% 100%',
+            }} />
+          );
+        })}
+
+        {/* Baseline */}
+        <div style={{
+          position: 'absolute',
+          left: left - 10 * u,
+          bottom: 14 * u,
+          width: totalW + 20 * u,
+          height: 16 * u,
+          borderRadius: 16 * u,
+          backgroundColor: COLORS.navy,
+        }} />
+
+        {/* Labels */}
+        {bars.map((bar, i) => (
+          <div key={i} style={{
+            position: 'absolute',
+            left: left + i * (barW + gap),
+            bottom: -52 * u,
+            width: barW,
+            textAlign: 'center',
+            fontFamily: FONT_FAMILY, fontWeight: 800, fontSize: 28 * u,
+            color: bar.color,
+            whiteSpace: 'pre-line',
+          }}>{bar.label}</div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 /** DNA strand with 3 toggle switches; an environment icon cycles sun/cloud
  * and the toggles spring on (teal) or off (navy) to show which genes
  * "get read." Acts out "environment decides which lines get performed." */
@@ -2877,5 +3162,11 @@ export const ActionLayer: React.FC<ActionLayerProps> = ({action, size = 600}) =>
       return <OrchidDandelion size={size} />;
     case 'susceptibility':
       return <Susceptibility size={size} />;
+    case 'inGroup':
+      return <InGroup size={size} />;
+    case 'widenCircle':
+      return <WidenCircle size={size} />;
+    case 'groupTrust':
+      return <GroupTrust size={size} />;
   }
 };
