@@ -1,0 +1,77 @@
+{
+  "title": "Your bad habits run on autopilot",
+  "durationSec": 56,
+  "scenes": [
+    {
+      "start": 0,
+      "end": 3,
+      "visual": "Big navy hook text pops word by word; Norb peeks curious from below.",
+      "components": ["HookCard", "Norb"],
+      "norbEmotion": "curious",
+      "cardText": "Why do bad habits feel automatic?",
+      "voiceover": "Why do bad habits feel automatic?",
+      "keywords": ["automatic"]
+    },
+    {
+      "start": 3,
+      "end": 13,
+      "visual": "Triangle habit loop: CUE (mustard) → ROUTINE (coral) → REWARD (teal) nodes with arrows; a navy dot travels the loop and the active node swells.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "cueLoop",
+      "norbEmotion": "curious",
+      "voiceover": "Every habit is a loop. A cue triggers a routine, and the routine pays off in a reward.",
+      "keywords": ["cue", "routine", "reward"]
+    },
+    {
+      "start": 13,
+      "end": 23,
+      "visual": "A navy steering wheel turns by itself while mustard Zzz bubbles float up — the brain has handed over control.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "autopilot",
+      "norbEmotion": "exhausted",
+      "voiceover": "Repeat it enough and your brain hands the wheel to autopilot. The cue fires and you're moving before you decide.",
+      "keywords": ["autopilot", "cue"]
+    },
+    {
+      "start": 23,
+      "end": 33,
+      "visual": "The same loop; the middle ROUTINE node (old, coral) slides out and a new teal routine springs in from above, while CUE and REWARD stay put.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "swapRoutine",
+      "norbEmotion": "lightbulb",
+      "voiceover": "So don't fight the cue. Keep it — and the reward — but swap the routine in the middle.",
+      "keywords": ["keep", "swap"]
+    },
+    {
+      "start": 33,
+      "end": 44,
+      "visual": "THE SCIENCE card; below it the habit loop runs as one automatic cycle — the basal ganglia chunking the whole thing.",
+      "components": ["ScienceCard", "Norb"],
+      "action": "cueLoop",
+      "norbEmotion": "curious",
+      "cardText": "Habits get 'chunked' in the basal ganglia — one automatic unit.",
+      "voiceover": "Deep in the brain, the basal ganglia chunk the whole loop into one automatic unit, so it runs without effort.",
+      "keywords": ["basal", "ganglia", "chunked"]
+    },
+    {
+      "start": 44,
+      "end": 52,
+      "visual": "TRY THIS card; below it the routine-swap animation plays with the new teal routine dropping in. Norb celebrates.",
+      "components": ["TakeawayCard", "Norb"],
+      "action": "swapRoutine",
+      "norbEmotion": "celebrating",
+      "cardText": "Keep the cue, swap the routine.\nSame trigger, better payoff.",
+      "voiceover": "Pick one bad habit. Keep its cue, but swap in a routine you actually want.",
+      "keywords": ["cue", "swap"]
+    },
+    {
+      "start": 52,
+      "end": 56,
+      "visual": "Sources card; Norb celebrating below.",
+      "components": ["SourceCard", "Norb"],
+      "norbEmotion": "celebrating",
+      "voiceover": "Sources in the caption.",
+      "keywords": []
+    }
+  ]
+}

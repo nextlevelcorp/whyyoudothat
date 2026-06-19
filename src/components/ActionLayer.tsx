@@ -2372,6 +2372,310 @@ const Maturation: React.FC<{size: number}> = ({size}) => {
   );
 };
 
+/** Triangle habit loop: CUE → ROUTINE → REWARD nodes with curved arrows.
+ * A bright dot travels the loop and the active node swells. Acts out
+ * "every habit is a loop: a cue triggers a routine, the routine pays off." */
+const CueLoop: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const u = size / 600;
+
+  const cx = size / 2;
+  const cy = size * 0.46;
+  const R = 165 * u;
+  const nodeD = 150 * u;
+
+  // Three nodes at 12, 4, 8 o'clock
+  const nodes = [
+    {label: 'CUE', color: COLORS.mustard, shadow: 'mustard' as const, angle: -Math.PI / 2},
+    {label: 'ROUTINE', color: COLORS.coral, shadow: 'coral' as const, angle: Math.PI / 6},
+    {label: 'REWARD', color: COLORS.teal, shadow: 'teal' as const, angle: (Math.PI * 5) / 6},
+  ];
+  const pos = nodes.map((n) => ({
+    x: cx + Math.cos(n.angle) * R,
+    y: cy + Math.sin(n.angle) * R,
+  }));
+
+  // Traveling dot cycles the loop; active node index
+  const cycle = 90;
+  const t = (frame % cycle) / cycle;
+  const seg = t * 3; // 0..3
+  const segIdx = Math.floor(seg) % 3;
+  const segP = seg - Math.floor(seg);
+  const from = pos[segIdx];
+  const to = pos[(segIdx + 1) % 3];
+  const dotX = from.x + (to.x - from.x) * segP;
+  const dotY = from.y + (to.y - from.y) * segP;
+  const activeNode = segP < 0.5 ? segIdx : (segIdx + 1) % 3;
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.9, margin: '0 auto'}}>
+      {/* Arrows between nodes (drawn as thin rotated bars) */}
+      {[0, 1, 2].map((i) => {
+        const a = pos[i];
+        const b = pos[(i + 1) % 3];
+        const midX = (a.x + b.x) / 2;
+        const midY = (a.y + b.y) / 2;
+        const len = Math.hypot(b.x - a.x, b.y - a.y) - nodeD * 0.9;
+        const ang = (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI;
+        return (
+          <div key={`arrow-${i}`} style={{
+            position: 'absolute',
+            left: midX - len / 2,
+            top: midY - 8 * u,
+            width: len,
+            height: 16 * u,
+            borderRadius: 16 * u,
+            backgroundColor: SHADOW_TONES.cream,
+            transform: `rotate(${ang}deg)`,
+          }} />
+        );
+      })}
+
+      {/* Nodes */}
+      {nodes.map((n, i) => {
+        const isActive = i === activeNode;
+        return (
+          <div key={n.label} style={{
+            position: 'absolute',
+            left: pos[i].x - nodeD / 2,
+            top: pos[i].y - nodeD / 2,
+            width: nodeD,
+            height: nodeD,
+            borderRadius: '50%',
+            backgroundColor: n.color,
+            boxShadow: boxShadow(n.shadow),
+            transform: `scale(${isActive ? 1.12 : 1})`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontFamily: FONT_FAMILY,
+            fontWeight: 900,
+            fontSize: 26 * u,
+            color: n.label === 'REWARD' ? COLORS.navy : COLORS.cream,
+            textAlign: 'center',
+          }}>{n.label}</div>
+        );
+      })}
+
+      {/* Traveling dot */}
+      <div style={{
+        position: 'absolute',
+        left: dotX - 18 * u,
+        top: dotY - 18 * u,
+        width: 36 * u,
+        height: 36 * u,
+        borderRadius: '50%',
+        backgroundColor: COLORS.navy,
+        boxShadow: boxShadow('navy'),
+      }} />
+    </div>
+  );
+};
+
+/** A navy steering wheel turns by itself while mustard "Zzz" bubbles float
+ * up — the brain has handed control to autopilot. */
+const Autopilot: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const u = size / 600;
+
+  const cx = size / 2;
+  const cy = size * 0.46;
+  const wheelR = 150 * u;
+  const rim = 34 * u;
+  const rot = frame * 1.6; // self-turning
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.9, margin: '0 auto'}}>
+      {/* Outer rim */}
+      <div style={{
+        position: 'absolute',
+        left: cx - wheelR,
+        top: cy - wheelR,
+        width: wheelR * 2,
+        height: wheelR * 2,
+        borderRadius: '50%',
+        backgroundColor: COLORS.navy,
+        boxShadow: boxShadow('navy'),
+        transform: `rotate(${rot}deg)`,
+      }}>
+        {/* Inner cutout */}
+        <div style={{
+          position: 'absolute',
+          left: rim,
+          top: rim,
+          width: (wheelR - rim) * 2,
+          height: (wheelR - rim) * 2,
+          borderRadius: '50%',
+          backgroundColor: COLORS.cream,
+        }} />
+        {/* Three spokes */}
+        {[0, 120, 240].map((deg) => (
+          <div key={deg} style={{
+            position: 'absolute',
+            left: wheelR - 11 * u,
+            top: wheelR - 11 * u,
+            width: 22 * u,
+            height: wheelR,
+            borderRadius: 22 * u,
+            backgroundColor: COLORS.navy,
+            transformOrigin: '50% 0%',
+            transform: `rotate(${deg}deg)`,
+          }} />
+        ))}
+        {/* Center hub */}
+        <div style={{
+          position: 'absolute',
+          left: wheelR - 40 * u,
+          top: wheelR - 40 * u,
+          width: 80 * u,
+          height: 80 * u,
+          borderRadius: '50%',
+          backgroundColor: COLORS.coral,
+          boxShadow: boxShadow('coral'),
+        }} />
+      </div>
+
+      {/* Floating Zzz bubbles */}
+      {[0, 1, 2].map((i) => {
+        const cyc = 60;
+        const local = (frame + i * 20) % cyc;
+        const p = local / cyc;
+        const fontSize = (44 - i * 8) * u;
+        return (
+          <div key={i} style={{
+            position: 'absolute',
+            left: cx + wheelR - 20 * u + i * 30 * u,
+            top: cy - wheelR + 40 * u - p * 120 * u,
+            fontFamily: FONT_FAMILY,
+            fontWeight: 900,
+            fontSize,
+            color: COLORS.mustard,
+            opacity: 1 - p,
+          }}>Z</div>
+        );
+      })}
+    </div>
+  );
+};
+
+/** Same habit loop as CueLoop, but the middle ROUTINE node slides out
+ * (old coral) and a new teal routine springs in from above. CUE and
+ * REWARD stay put. Acts out "keep the cue and reward, swap the routine." */
+const SwapRoutine: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const u = size / 600;
+
+  const cx = size / 2;
+  const cy = size * 0.46;
+  const R = 165 * u;
+  const nodeD = 150 * u;
+
+  const fixed = [
+    {label: 'CUE', color: COLORS.mustard, shadow: 'mustard' as const, angle: -Math.PI / 2, textColor: COLORS.cream},
+    {label: 'REWARD', color: COLORS.teal, shadow: 'teal' as const, angle: (Math.PI * 5) / 6, textColor: COLORS.navy},
+  ];
+  const fixedPos = fixed.map((n) => ({
+    x: cx + Math.cos(n.angle) * R,
+    y: cy + Math.sin(n.angle) * R,
+  }));
+
+  // Routine node sits at 4 o'clock
+  const routineAngle = Math.PI / 6;
+  const routineX = cx + Math.cos(routineAngle) * R;
+  const routineY = cy + Math.sin(routineAngle) * R;
+
+  // Swap cycle: old slides down/out, new drops in
+  const cycle = 100;
+  const local = frame % cycle;
+  const outProg = spring({frame: local - 10, fps, config: SPRINGS.gentle, durationInFrames: 22});
+  const inProg = spring({frame: local - 38, fps, config: SPRINGS.bouncy, durationInFrames: 26});
+
+  const oldY = routineY + outProg * 200 * u;
+  const oldScale = 1 - outProg * 0.6;
+  const oldOpacity = 1 - outProg;
+  const newY = routineY - (1 - inProg) * 220 * u;
+  const newScale = inProg;
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.9, margin: '0 auto'}}>
+      {/* Arrows: CUE→ROUTINE and ROUTINE→REWARD and REWARD→CUE */}
+      {[
+        {a: fixedPos[0], b: {x: routineX, y: routineY}},
+        {a: {x: routineX, y: routineY}, b: fixedPos[1]},
+        {a: fixedPos[1], b: fixedPos[0]},
+      ].map((seg, i) => {
+        const midX = (seg.a.x + seg.b.x) / 2;
+        const midY = (seg.a.y + seg.b.y) / 2;
+        const len = Math.hypot(seg.b.x - seg.a.x, seg.b.y - seg.a.y) - nodeD * 0.9;
+        const ang = (Math.atan2(seg.b.y - seg.a.y, seg.b.x - seg.a.x) * 180) / Math.PI;
+        return (
+          <div key={i} style={{
+            position: 'absolute',
+            left: midX - len / 2,
+            top: midY - 8 * u,
+            width: len,
+            height: 16 * u,
+            borderRadius: 16 * u,
+            backgroundColor: SHADOW_TONES.cream,
+            transform: `rotate(${ang}deg)`,
+          }} />
+        );
+      })}
+
+      {/* Fixed nodes */}
+      {fixed.map((n, i) => (
+        <div key={n.label} style={{
+          position: 'absolute',
+          left: fixedPos[i].x - nodeD / 2,
+          top: fixedPos[i].y - nodeD / 2,
+          width: nodeD,
+          height: nodeD,
+          borderRadius: '50%',
+          backgroundColor: n.color,
+          boxShadow: boxShadow(n.shadow),
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontFamily: FONT_FAMILY, fontWeight: 900, fontSize: 26 * u,
+          color: n.textColor, textAlign: 'center',
+        }}>{n.label}</div>
+      ))}
+
+      {/* Old routine sliding out */}
+      <div style={{
+        position: 'absolute',
+        left: routineX - nodeD / 2,
+        top: oldY - nodeD / 2,
+        width: nodeD,
+        height: nodeD,
+        borderRadius: '50%',
+        backgroundColor: COLORS.coral,
+        boxShadow: boxShadow('coral'),
+        opacity: oldOpacity,
+        transform: `scale(${oldScale})`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontFamily: FONT_FAMILY, fontWeight: 900, fontSize: 24 * u,
+        color: COLORS.cream, textAlign: 'center',
+      }}>OLD</div>
+
+      {/* New routine dropping in */}
+      <div style={{
+        position: 'absolute',
+        left: routineX - nodeD / 2,
+        top: newY - nodeD / 2,
+        width: nodeD,
+        height: nodeD,
+        borderRadius: '50%',
+        backgroundColor: COLORS.teal,
+        boxShadow: boxShadow('teal'),
+        transform: `scale(${newScale})`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontFamily: FONT_FAMILY, fontWeight: 900, fontSize: 24 * u,
+        color: COLORS.cream, textAlign: 'center',
+      }}>NEW</div>
+    </div>
+  );
+};
+
 /** 5–6 teal dots cluster tightly (the in-group); a navy ring surrounds them.
  * A lone coral dot outside the ring gets nudged further away with a spring.
  * Acts out "the same glue draws a line — outsiders get pushed further." */
@@ -3168,5 +3472,11 @@ export const ActionLayer: React.FC<ActionLayerProps> = ({action, size = 600}) =>
       return <WidenCircle size={size} />;
     case 'groupTrust':
       return <GroupTrust size={size} />;
+    case 'cueLoop':
+      return <CueLoop size={size} />;
+    case 'autopilot':
+      return <Autopilot size={size} />;
+    case 'swapRoutine':
+      return <SwapRoutine size={size} />;
   }
 };

@@ -47,7 +47,10 @@ export type SceneAction =
   | 'susceptibility'  // crossover line chart: steep teal "SENSITIVE" vs flat mustard "RESILIENT" across environments
   | 'inGroup'         // teal dots cluster inside a navy ring; a coral outsider dot is pushed further away
   | 'widenCircle'     // navy ring springs outward, coral outsider enters and turns teal, mustard pulse blooms
-  | 'groupTrust';     // two-bar chart: tall teal "YOUR GROUP" vs short navy "OUTSIDERS" — in-group favoritism
+  | 'groupTrust'      // two-bar chart: tall teal "YOUR GROUP" vs short navy "OUTSIDERS" — in-group favoritism
+  | 'cueLoop'         // triangle habit loop CUE→ROUTINE→REWARD with a dot traveling the loop
+  | 'autopilot'       // a navy steering wheel turns by itself while mustard Zzz bubbles float up
+  | 'swapRoutine';    // same loop, but the middle ROUTINE node slides out and a new teal one springs in
 
 export type SceneScript = {
   /** Scene start, in seconds from the beginning of the episode. */
