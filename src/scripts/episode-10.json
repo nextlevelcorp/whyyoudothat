@@ -1,0 +1,77 @@
+{
+  "title": "Why bad news hits harder",
+  "durationSec": 56,
+  "scenes": [
+    {
+      "start": 0,
+      "end": 3,
+      "visual": "Big navy hook text pops word by word; Norb peeks curious from below.",
+      "components": ["HookCard", "Norb"],
+      "norbEmotion": "curious",
+      "cardText": "Why does one bad comment ruin your day?",
+      "voiceover": "Why does one bad comment ruin your whole day?",
+      "keywords": ["bad", "comment"]
+    },
+    {
+      "start": 3,
+      "end": 13,
+      "visual": "A balance beam: one big coral BAD block on the left tips the beam down, outweighing five small teal good blocks on the right.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "scaleWeigh",
+      "norbEmotion": "curious",
+      "voiceover": "Your brain doesn't treat bad and good equally. One bad thing outweighs several good things, every time.",
+      "keywords": ["bad", "good"]
+    },
+    {
+      "start": 13,
+      "end": 23,
+      "visual": "Two bars under BRAIN WEIGHT: a very tall coral '1 BAD' bar towers over a short teal '5 GOOD' bar.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "biasChart",
+      "norbEmotion": "panicked",
+      "voiceover": "A single criticism can undo five compliments. Your brain is wired to make threats stick harder than wins.",
+      "keywords": ["criticism", "threats"]
+    },
+    {
+      "start": 23,
+      "end": 33,
+      "visual": "A small teal dot breathes at center while slow mustard rings expand outward and a circular timer fills — savoring a good moment.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "savor",
+      "norbEmotion": "lightbulb",
+      "voiceover": "Good things slide off. So force a pause — thirty seconds to sit with something good makes the brain hold on.",
+      "keywords": ["pause", "sit"]
+    },
+    {
+      "start": 33,
+      "end": 44,
+      "visual": "THE SCIENCE card; below it the balance beam tips toward the single heavy coral block — bad weighed deeper than good.",
+      "components": ["ScienceCard", "Norb"],
+      "action": "scaleWeigh",
+      "norbEmotion": "curious",
+      "cardText": "Negativity bias: bad events are processed more deeply than equally strong good ones.",
+      "voiceover": "Negativity bias: research shows bad events trigger stronger neural responses than equally intense good ones — built-in threat detection from our past.",
+      "keywords": ["negativity", "bias"]
+    },
+    {
+      "start": 44,
+      "end": 52,
+      "visual": "TRY THIS card; below it the savor animation plays — teal dot breathing as mustard rings expand. Norb celebrates.",
+      "components": ["TakeawayCard", "Norb"],
+      "action": "savor",
+      "norbEmotion": "celebrating",
+      "cardText": "When something good happens, pause.\n30 seconds — really feel it.",
+      "voiceover": "When something good happens today, pause for thirty seconds and actually feel it. That's your antidote.",
+      "keywords": ["pause", "feel"]
+    },
+    {
+      "start": 52,
+      "end": 56,
+      "visual": "Sources card; Norb celebrating below.",
+      "components": ["SourceCard", "Norb"],
+      "norbEmotion": "celebrating",
+      "voiceover": "Sources in the caption.",
+      "keywords": []
+    }
+  ]
+}

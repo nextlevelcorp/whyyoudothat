@@ -2372,6 +2372,277 @@ const Maturation: React.FC<{size: number}> = ({size}) => {
   );
 };
 
+/** A balance beam: one big coral block on the left outweighs five small
+ * teal blocks on the right; the beam tips left. Acts out "one bad thing
+ * outweighs several good things." */
+const ScaleWeigh: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const u = size / 600;
+
+  const cx = size / 2;
+  const pivotY = size * 0.34;
+  const beamLen = size * 0.78;
+  const beamThick = 26 * u;
+
+  // Beam tips toward the heavy (coral) side
+  const tip = spring({frame: frame - 12, fps, config: SPRINGS.bouncy, durationInFrames: 30});
+  const angle = -tip * 14; // negative = left side down
+  const rad = (angle * Math.PI) / 180;
+
+  const armEndDX = (beamLen / 2) * Math.cos(rad);
+  const armEndDY = (beamLen / 2) * Math.sin(rad);
+
+  // Pan positions
+  const leftX = cx - armEndDX;
+  const leftY = pivotY - armEndDY;
+  const rightX = cx + armEndDX;
+  const rightY = pivotY + armEndDY;
+
+  const bigD = 130 * u;
+  const smallD = 48 * u;
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.86, margin: '0 auto'}}>
+      {/* Central pillar */}
+      <div style={{
+        position: 'absolute',
+        left: cx - 16 * u,
+        top: pivotY,
+        width: 32 * u,
+        height: size * 0.4,
+        borderRadius: 16 * u,
+        backgroundColor: COLORS.navy,
+        boxShadow: boxShadow('navy'),
+      }} />
+
+      {/* Beam */}
+      <div style={{
+        position: 'absolute',
+        left: cx - beamLen / 2,
+        top: pivotY - beamThick / 2,
+        width: beamLen,
+        height: beamThick,
+        borderRadius: beamThick,
+        backgroundColor: COLORS.navy,
+        boxShadow: boxShadow('navy'),
+        transformOrigin: '50% 50%',
+        transform: `rotate(${angle}deg)`,
+      }} />
+
+      {/* Pivot cap */}
+      <div style={{
+        position: 'absolute',
+        left: cx - 24 * u,
+        top: pivotY - 24 * u,
+        width: 48 * u,
+        height: 48 * u,
+        borderRadius: '50%',
+        backgroundColor: COLORS.mustard,
+        boxShadow: boxShadow('mustard'),
+      }} />
+
+      {/* LEFT pan: one big coral "BAD" block */}
+      <div style={{
+        position: 'absolute',
+        left: leftX - bigD / 2,
+        top: leftY + 30 * u,
+        width: bigD,
+        height: bigD,
+        borderRadius: 28 * u,
+        backgroundColor: COLORS.coral,
+        boxShadow: boxShadow('coral'),
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontFamily: FONT_FAMILY, fontWeight: 900, fontSize: 30 * u, color: COLORS.cream,
+      }}>BAD</div>
+
+      {/* RIGHT pan: five small teal "good" blocks */}
+      <div style={{
+        position: 'absolute',
+        left: rightX - bigD / 2,
+        top: rightY + 30 * u,
+        width: bigD,
+        height: bigD,
+        display: 'flex', flexWrap: 'wrap', gap: 8 * u,
+        alignContent: 'center', justifyContent: 'center',
+      }}>
+        {Array.from({length: 5}).map((_, i) => (
+          <div key={i} style={{
+            width: smallD,
+            height: smallD,
+            borderRadius: 12 * u,
+            backgroundColor: COLORS.teal,
+            boxShadow: boxShadow('teal'),
+          }} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+/** Two-bar chart: a very tall coral "1 BAD" bar vs a much shorter teal
+ * "5 GOOD" bar, under a BRAIN WEIGHT headline. Acts out "one criticism
+ * undoes five compliments." */
+const BiasChart: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const u = size / 600;
+
+  const barW = 170 * u;
+  const maxH = 300 * u;
+  const gap = 90 * u;
+  const totalW = barW * 2 + gap;
+  const left = (size - totalW) / 2;
+
+  const bars = [
+    {label: '1 BAD', h: 0.95, color: COLORS.coral, shadow: 'coral' as const, textColor: COLORS.coral},
+    {label: '5 GOOD', h: 0.40, color: COLORS.teal, shadow: 'teal' as const, textColor: COLORS.teal},
+  ];
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.82, margin: '0 auto'}}>
+      <div style={{
+        textAlign: 'center',
+        fontFamily: FONT_FAMILY, fontWeight: 900, fontSize: 34 * u, letterSpacing: 3,
+        color: COLORS.navy, marginBottom: 24 * u,
+      }}>BRAIN WEIGHT</div>
+
+      <div style={{position: 'relative', height: maxH + 80 * u}}>
+        {bars.map((bar, i) => {
+          const rise = spring({frame: frame - 6 - i * 10, fps, config: SPRINGS.bouncy, durationInFrames: 24});
+          return (
+            <div key={i} style={{
+              position: 'absolute',
+              left: left + i * (barW + gap),
+              bottom: 30 * u,
+              width: barW,
+              height: maxH * bar.h * rise,
+              borderRadius: 22 * u,
+              backgroundColor: bar.color,
+              boxShadow: boxShadow(bar.shadow),
+              transformOrigin: '50% 100%',
+            }} />
+          );
+        })}
+
+        {/* Baseline */}
+        <div style={{
+          position: 'absolute',
+          left: left - 10 * u,
+          bottom: 14 * u,
+          width: totalW + 20 * u,
+          height: 16 * u,
+          borderRadius: 16 * u,
+          backgroundColor: COLORS.navy,
+        }} />
+
+        {/* Labels */}
+        {bars.map((bar, i) => (
+          <div key={i} style={{
+            position: 'absolute',
+            left: left + i * (barW + gap),
+            bottom: -52 * u,
+            width: barW,
+            textAlign: 'center',
+            fontFamily: FONT_FAMILY, fontWeight: 800, fontSize: 28 * u,
+            color: bar.textColor,
+          }}>{bar.label}</div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+/** A small teal dot breathes at center; slow mustard rings expand outward
+ * and fade while a circular timer arc fills — savoring a good moment so it
+ * sticks. Acts out "pause thirty seconds to let the brain hold on." */
+const Savor: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const u = size / 600;
+
+  const cx = size / 2;
+  const cy = size * 0.42;
+  const dotD = 70 * u;
+  const breath = 1 + Math.sin(frame / 10) * 0.12;
+
+  // Expanding rings
+  const ringCycle = 50;
+  const rings = [0, 1, 2];
+
+  // Circular timer arc (fills over ~5s loop)
+  const timerCycle = 150;
+  const timerP = (frame % timerCycle) / timerCycle;
+  const timerR = 150 * u;
+  const dots = 24;
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.82, margin: '0 auto'}}>
+      {/* Timer arc made of dots — fills clockwise */}
+      {Array.from({length: dots}).map((_, i) => {
+        const frac = i / dots;
+        const lit = frac <= timerP;
+        const a = -Math.PI / 2 + frac * Math.PI * 2;
+        const d = 18 * u;
+        return (
+          <div key={`t-${i}`} style={{
+            position: 'absolute',
+            left: cx + Math.cos(a) * timerR - d / 2,
+            top: cy + Math.sin(a) * timerR - d / 2,
+            width: d,
+            height: d,
+            borderRadius: '50%',
+            backgroundColor: lit ? COLORS.mustard : SHADOW_TONES.cream,
+          }} />
+        );
+      })}
+
+      {/* Expanding mustard rings */}
+      {rings.map((r) => {
+        const local = (frame + r * (ringCycle / rings.length)) % ringCycle;
+        const p = local / ringCycle;
+        const ringR = interpolate(p, [0, 1], [40 * u, 130 * u]);
+        const thick = 14 * u;
+        return (
+          <div key={`r-${r}`} style={{
+            position: 'absolute',
+            left: cx - ringR,
+            top: cy - ringR,
+            width: ringR * 2,
+            height: ringR * 2,
+            borderRadius: '50%',
+            backgroundColor: COLORS.mustard,
+            opacity: (1 - p) * 0.5,
+            transform: `scale(1)`,
+            // hollow look: overlay a cream circle
+          }}>
+            <div style={{
+              position: 'absolute',
+              left: thick,
+              top: thick,
+              width: (ringR - thick) * 2,
+              height: (ringR - thick) * 2,
+              borderRadius: '50%',
+              backgroundColor: COLORS.cream,
+            }} />
+          </div>
+        );
+      })}
+
+      {/* Central teal dot */}
+      <div style={{
+        position: 'absolute',
+        left: cx - (dotD * breath) / 2,
+        top: cy - (dotD * breath) / 2,
+        width: dotD * breath,
+        height: dotD * breath,
+        borderRadius: '50%',
+        backgroundColor: COLORS.teal,
+        boxShadow: boxShadow('teal'),
+      }} />
+    </div>
+  );
+};
+
 /** Triangle habit loop: CUE → ROUTINE → REWARD nodes with curved arrows.
  * A bright dot travels the loop and the active node swells. Acts out
  * "every habit is a loop: a cue triggers a routine, the routine pays off." */
@@ -3478,5 +3749,11 @@ export const ActionLayer: React.FC<ActionLayerProps> = ({action, size = 600}) =>
       return <Autopilot size={size} />;
     case 'swapRoutine':
       return <SwapRoutine size={size} />;
+    case 'scaleWeigh':
+      return <ScaleWeigh size={size} />;
+    case 'biasChart':
+      return <BiasChart size={size} />;
+    case 'savor':
+      return <Savor size={size} />;
   }
 };

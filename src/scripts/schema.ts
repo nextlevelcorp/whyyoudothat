@@ -50,7 +50,10 @@ export type SceneAction =
   | 'groupTrust'      // two-bar chart: tall teal "YOUR GROUP" vs short navy "OUTSIDERS" — in-group favoritism
   | 'cueLoop'         // triangle habit loop CUE→ROUTINE→REWARD with a dot traveling the loop
   | 'autopilot'       // a navy steering wheel turns by itself while mustard Zzz bubbles float up
-  | 'swapRoutine';    // same loop, but the middle ROUTINE node slides out and a new teal one springs in
+  | 'swapRoutine'     // same loop, but the middle ROUTINE node slides out and a new teal one springs in
+  | 'scaleWeigh'      // balance beam: one big coral "BAD" block outweighs five small teal "good" blocks
+  | 'biasChart'       // two-bar chart: tall coral "1 BAD" vs short teal "5 GOOD" — negativity bias
+  | 'savor';          // teal dot breathes, mustard rings expand and a circular timer fills — savor the good
 
 export type SceneScript = {
   /** Scene start, in seconds from the beginning of the episode. */
