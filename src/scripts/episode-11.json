@@ -1,0 +1,77 @@
+{
+  "title": "Losing hurts twice as much",
+  "durationSec": 56,
+  "scenes": [
+    {
+      "start": 0,
+      "end": 3,
+      "visual": "Big navy hook text pops word by word; Norb peeks curious from below.",
+      "components": ["HookCard", "Norb"],
+      "norbEmotion": "curious",
+      "cardText": "Why is losing $50 worse than finding $50 feels good?",
+      "voiceover": "Why does losing fifty dollars feel worse than finding fifty dollars feels good?",
+      "keywords": ["losing", "finding"]
+    },
+    {
+      "start": 3,
+      "end": 13,
+      "visual": "Two side-by-side meters: the coral LOSS bar springs much higher than the teal GAIN bar — same amount, totally different emotional height.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "lossGain",
+      "norbEmotion": "panicked",
+      "voiceover": "Your brain isn't a calculator. Losing something hurts roughly twice as much as gaining the same thing feels good.",
+      "keywords": ["losing", "gaining"]
+    },
+    {
+      "start": 13,
+      "end": 23,
+      "visual": "A coral pit swallows mustard coins in a loop while a teal figure stands frozen — sunk cost trap.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "sunkCost",
+      "norbEmotion": "exhausted",
+      "voiceover": "So you hold on — to bad stocks, bad jobs, bad relationships — trying to recover what's already gone. That money left the building.",
+      "keywords": ["hold", "gone"]
+    },
+    {
+      "start": 23,
+      "end": 33,
+      "visual": "A navy card flips from coral 'LOSE 40%' to teal 'KEEP 60%' — same deal, different frame, teal tick pops in.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "gainFrame",
+      "norbEmotion": "lightbulb",
+      "voiceover": "The trick is reframing. 'I'll lose 40%' and 'I'll keep 60%' are the same deal — but one feels like a win.",
+      "keywords": ["reframing", "win"]
+    },
+    {
+      "start": 33,
+      "end": 44,
+      "visual": "THE SCIENCE card; below it the two-meter chart shows LOSS towering over GAIN — loss aversion quantified.",
+      "components": ["ScienceCard", "Norb"],
+      "action": "lossGain",
+      "norbEmotion": "curious",
+      "cardText": "Loss aversion: losses feel about twice as powerful as equivalent gains.",
+      "voiceover": "Loss aversion: research shows the pain of losing is about twice as powerful as the pleasure of an equivalent gain.",
+      "keywords": ["loss", "aversion"]
+    },
+    {
+      "start": 44,
+      "end": 52,
+      "visual": "TRY THIS card; below it the gain-frame card flips to show KEEP 60%. Norb celebrates.",
+      "components": ["TakeawayCard", "Norb"],
+      "action": "gainFrame",
+      "norbEmotion": "celebrating",
+      "cardText": "Before any hard decision:\nask 'what am I keeping?' not 'what could I lose?'",
+      "voiceover": "Before any tough decision, ask what you are keeping — not what you might lose. Same facts, better brain.",
+      "keywords": ["keeping"]
+    },
+    {
+      "start": 52,
+      "end": 56,
+      "visual": "Sources card; Norb celebrating below.",
+      "components": ["SourceCard", "Norb"],
+      "norbEmotion": "celebrating",
+      "voiceover": "Sources in the caption.",
+      "keywords": []
+    }
+  ]
+}

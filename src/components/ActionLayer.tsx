@@ -2372,6 +2372,256 @@ const Maturation: React.FC<{size: number}> = ({size}) => {
   );
 };
 
+/** Two side-by-side emotional meter bars: LOSS (coral) springs up much
+ * higher than GAIN (teal) for the same amount. Acts out "losing hurts
+ * roughly twice as much as gaining the same thing feels good." */
+const LossGain: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const u = size / 600;
+
+  const barW = 170 * u;
+  const maxH = 300 * u;
+  const gap = 90 * u;
+  const totalW = barW * 2 + gap;
+  const left = (size - totalW) / 2;
+
+  const lossRise = spring({frame: frame - 6, fps, config: SPRINGS.bouncy, durationInFrames: 26});
+  const gainRise = spring({frame: frame - 16, fps, config: SPRINGS.gentle, durationInFrames: 24});
+
+  const bars = [
+    {label: 'LOSS', h: 0.92, rise: lossRise, color: COLORS.coral, shadow: 'coral' as const},
+    {label: 'GAIN', h: 0.44, rise: gainRise, color: COLORS.teal, shadow: 'teal' as const},
+  ];
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.82, margin: '0 auto'}}>
+      <div style={{
+        textAlign: 'center',
+        fontFamily: FONT_FAMILY, fontWeight: 900, fontSize: 30 * u, letterSpacing: 3,
+        color: COLORS.navy, marginBottom: 20 * u,
+      }}>SAME AMOUNT</div>
+
+      <div style={{position: 'relative', height: maxH + 80 * u}}>
+        {bars.map((bar, i) => (
+          <div key={i}>
+            <div style={{
+              position: 'absolute',
+              left: left + i * (barW + gap),
+              bottom: 30 * u,
+              width: barW,
+              height: maxH * bar.h * bar.rise,
+              borderRadius: 22 * u,
+              backgroundColor: bar.color,
+              boxShadow: boxShadow(bar.shadow),
+              transformOrigin: '50% 100%',
+            }} />
+          </div>
+        ))}
+
+        {/* Baseline */}
+        <div style={{
+          position: 'absolute',
+          left: left - 10 * u,
+          bottom: 14 * u,
+          width: totalW + 20 * u,
+          height: 16 * u,
+          borderRadius: 16 * u,
+          backgroundColor: COLORS.navy,
+        }} />
+
+        {/* Labels */}
+        {bars.map((bar, i) => (
+          <div key={i} style={{
+            position: 'absolute',
+            left: left + i * (barW + gap),
+            bottom: -52 * u,
+            width: barW,
+            textAlign: 'center',
+            fontFamily: FONT_FAMILY, fontWeight: 900, fontSize: 30 * u,
+            color: bar.color,
+          }}>{bar.label}</div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+/** A coral pit in the center; mustard coin discs fall in and shrink away
+ * in a loop while a small figure stands frozen. Acts out "you keep pouring
+ * in — trying to recover what's already gone." */
+const SunkCost: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const u = size / 600;
+
+  const cx = size / 2;
+  const pitY = size * 0.55;
+  const pitW = 200 * u;
+  const pitH = 80 * u;
+
+  // Three coins with staggered fall cycles
+  const coinCycle = 50;
+  const coins = [0, 1, 2].map((i) => {
+    const local = (frame + i * Math.floor(coinCycle / 3)) % coinCycle;
+    const p = local / coinCycle;
+    const startY = pitY - 240 * u;
+    const endY = pitY - 10 * u;
+    const y = startY + (endY - startY) * Math.min(1, p * 1.6);
+    const scale = p > 0.7 ? 1 - (p - 0.7) / 0.3 : 1;
+    const opacity = p > 0.75 ? 1 - (p - 0.75) / 0.25 : 1;
+    return {y, scale, opacity, x: cx + (i - 1) * 56 * u};
+  });
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.88, margin: '0 auto'}}>
+      {/* Pit opening: two rounded shapes forming a mouth */}
+      <div style={{
+        position: 'absolute',
+        left: cx - pitW / 2,
+        top: pitY - pitH / 2,
+        width: pitW,
+        height: pitH,
+        borderRadius: `0 0 ${pitW / 2}px ${pitW / 2}px`,
+        backgroundColor: COLORS.coral,
+        boxShadow: boxShadow('coral'),
+      }} />
+      {/* Pit lip */}
+      <div style={{
+        position: 'absolute',
+        left: cx - pitW / 2 - 24 * u,
+        top: pitY - pitH / 2 - 16 * u,
+        width: pitW + 48 * u,
+        height: 32 * u,
+        borderRadius: 16 * u,
+        backgroundColor: COLORS.navy,
+        boxShadow: boxShadow('navy'),
+      }} />
+
+      {/* Falling coins */}
+      {coins.map((c, i) => (
+        <div key={i} style={{
+          position: 'absolute',
+          left: c.x - 28 * u,
+          top: c.y - 28 * u,
+          width: 56 * u,
+          height: 56 * u,
+          borderRadius: '50%',
+          backgroundColor: COLORS.mustard,
+          boxShadow: boxShadow('mustard'),
+          transform: `scale(${c.scale})`,
+          opacity: c.opacity,
+        }} />
+      ))}
+
+      {/* "ALREADY GONE" label */}
+      <div style={{
+        position: 'absolute',
+        left: 0, right: 0,
+        top: pitY + pitH / 2 + 18 * u,
+        textAlign: 'center',
+        fontFamily: FONT_FAMILY, fontWeight: 900, fontSize: 28 * u,
+        color: COLORS.coral,
+      }}>ALREADY GONE</div>
+
+      {/* Frozen figure (simple: teal circle body + smaller circle head) */}
+      <div style={{
+        position: 'absolute',
+        left: cx - pitW / 2 - 120 * u,
+        top: pitY - 80 * u,
+      }}>
+        {/* Head */}
+        <div style={{
+          width: 52 * u, height: 52 * u, borderRadius: '50%',
+          backgroundColor: COLORS.teal, boxShadow: boxShadow('teal'),
+          marginBottom: 6 * u,
+        }} />
+        {/* Body */}
+        <div style={{
+          width: 52 * u, height: 66 * u, borderRadius: 26 * u,
+          backgroundColor: COLORS.teal,
+        }} />
+      </div>
+    </div>
+  );
+};
+
+/** A navy card shows "LOSE 40%" (coral) then spring-flips horizontally to
+ * reveal "KEEP 60%" (teal) — same deal, different frame. A teal tick pops
+ * in after the flip. Acts out "reframing: same facts, better feeling." */
+const GainFrame: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const u = size / 600;
+
+  const cycle = 80;
+  const local = frame % cycle;
+
+  // Two-phase flip: front shrinks 0→28, back grows 28→80
+  const shrinkProg = spring({frame: local - 4, fps, config: SPRINGS.bouncy, durationInFrames: 18});
+  const growProg = spring({frame: local - 30, fps, config: SPRINGS.bouncy, durationInFrames: 18});
+  const showBack = local >= 28;
+  const absScaleX = showBack ? growProg : 1 - shrinkProg;
+
+  const tickIn = spring({frame: local - 48, fps, config: SPRINGS.bouncy, durationInFrames: 16});
+
+  const cardW = 480 * u;
+  const cardH = 260 * u;
+  const cx = size / 2;
+  const cy = size * 0.42;
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.82, margin: '0 auto'}}>
+      {/* Card */}
+      <div style={{
+        position: 'absolute',
+        left: cx - cardW / 2,
+        top: cy - cardH / 2,
+        width: cardW,
+        height: cardH,
+        borderRadius: 40 * u,
+        backgroundColor: COLORS.navy,
+        boxShadow: boxShadow('navy'),
+        transform: `scaleX(${absScaleX})`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        flexDirection: 'column', gap: 12 * u,
+      }}>
+        <div style={{
+          fontFamily: FONT_FAMILY, fontWeight: 900,
+          fontSize: 56 * u,
+          color: showBack ? COLORS.teal : COLORS.coral,
+        }}>
+          {showBack ? 'KEEP 60%' : 'LOSE 40%'}
+        </div>
+        <div style={{
+          fontFamily: FONT_FAMILY, fontWeight: 800,
+          fontSize: 28 * u,
+          color: COLORS.cream,
+          opacity: 0.7,
+        }}>
+          {showBack ? '← same deal' : 'of your money'}
+        </div>
+      </div>
+
+      {/* Tick that pops in after back is revealed */}
+      {showBack && (
+        <div style={{
+          position: 'absolute',
+          left: cx + cardW / 2 - 20 * u,
+          top: cy - cardH / 2 - 20 * u,
+          width: 60 * u,
+          height: 60 * u,
+          borderRadius: '50%',
+          backgroundColor: COLORS.teal,
+          boxShadow: boxShadow('teal'),
+          transform: `scale(${tickIn})`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontFamily: FONT_FAMILY, fontWeight: 900, fontSize: 32 * u, color: COLORS.cream,
+        }}>✓</div>
+      )}
+    </div>
+  );
+};
+
 /** A balance beam: one big coral block on the left outweighs five small
  * teal blocks on the right; the beam tips left. Acts out "one bad thing
  * outweighs several good things." */
@@ -3749,6 +3999,12 @@ export const ActionLayer: React.FC<ActionLayerProps> = ({action, size = 600}) =>
       return <Autopilot size={size} />;
     case 'swapRoutine':
       return <SwapRoutine size={size} />;
+    case 'lossGain':
+      return <LossGain size={size} />;
+    case 'sunkCost':
+      return <SunkCost size={size} />;
+    case 'gainFrame':
+      return <GainFrame size={size} />;
     case 'scaleWeigh':
       return <ScaleWeigh size={size} />;
     case 'biasChart':

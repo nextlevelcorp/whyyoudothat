@@ -51,6 +51,9 @@ export type SceneAction =
   | 'cueLoop'         // triangle habit loop CUE→ROUTINE→REWARD with a dot traveling the loop
   | 'autopilot'       // a navy steering wheel turns by itself while mustard Zzz bubbles float up
   | 'swapRoutine'     // same loop, but the middle ROUTINE node slides out and a new teal one springs in
+  | 'lossGain'        // two emotional meters: coral LOSS bar springs much higher than teal GAIN for the same amount
+  | 'sunkCost'        // coral pit swallows falling mustard coins in a loop — "already gone"
+  | 'gainFrame'       // navy card flips from coral "LOSE 40%" to teal "KEEP 60%" — same deal, reframed
   | 'scaleWeigh'      // balance beam: one big coral "BAD" block outweighs five small teal "good" blocks
   | 'biasChart'       // two-bar chart: tall coral "1 BAD" vs short teal "5 GOOD" — negativity bias
   | 'savor';          // teal dot breathes, mustard rings expand and a circular timer fills — savor the good
