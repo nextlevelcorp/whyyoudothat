@@ -3925,6 +3925,270 @@ const Susceptibility: React.FC<{size: number}> = ({size}) => {
   );
 };
 
+/** Cortisol drops rain onto a mustard hippocampus blob, which shrinks to
+ * ~52% of its original size in a loop. Acts out "chronic cortisol is toxic
+ * to your hippocampus." */
+const HippoShrink: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const u = size / 600;
+
+  const cycle = 110;
+  const local = frame % cycle;
+  const shrinkProg = spring({frame: local - 8, fps, config: SPRINGS.gentle, durationInFrames: 45});
+  const hippoScale = 1 - shrinkProg * 0.48;
+
+  const hippoW = 270 * u;
+  const hippoH = 190 * u;
+  const cx = size / 2;
+  const cy = size * 0.54;
+
+  const dropCycle = 38;
+  const drops = [0, 1, 2].map((i) => {
+    const loc = (frame + i * Math.floor(dropCycle / 3)) % dropCycle;
+    const p = loc / dropCycle;
+    return {
+      x: cx + (i - 1) * 70 * u,
+      y: cy - hippoH * 0.5 - 90 * u + p * 106 * u,
+      opacity: p < 0.8 ? 1 : 1 - (p - 0.8) / 0.2,
+    };
+  });
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.88, margin: '0 auto'}}>
+      <div style={{
+        textAlign: 'center', fontFamily: FONT_FAMILY, fontWeight: 900,
+        fontSize: 32 * u, letterSpacing: 3, color: COLORS.coral, marginBottom: 14 * u,
+      }}>CORTISOL</div>
+
+      {drops.map((d, i) => (
+        <div key={i} style={{
+          position: 'absolute',
+          left: d.x - 20 * u,
+          top: d.y,
+          width: 40 * u,
+          height: 50 * u,
+          borderRadius: '50% 50% 50% 50% / 40% 40% 60% 60%',
+          backgroundColor: COLORS.coral,
+          boxShadow: boxShadow('coral'),
+          opacity: d.opacity,
+        }} />
+      ))}
+
+      <div style={{
+        position: 'absolute',
+        left: cx - (hippoW * hippoScale) / 2,
+        top: cy - (hippoH * hippoScale) / 2,
+        width: hippoW * hippoScale,
+        height: hippoH * hippoScale,
+        borderRadius: '55% 45% 40% 60% / 60% 50% 50% 40%',
+        backgroundColor: COLORS.mustard,
+        boxShadow: boxShadow('mustard'),
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontFamily: FONT_FAMILY, fontWeight: 900,
+        fontSize: Math.max(14, 28 * u * hippoScale),
+        color: COLORS.navy, letterSpacing: 2,
+      }}>HIPPO</div>
+
+      <Pill
+        text={shrinkProg > 0.3 ? 'SHRINKING' : 'HEALTHY'}
+        color={shrinkProg > 0.3 ? 'coral' : 'teal'}
+        u={u}
+        style={{position: 'absolute', bottom: 20 * u, left: '50%', transform: 'translateX(-50%)'}}
+      />
+    </div>
+  );
+};
+
+/** Triangle vicious cycle: STRESS → CORTISOL → HIPPO↓ → back to STRESS.
+ * A traveling navy dot orbits the loop. Acts out "the damaged hippo loses
+ * the ability to turn stress off — more stress, more damage." */
+const StressLoop: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const u = size / 600;
+
+  const cx = size / 2;
+  const cy = size * 0.48;
+  const R = 158 * u;
+  const nodeD = 148 * u;
+
+  const nodes = [
+    {label: 'STRESS', color: COLORS.coral, shadow: 'coral' as const, angle: -Math.PI / 2, textColor: COLORS.cream},
+    {label: 'CORTISOL', color: COLORS.coral, shadow: 'coral' as const, angle: Math.PI / 6, textColor: COLORS.cream},
+    {label: 'HIPPO↓', color: COLORS.mustard, shadow: 'mustard' as const, angle: (Math.PI * 5) / 6, textColor: COLORS.navy},
+  ];
+  const pos = nodes.map((n) => ({
+    x: cx + Math.cos(n.angle) * R,
+    y: cy + Math.sin(n.angle) * R,
+  }));
+
+  const cycle = 90;
+  const t = (frame % cycle) / cycle;
+  const seg = t * 3;
+  const segIdx = Math.floor(seg) % 3;
+  const segP = seg - Math.floor(seg);
+  const from = pos[segIdx];
+  const to = pos[(segIdx + 1) % 3];
+  const dotX = from.x + (to.x - from.x) * segP;
+  const dotY = from.y + (to.y - from.y) * segP;
+  const activeNode = segP < 0.5 ? segIdx : (segIdx + 1) % 3;
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.92, margin: '0 auto'}}>
+      {[0, 1, 2].map((i) => {
+        const a = pos[i];
+        const b = pos[(i + 1) % 3];
+        const midX = (a.x + b.x) / 2;
+        const midY = (a.y + b.y) / 2;
+        const len = Math.hypot(b.x - a.x, b.y - a.y) - nodeD * 0.9;
+        const ang = (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI;
+        return (
+          <div key={i} style={{
+            position: 'absolute',
+            left: midX - len / 2,
+            top: midY - 8 * u,
+            width: len,
+            height: 16 * u,
+            borderRadius: 16 * u,
+            backgroundColor: SHADOW_TONES.coral,
+            transform: `rotate(${ang}deg)`,
+          }} />
+        );
+      })}
+
+      {nodes.map((n, i) => (
+        <div key={n.label} style={{
+          position: 'absolute',
+          left: pos[i].x - nodeD / 2,
+          top: pos[i].y - nodeD / 2,
+          width: nodeD,
+          height: nodeD,
+          borderRadius: '50%',
+          backgroundColor: n.color,
+          boxShadow: boxShadow(n.shadow),
+          transform: `scale(${i === activeNode ? 1.12 : 1})`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontFamily: FONT_FAMILY, fontWeight: 900,
+          fontSize: 24 * u,
+          color: n.textColor, textAlign: 'center',
+        }}>{n.label}</div>
+      ))}
+
+      <div style={{
+        position: 'absolute',
+        left: dotX - 18 * u,
+        top: dotY - 18 * u,
+        width: 36 * u,
+        height: 36 * u,
+        borderRadius: '50%',
+        backgroundColor: COLORS.navy,
+        boxShadow: boxShadow('navy'),
+      }} />
+
+      <div style={{
+        position: 'absolute',
+        left: cx - 80 * u,
+        top: cy - 20 * u,
+        width: 160 * u,
+        textAlign: 'center',
+        fontFamily: FONT_FAMILY, fontWeight: 900,
+        fontSize: 22 * u, color: SHADOW_TONES.coral,
+        letterSpacing: 2, lineHeight: 1.3,
+      }}>VICIOUS{'\n'}CYCLE</div>
+    </div>
+  );
+};
+
+/** Teal BDNF spark hits the shrunken hippocampus; it spring-grows to full
+ * size while a mustard ring blooms outward. Acts out "exercise triggers BDNF
+ * — the hippocampus can grow back." */
+const GrowBack: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const u = size / 600;
+
+  const cycle = 100;
+  const local = frame % cycle;
+
+  const sparkIn = spring({frame: local - 14, fps, config: SPRINGS.bouncy, durationInFrames: 14});
+  const growProg = spring({frame: local - 30, fps, config: SPRINGS.bouncy, durationInFrames: 30});
+  const hippoScale = 0.52 + growProg * 0.48;
+
+  const ringP = local > 54 ? Math.min(1, (local - 54) / 46) : 0;
+  const ringR = ringP * 190 * u;
+  const ringThick = 22 * u;
+
+  const hippoW = 270 * u;
+  const hippoH = 190 * u;
+  const cx = size / 2;
+  const cy = size * 0.52;
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.88, margin: '0 auto'}}>
+      {ringP > 0 && (
+        <div style={{
+          position: 'absolute',
+          left: cx - ringR - ringThick,
+          top: cy - ringR - ringThick,
+          width: (ringR + ringThick) * 2,
+          height: (ringR + ringThick) * 2,
+          borderRadius: '50%',
+          backgroundColor: COLORS.mustard,
+          opacity: (1 - ringP) * 0.45,
+        }}>
+          <div style={{
+            position: 'absolute',
+            left: ringThick,
+            top: ringThick,
+            width: ringR * 2,
+            height: ringR * 2,
+            borderRadius: '50%',
+            backgroundColor: COLORS.cream,
+          }} />
+        </div>
+      )}
+
+      <div style={{
+        position: 'absolute',
+        left: cx - (hippoW * hippoScale) / 2,
+        top: cy - (hippoH * hippoScale) / 2,
+        width: hippoW * hippoScale,
+        height: hippoH * hippoScale,
+        borderRadius: '55% 45% 40% 60% / 60% 50% 50% 40%',
+        backgroundColor: COLORS.mustard,
+        boxShadow: boxShadow('mustard'),
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontFamily: FONT_FAMILY, fontWeight: 900,
+        fontSize: Math.max(14, 28 * u * hippoScale),
+        color: COLORS.navy, letterSpacing: 2,
+      }}>HIPPO</div>
+
+      <div style={{
+        position: 'absolute',
+        left: cx + hippoW * 0.28,
+        top: cy - hippoH * 0.62,
+        transform: `scale(${sparkIn})`,
+        transformOrigin: '50% 50%',
+      }}>
+        <div style={{
+          width: 86 * u, height: 86 * u, borderRadius: '50%',
+          backgroundColor: COLORS.teal, boxShadow: boxShadow('teal'),
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontFamily: FONT_FAMILY, fontWeight: 900,
+          fontSize: 18 * u, color: COLORS.cream, textAlign: 'center',
+        }}>BDNF</div>
+      </div>
+
+      <Pill
+        text={growProg > 0.5 ? 'GROWING BACK' : 'SMALL'}
+        color={growProg > 0.5 ? 'teal' : 'coral'}
+        u={u}
+        style={{position: 'absolute', bottom: 20 * u, left: '50%', transform: 'translateX(-50%)'}}
+      />
+    </div>
+  );
+};
+
 /**
  * Animated prop layer that ACTS OUT the scene's narration. One action per
  * scene; the engine centers it on the stage. This is what keeps every
@@ -4011,5 +4275,11 @@ export const ActionLayer: React.FC<ActionLayerProps> = ({action, size = 600}) =>
       return <BiasChart size={size} />;
     case 'savor':
       return <Savor size={size} />;
+    case 'hippoShrink':
+      return <HippoShrink size={size} />;
+    case 'stressLoop':
+      return <StressLoop size={size} />;
+    case 'growBack':
+      return <GrowBack size={size} />;
   }
 };

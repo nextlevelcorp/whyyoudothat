@@ -1,0 +1,77 @@
+{
+  "title": "Stress is eating your brain",
+  "durationSec": 56,
+  "scenes": [
+    {
+      "start": 0,
+      "end": 3,
+      "visual": "Big navy hook text pops word by word; Norb peeks curious from below.",
+      "components": ["HookCard", "Norb"],
+      "norbEmotion": "curious",
+      "cardText": "Why does long-term stress make you forgetful — and make stress even harder to stop?",
+      "voiceover": "Why does long-term stress make you forgetful — and somehow make stress even harder to stop?",
+      "keywords": ["stress", "forgetful"]
+    },
+    {
+      "start": 3,
+      "end": 13,
+      "visual": "Cortisol drops rain on a mustard hippocampus blob; it visibly shrinks.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "hippoShrink",
+      "norbEmotion": "panicked",
+      "voiceover": "Every stress burst floods your brain with cortisol. Short term: fine. But chronic stress keeps cortisol high — and it is toxic to your hippocampus, the part that handles memory.",
+      "keywords": ["cortisol", "hippocampus", "toxic"]
+    },
+    {
+      "start": 13,
+      "end": 23,
+      "visual": "Triangle vicious cycle: STRESS → CORTISOL → HIPPO↓ → back to STRESS. Traveling dot loops endlessly.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "stressLoop",
+      "norbEmotion": "exhausted",
+      "voiceover": "Here is the trap: your hippocampus is also your stress off-switch. Damage it — and your brain loses the ability to calm down. More stress, more cortisol, more damage.",
+      "keywords": ["trap", "damage"]
+    },
+    {
+      "start": 23,
+      "end": 33,
+      "visual": "Teal BDNF spark zaps the small hippo; it springs back to full size; mustard ring blooms.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "growBack",
+      "norbEmotion": "lightbulb",
+      "voiceover": "The good news: exercise releases a molecule called BDNF — basically fertilizer for brain cells. Regular movement can actually reverse the damage and regrow the hippocampus.",
+      "keywords": ["BDNF", "regrow"]
+    },
+    {
+      "start": 33,
+      "end": 44,
+      "visual": "THE SCIENCE card; cortisol-shrink visual below. Norb curious.",
+      "components": ["ScienceCard", "Norb"],
+      "action": "hippoShrink",
+      "norbEmotion": "curious",
+      "cardText": "Glucocorticoid toxicity: chronic cortisol physically shrinks the hippocampus, impairing memory and the brain's stress off-switch.",
+      "voiceover": "Glucocorticoid toxicity: chronic cortisol physically shrinks the hippocampus — impairing memory, learning, and the brain's ability to turn stress off.",
+      "keywords": ["glucocorticoid", "toxicity"]
+    },
+    {
+      "start": 44,
+      "end": 52,
+      "visual": "TRY THIS card; BDNF grow-back visual below. Norb celebrating.",
+      "components": ["TakeawayCard", "Norb"],
+      "action": "growBack",
+      "norbEmotion": "celebrating",
+      "cardText": "20 minutes of walking, most days:\nproven to trigger BDNF and restart hippocampal growth.",
+      "voiceover": "Twenty minutes of walking most days. Studies show it is enough to trigger BDNF and restart hippocampal growth. The antidote is that simple.",
+      "keywords": ["walking", "BDNF"]
+    },
+    {
+      "start": 52,
+      "end": 56,
+      "visual": "Sources card; Norb celebrating below.",
+      "components": ["SourceCard", "Norb"],
+      "norbEmotion": "celebrating",
+      "voiceover": "Sources in the caption.",
+      "keywords": []
+    }
+  ]
+}

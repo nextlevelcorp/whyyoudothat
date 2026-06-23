@@ -56,7 +56,10 @@ export type SceneAction =
   | 'gainFrame'       // navy card flips from coral "LOSE 40%" to teal "KEEP 60%" — same deal, reframed
   | 'scaleWeigh'      // balance beam: one big coral "BAD" block outweighs five small teal "good" blocks
   | 'biasChart'       // two-bar chart: tall coral "1 BAD" vs short teal "5 GOOD" — negativity bias
-  | 'savor';          // teal dot breathes, mustard rings expand and a circular timer fills — savor the good
+  | 'savor'           // teal dot breathes, mustard rings expand and a circular timer fills — savor the good
+  | 'hippoShrink'     // cortisol rain drops hit a mustard hippocampus blob; it shrinks to ~50% then resets
+  | 'stressLoop'      // triangle vicious cycle: STRESS→CORTISOL→HIPPO↓→STRESS, traveling coral dot
+  | 'growBack';       // teal BDNF spark hits the shrunken hippo; it springs back to full size, mustard ring blooms
 
 export type SceneScript = {
   /** Scene start, in seconds from the beginning of the episode. */
