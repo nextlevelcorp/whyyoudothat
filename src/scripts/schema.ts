@@ -59,7 +59,9 @@ export type SceneAction =
   | 'savor'           // teal dot breathes, mustard rings expand and a circular timer fills — savor the good
   | 'hippoShrink'     // cortisol rain drops hit a mustard hippocampus blob; it shrinks to ~50% then resets
   | 'stressLoop'      // triangle vicious cycle: STRESS→CORTISOL→HIPPO↓→STRESS, traveling coral dot
-  | 'growBack';       // teal BDNF spark hits the shrunken hippo; it springs back to full size, mustard ring blooms
+  | 'growBack'        // teal BDNF spark hits the shrunken hippo; it springs back to full size, mustard ring blooms
+  | 'painOverlap'     // two triggers (foot spark + rejection phone) alternately light the same mustard brain alarm
+  | 'rejectionTrap';  // navy ring wall grows around a teal creature; reach dots bounce off; creature turns coral
 
 export type SceneScript = {
   /** Scene start, in seconds from the beginning of the episode. */

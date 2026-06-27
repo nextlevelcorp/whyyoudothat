@@ -1,0 +1,77 @@
+{
+  "title": "Rejection really does hurt",
+  "durationSec": 56,
+  "scenes": [
+    {
+      "start": 0,
+      "end": 3,
+      "visual": "Big navy hook text pops word by word; Norb peeks curious from below.",
+      "components": ["HookCard", "Norb"],
+      "norbEmotion": "curious",
+      "cardText": "Why does being left out or turned down feel physically painful?",
+      "voiceover": "Why does being left out or turned down feel physically painful — like something is actually wrong?",
+      "keywords": ["left", "painful"]
+    },
+    {
+      "start": 3,
+      "end": 13,
+      "visual": "Left: navy figure with coral spark at foot. Right: phone with coral ✕. Center: mustard brain blob lights up for BOTH.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "painOverlap",
+      "norbEmotion": "panicked",
+      "voiceover": "Your brain has one pain alarm — and it fires for a broken bone the exact same way it fires for being left on read.",
+      "keywords": ["alarm", "same"]
+    },
+    {
+      "start": 13,
+      "end": 23,
+      "visual": "Navy ring wall springs up around a teal creature; reach dots bounce off; creature turns coral.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "rejectionTrap",
+      "norbEmotion": "exhausted",
+      "voiceover": "So your brain treats rejection like a physical threat — and responds by withdrawing, bracing. Which is exactly what keeps you isolated and hurting longer.",
+      "keywords": ["withdrawing", "isolated"]
+    },
+    {
+      "start": 23,
+      "end": 33,
+      "visual": "Two creatures slide together; warm pulse blooms; the stressed one calms. Acts out 'connection is pain relief.'",
+      "components": ["Norb", "CaptionBand"],
+      "action": "connect",
+      "norbEmotion": "lightbulb",
+      "voiceover": "The counter-move is literal: social connection acts like a painkiller. Feeling close to someone dials down the same pain circuit. You are not being soft — you are medicating.",
+      "keywords": ["painkiller", "medicating"]
+    },
+    {
+      "start": 33,
+      "end": 44,
+      "visual": "THE SCIENCE card; painOverlap visual below showing the dual-trigger alarm. Norb curious.",
+      "components": ["ScienceCard", "Norb"],
+      "action": "painOverlap",
+      "norbEmotion": "curious",
+      "cardText": "Social pain overlap theory: the anterior cingulate cortex registers social exclusion the same way it registers physical injury.",
+      "voiceover": "Social pain overlap theory: the anterior cingulate cortex — your brain's pain alarm — registers social exclusion exactly the same way it registers physical injury.",
+      "keywords": ["anterior", "cingulate"]
+    },
+    {
+      "start": 44,
+      "end": 52,
+      "visual": "TRY THIS card; connect visual below. Norb celebrating.",
+      "components": ["TakeawayCard", "Norb"],
+      "action": "connect",
+      "norbEmotion": "celebrating",
+      "cardText": "When rejection stings:\nreach out to one person you trust — not to vent, just to connect.",
+      "voiceover": "When rejection stings, reach out to one person you trust — not to process it, just to connect. That is not weakness. That is neuroscience.",
+      "keywords": ["reach", "connect"]
+    },
+    {
+      "start": 52,
+      "end": 56,
+      "visual": "Sources card; Norb celebrating below.",
+      "components": ["SourceCard", "Norb"],
+      "norbEmotion": "celebrating",
+      "voiceover": "Sources in the caption.",
+      "keywords": []
+    }
+  ]
+}

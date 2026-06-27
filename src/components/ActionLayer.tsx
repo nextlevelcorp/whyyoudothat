@@ -3925,6 +3925,270 @@ const Susceptibility: React.FC<{size: number}> = ({size}) => {
   );
 };
 
+/** Two triggers — a physical injury spark and a social rejection phone —
+ * alternate firing and each lights up the SAME mustard brain alarm blob at
+ * center. Acts out "one pain alarm, two very different causes." */
+const PainOverlap: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const u = size / 600;
+
+  const cycle = 76;
+  const local = frame % cycle;
+
+  // Physical fires frames 0-36, social fires frames 38-74
+  const physBright = interpolate(local, [0, 6, 22, 36], [0, 1, 1, 0], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
+  const socBright = interpolate(local, [38, 44, 60, 74], [0, 1, 1, 0], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
+  const brainBright = Math.max(physBright, socBright);
+
+  const cx = size / 2;
+  const brainW = 156 * u;
+  const brainH = 110 * u;
+  const brainCx = cx;
+  const brainCy = size * 0.24;
+
+  const figCx = cx - 176 * u;
+  const figCy = size * 0.58;
+  const phoneCx = cx + 110 * u;
+  const phoneCy = size * 0.58;
+
+  // Connector bars (same math as cueLoop arrows)
+  const connL = {
+    ax: brainCx,    ay: brainCy + brainH / 2,
+    bx: figCx,      by: figCy - 56 * u,
+    pad: 36 * u,
+  };
+  const connR = {
+    ax: brainCx,    ay: brainCy + brainH / 2,
+    bx: phoneCx + 44 * u,   by: phoneCy - 46 * u,
+    pad: 36 * u,
+  };
+
+  const renderConn = (c: typeof connL, key: number) => {
+    const dx = c.bx - c.ax;
+    const dy = c.by - c.ay;
+    const len = Math.hypot(dx, dy) - c.pad;
+    const midX = (c.ax + c.bx) / 2;
+    const midY = (c.ay + c.by) / 2;
+    const ang = (Math.atan2(dy, dx) * 180) / Math.PI;
+    return (
+      <div key={key} style={{
+        position: 'absolute',
+        left: midX - len / 2,
+        top: midY - 7 * u,
+        width: Math.max(0, len),
+        height: 14 * u,
+        borderRadius: 14 * u,
+        backgroundColor: SHADOW_TONES.cream,
+        transform: `rotate(${ang}deg)`,
+      }} />
+    );
+  };
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.9, margin: '0 auto'}}>
+      {renderConn(connL, 0)}
+      {renderConn(connR, 1)}
+
+      {/* Shared pain alarm brain — pulses for both triggers */}
+      <div style={{
+        position: 'absolute',
+        left: brainCx - brainW / 2 * (1 + brainBright * 0.13),
+        top: brainCy - brainH / 2 * (1 + brainBright * 0.13),
+        width: brainW * (1 + brainBright * 0.13),
+        height: brainH * (1 + brainBright * 0.13),
+        borderRadius: '48% 52% 55% 45% / 58% 60% 40% 42%',
+        backgroundColor: brainBright > 0.08 ? COLORS.mustard : SHADOW_TONES.cream,
+        boxShadow: brainBright > 0.08 ? boxShadow('mustard') : undefined,
+      }} />
+      <Pill text="SAME ALARM" color="mustard" textColor={COLORS.navy} u={u}
+        style={{
+          position: 'absolute',
+          left: brainCx - 74 * u,
+          top: brainCy + brainH / 2 + 12 * u,
+        }}
+      />
+
+      {/* LEFT: physical injury — navy figure + coral spark */}
+      {/* Head */}
+      <div style={{
+        position: 'absolute',
+        left: figCx - 26 * u,
+        top: figCy - 122 * u,
+        width: 52 * u, height: 52 * u,
+        borderRadius: '50%',
+        backgroundColor: COLORS.navy,
+        boxShadow: boxShadow('navy'),
+      }} />
+      {/* Body */}
+      <div style={{
+        position: 'absolute',
+        left: figCx - 30 * u,
+        top: figCy - 68 * u,
+        width: 60 * u, height: 72 * u,
+        borderRadius: 26 * u,
+        backgroundColor: COLORS.navy,
+      }} />
+      {/* Pain spark at foot */}
+      <div style={{
+        position: 'absolute',
+        left: figCx + 8 * u,
+        top: figCy + 8 * u,
+        width: 54 * u, height: 54 * u,
+        borderRadius: '50%',
+        backgroundColor: COLORS.coral,
+        boxShadow: boxShadow('coral'),
+        transform: `scale(${0.35 + physBright * 0.85})`,
+        opacity: 0.25 + physBright * 0.75,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontFamily: FONT_FAMILY, fontWeight: 900,
+        fontSize: 26 * u, color: COLORS.cream,
+      }}>!</div>
+      <Pill text="PHYSICAL" color="coral" u={u}
+        style={{position: 'absolute', left: figCx - 52 * u, top: figCy + 76 * u}} />
+
+      {/* RIGHT: social rejection — phone + ✕ */}
+      <div style={{
+        position: 'absolute',
+        left: phoneCx - 8 * u,
+        top: phoneCy - 86 * u,
+        width: 88 * u, height: 130 * u,
+        borderRadius: 18 * u,
+        backgroundColor: COLORS.navy,
+        boxShadow: boxShadow('navy'),
+        padding: 8 * u,
+      }}>
+        <div style={{
+          width: '100%', height: '100%',
+          backgroundColor: COLORS.cream,
+          borderRadius: 12 * u,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <div style={{
+            width: 54 * u, height: 38 * u,
+            borderRadius: 20 * u,
+            backgroundColor: socBright > 0.08 ? COLORS.coral : SHADOW_TONES.cream,
+            boxShadow: socBright > 0.08 ? boxShadow('coral') : undefined,
+            transform: `scale(${0.45 + socBright * 0.55})`,
+            opacity: 0.2 + socBright * 0.8,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontFamily: FONT_FAMILY, fontWeight: 900,
+            fontSize: 22 * u, color: COLORS.cream,
+          }}>{socBright > 0.05 ? '✕' : ''}</div>
+        </div>
+      </div>
+      <Pill text="SOCIAL" color="navy" u={u}
+        style={{position: 'absolute', left: phoneCx - 2 * u, top: phoneCy + 52 * u}} />
+    </div>
+  );
+};
+
+/** A navy ring wall springs up around a small teal creature; reach dots
+ * (teal) approach from outside and bounce off the wall; the creature
+ * slowly turns coral. Acts out "rejection triggers the danger response —
+ * you withdraw — which keeps you isolated and hurting longer." */
+const RejectionTrap: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const u = size / 600;
+
+  const cx = size / 2;
+  const cy = size * 0.44;
+
+  const cycle = 100;
+  const local = frame % cycle;
+
+  const ringGrow = spring({frame: local - 5, fps, config: SPRINGS.gentle, durationInFrames: 50});
+  const ringR = 28 * u + ringGrow * 116 * u;
+  const ringThick = 22 * u;
+
+  const trapped = ringGrow > 0.72;
+  const creatureD = (80 - ringGrow * 12) * u;
+  const creatureColor: string = trapped ? COLORS.coral : COLORS.teal;
+  const creatureShadow: 'coral' | 'teal' = trapped ? 'coral' : 'teal';
+
+  // Reach dots: approach from outside, bounce off wall
+  const reachDots = [0, 1, 2].map((i) => {
+    const reachCycle = 44;
+    const loc = (frame + i * 14) % reachCycle;
+    const p = loc / reachCycle;
+    const approach = Math.min(1, p / 0.5);
+    const bounce = p > 0.5 ? (p - 0.5) / 0.5 : 0;
+    const dist = ringR + 80 * u - approach * 76 * u + bounce * 60 * u;
+    const angle = (i / 3) * Math.PI * 2 + Math.PI / 6;
+    return {
+      x: cx + Math.cos(angle) * dist,
+      y: cy + Math.sin(angle) * dist,
+      opacity: p < 0.88 ? 1 : 1 - (p - 0.88) / 0.12,
+    };
+  });
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.9, margin: '0 auto'}}>
+      {/* Navy ring outer */}
+      <div style={{
+        position: 'absolute',
+        left: cx - ringR - ringThick,
+        top: cy - ringR - ringThick,
+        width: (ringR + ringThick) * 2,
+        height: (ringR + ringThick) * 2,
+        borderRadius: '50%',
+        backgroundColor: COLORS.navy,
+        boxShadow: boxShadow('navy'),
+      }} />
+      {/* Cream inner fill */}
+      <div style={{
+        position: 'absolute',
+        left: cx - ringR,
+        top: cy - ringR,
+        width: ringR * 2,
+        height: ringR * 2,
+        borderRadius: '50%',
+        backgroundColor: COLORS.cream,
+      }} />
+
+      {/* Creature */}
+      <div style={{
+        position: 'absolute',
+        left: cx - creatureD / 2,
+        top: cy - creatureD / 2,
+        width: creatureD,
+        height: creatureD,
+        borderRadius: '50%',
+        backgroundColor: creatureColor,
+        boxShadow: boxShadow(creatureShadow),
+      }} />
+
+      {/* Reach dots bounce off the wall */}
+      {ringR > 58 * u && reachDots.map((d, i) => (
+        <div key={i} style={{
+          position: 'absolute',
+          left: d.x - 18 * u,
+          top: d.y - 18 * u,
+          width: 36 * u,
+          height: 36 * u,
+          borderRadius: '50%',
+          backgroundColor: COLORS.teal,
+          boxShadow: boxShadow('teal'),
+          opacity: d.opacity,
+        }} />
+      ))}
+
+      <Pill
+        text={trapped ? 'WITHDRAWING' : 'ISOLATING'}
+        color="coral"
+        u={u}
+        style={{position: 'absolute', bottom: 16 * u, left: '50%', transform: 'translateX(-50%)'}}
+      />
+    </div>
+  );
+};
+
 /** Cortisol drops rain onto a mustard hippocampus blob, which shrinks to
  * ~52% of its original size in a loop. Acts out "chronic cortisol is toxic
  * to your hippocampus." */
@@ -4281,5 +4545,9 @@ export const ActionLayer: React.FC<ActionLayerProps> = ({action, size = 600}) =>
       return <StressLoop size={size} />;
     case 'growBack':
       return <GrowBack size={size} />;
+    case 'painOverlap':
+      return <PainOverlap size={size} />;
+    case 'rejectionTrap':
+      return <RejectionTrap size={size} />;
   }
 };
