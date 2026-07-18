@@ -4189,6 +4189,192 @@ const RejectionTrap: React.FC<{size: number}> = ({size}) => {
   );
 };
 
+/** One navy "T" amplifier sits at center. Two context pills — coral
+ * "AGGRESS = WIN" and teal "COOPERATE = WIN" — alternately light up. The
+ * behavior the amplifier drives below flips to match: a coral raised fist
+ * when the aggressive context is active, a teal handshake when the
+ * cooperative one is. Acts out "same testosterone, opposite behavior —
+ * the context decides." */
+const ContextFlip: React.FC<{size: number}> = ({size}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const u = size / 600;
+
+  const cx = size / 2;
+  const ampCy = size * 0.34;
+  const ampW = 180 * u;
+  const ampH = 150 * u;
+
+  const cycle = 96;
+  const local = frame % cycle;
+
+  // Aggressive context active first half, cooperative second half.
+  const aggressActive = local < cycle / 2;
+  const aggressBright = interpolate(local, [0, 6, 42, 48], [0, 1, 1, 0], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
+  const coopBright = interpolate(local, [48, 54, 90, 96], [0, 1, 1, 0], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
+
+  // The behavior below springs in on each flip.
+  const flipStart = aggressActive ? 6 : 54;
+  const behaviorIn = spring({
+    frame: local - flipStart,
+    fps,
+    config: SPRINGS.bouncy,
+    durationInFrames: 18,
+  });
+
+  const ampPulse = 1 + Math.max(aggressBright, coopBright) * 0.06;
+
+  const behaviorCy = size * 0.68;
+  const fistD = 96 * u;
+
+  return (
+    <div style={{position: 'relative', width: size, height: size * 0.92, margin: '0 auto'}}>
+      {/* SAME T headline */}
+      <div style={{
+        position: 'absolute',
+        top: ampCy - ampH / 2 - 58 * u,
+        left: 0, right: 0,
+        textAlign: 'center',
+        fontFamily: FONT_FAMILY, fontWeight: 900, fontSize: 30 * u, letterSpacing: 3,
+        color: COLORS.navy,
+      }}>SAME T</div>
+
+      {/* Context pill — aggressive (left), right-anchored so it never tucks
+          under the amplifier box */}
+      <div style={{
+        position: 'absolute',
+        right: size / 2 + 116 * u,
+        top: ampCy - 22 * u,
+        transform: `scale(${0.82 + aggressBright * 0.26})`,
+        transformOrigin: '100% 50%',
+        opacity: 0.35 + aggressBright * 0.65,
+      }}>
+        <Pill text="AGGRESS WINS" color="coral" u={u} />
+      </div>
+
+      {/* Context pill — cooperative (right) */}
+      <div style={{
+        position: 'absolute',
+        left: cx + 116 * u,
+        top: ampCy - 22 * u,
+        transform: `scale(${0.82 + coopBright * 0.26})`,
+        transformOrigin: '0% 50%',
+        opacity: 0.35 + coopBright * 0.65,
+      }}>
+        <Pill text="KINDNESS WINS" color="teal" textColor={COLORS.navy} u={u} />
+      </div>
+
+      {/* Amplifier body with "T" */}
+      <div style={{
+        position: 'absolute',
+        left: cx - (ampW * ampPulse) / 2,
+        top: ampCy - (ampH * ampPulse) / 2,
+        width: ampW * ampPulse,
+        height: ampH * ampPulse,
+        borderRadius: 40 * u,
+        backgroundColor: COLORS.navy,
+        boxShadow: boxShadow('navy'),
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontFamily: FONT_FAMILY, fontWeight: 900, fontSize: 96 * u,
+        color: COLORS.cream,
+      }}>T</div>
+
+      {/* Feed arrows: pills into amp (thin bars) */}
+      <div style={{
+        position: 'absolute',
+        left: cx - 150 * u,
+        top: ampCy + 44 * u,
+        width: 300 * u,
+        textAlign: 'center',
+        fontFamily: FONT_FAMILY, fontWeight: 800, fontSize: 24 * u,
+        color: SHADOW_TONES.cream,
+      }}>▼ amplifies ▼</div>
+
+      {/* Behavior below — flips with context */}
+      {aggressActive ? (
+        /* Raised fist: a rounded coral block + knuckle bumps + arm */
+        <div style={{
+          position: 'absolute',
+          left: cx - fistD / 2,
+          top: behaviorCy - fistD / 2,
+          transform: `scale(${behaviorIn})`,
+          transformOrigin: '50% 100%',
+        }}>
+          <div style={{
+            position: 'relative',
+            width: fistD,
+            height: fistD * 0.86,
+            borderRadius: 30 * u,
+            backgroundColor: COLORS.coral,
+            boxShadow: boxShadow('coral'),
+          }}>
+            {/* knuckles */}
+            {[0, 1, 2, 3].map((i) => (
+              <div key={i} style={{
+                position: 'absolute',
+                top: -14 * u,
+                left: 10 * u + i * 20 * u,
+                width: 22 * u,
+                height: 26 * u,
+                borderRadius: 12 * u,
+                backgroundColor: COLORS.coral,
+              }} />
+            ))}
+          </div>
+          {/* arm */}
+          <div style={{
+            width: 40 * u,
+            height: 46 * u,
+            margin: '0 auto',
+            borderRadius: `0 0 ${16 * u}px ${16 * u}px`,
+            backgroundColor: SHADOW_TONES.coral,
+          }} />
+        </div>
+      ) : (
+        /* Handshake: two teal circles clasped, mustard warm dot between */
+        <div style={{
+          position: 'absolute',
+          left: cx - 90 * u,
+          top: behaviorCy - 40 * u,
+          transform: `scale(${behaviorIn})`,
+          transformOrigin: '50% 50%',
+        }}>
+          <div style={{
+            position: 'absolute',
+            left: 0, top: 0,
+            width: 84 * u, height: 84 * u,
+            borderRadius: '50%',
+            backgroundColor: COLORS.teal,
+            boxShadow: boxShadow('teal'),
+          }} />
+          <div style={{
+            position: 'absolute',
+            left: 96 * u, top: 0,
+            width: 84 * u, height: 84 * u,
+            borderRadius: '50%',
+            backgroundColor: COLORS.teal,
+            boxShadow: boxShadow('teal'),
+          }} />
+          <div style={{
+            position: 'absolute',
+            left: 66 * u, top: 18 * u,
+            width: 48 * u, height: 48 * u,
+            borderRadius: '50%',
+            backgroundColor: COLORS.mustard,
+            boxShadow: boxShadow('mustard'),
+          }} />
+        </div>
+      )}
+    </div>
+  );
+};
+
 /** Cortisol drops rain onto a mustard hippocampus blob, which shrinks to
  * ~52% of its original size in a loop. Acts out "chronic cortisol is toxic
  * to your hippocampus." */
@@ -4549,5 +4735,7 @@ export const ActionLayer: React.FC<ActionLayerProps> = ({action, size = 600}) =>
       return <PainOverlap size={size} />;
     case 'rejectionTrap':
       return <RejectionTrap size={size} />;
+    case 'contextFlip':
+      return <ContextFlip size={size} />;
   }
 };

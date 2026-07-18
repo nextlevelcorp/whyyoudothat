@@ -61,7 +61,8 @@ export type SceneAction =
   | 'stressLoop'      // triangle vicious cycle: STRESS→CORTISOL→HIPPO↓→STRESS, traveling coral dot
   | 'growBack'        // teal BDNF spark hits the shrunken hippo; it springs back to full size, mustard ring blooms
   | 'painOverlap'     // two triggers (foot spark + rejection phone) alternately light the same mustard brain alarm
-  | 'rejectionTrap';  // navy ring wall grows around a teal creature; reach dots bounce off; creature turns coral
+  | 'rejectionTrap'   // navy ring wall grows around a teal creature; reach dots bounce off; creature turns coral
+  | 'contextFlip';    // one navy "T" amplifier; two context pills alternate; the amplified behavior flips fist↔handshake
 
 export type SceneScript = {
   /** Scene start, in seconds from the beginning of the episode. */

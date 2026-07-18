@@ -14,6 +14,7 @@ import {Episode10, episode10Script} from './episodes/episode-10';
 import {Episode11, episode11Script} from './episodes/episode-11';
 import {Episode12, episode12Script} from './episodes/episode-12';
 import {Episode13, episode13Script} from './episodes/episode-13';
+import {Episode14, episode14Script} from './episodes/episode-14';
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -118,6 +119,14 @@ export const RemotionRoot: React.FC = () => {
         id="episode-13"
         component={Episode13}
         durationInFrames={episode13Script.durationSec * VIDEO.fps}
+        fps={VIDEO.fps}
+        width={VIDEO.width}
+        height={VIDEO.height}
+      />
+      <Composition
+        id="episode-14"
+        component={Episode14}
+        durationInFrames={episode14Script.durationSec * VIDEO.fps}
         fps={VIDEO.fps}
         width={VIDEO.width}
         height={VIDEO.height}

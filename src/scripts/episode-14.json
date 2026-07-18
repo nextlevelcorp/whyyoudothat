@@ -1,0 +1,77 @@
+{
+  "title": "The testosterone myth",
+  "durationSec": 56,
+  "scenes": [
+    {
+      "start": 0,
+      "end": 3,
+      "visual": "Big navy hook text pops word by word; Norb peeks curious from below.",
+      "components": ["HookCard", "Norb"],
+      "norbEmotion": "curious",
+      "cardText": "Why do some of the most testosterone-fueled people become the most generous leaders?",
+      "voiceover": "Why do some of the most testosterone-fueled people you know become the most generous, disciplined leaders?",
+      "keywords": ["testosterone", "generous"]
+    },
+    {
+      "start": 3,
+      "end": 13,
+      "visual": "One navy 'T' amplifier; coral AGGRESS=WIN and teal COOPERATE=WIN pills alternate; the behavior below flips fist ↔ handshake.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "contextFlip",
+      "norbEmotion": "panicked",
+      "voiceover": "Testosterone does not cause aggression. It amplifies your sensitivity to status. What you do about that depends on what wins respect around you.",
+      "keywords": ["aggression", "status"]
+    },
+    {
+      "start": 13,
+      "end": 23,
+      "visual": "Rank ladder: bottom-rank creature trembles, top-rank wears a crown. Status drive made literal.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "hierarchy",
+      "norbEmotion": "exhausted",
+      "voiceover": "So calling it the aggression hormone is wrong. It is a status hormone — and in the wrong culture, the drive for rank takes the ugliest path available.",
+      "keywords": ["status", "rank"]
+    },
+    {
+      "start": 23,
+      "end": 33,
+      "visual": "The navy circle springs wider; a coral outsider enters and turns teal; a warm mustard pulse blooms.",
+      "components": ["Norb", "CaptionBand"],
+      "action": "widenCircle",
+      "norbEmotion": "lightbulb",
+      "voiceover": "The move: deliberately pick environments where kindness and competence win. Your status drive is fuel — the direction it takes depends on where you point it.",
+      "keywords": ["prosocial", "fuel"]
+    },
+    {
+      "start": 33,
+      "end": 44,
+      "visual": "THE SCIENCE card; contextFlip amplifier below showing the same T driving opposite behaviors. Norb curious.",
+      "components": ["ScienceCard", "Norb"],
+      "action": "contextFlip",
+      "norbEmotion": "curious",
+      "cardText": "The challenge hypothesis: testosterone surges at status challenges, then amplifies whatever the social context rewards — aggression or generosity.",
+      "voiceover": "The challenge hypothesis: testosterone surges in response to status challenges, then amplifies whatever that context rewards — aggression, or generosity.",
+      "keywords": ["challenge", "hypothesis"]
+    },
+    {
+      "start": 44,
+      "end": 52,
+      "visual": "TRY THIS card; widenCircle visual below. Norb celebrating.",
+      "components": ["TakeawayCard", "Norb"],
+      "action": "widenCircle",
+      "norbEmotion": "celebrating",
+      "cardText": "Next time you feel competitive:\nask what wins respect here — then channel it there.",
+      "voiceover": "Next time you feel the urge to compete, ask what actually wins respect here — then aim the drive there.",
+      "keywords": ["compete", "respect"]
+    },
+    {
+      "start": 52,
+      "end": 56,
+      "visual": "Sources card; Norb celebrating below.",
+      "components": ["SourceCard", "Norb"],
+      "norbEmotion": "celebrating",
+      "voiceover": "Sources in the caption.",
+      "keywords": []
+    }
+  ]
+}
